@@ -1,27 +1,70 @@
-// js/script.js
+document.addEventListener("DOMContentLoaded", () => {
+  const contentForm = document.getElementById("contentForm");
+  const promptInput = document.getElementById("prompt");
+  const generateButton = document.getElementById("generateButton");
+  const buttonText = document.getElementById("buttonText");
+  const spinner = document.getElementById("spinner");
+  const errorMessageDiv = document.getElementById("errorMessage"); // Keep this for now for specific API errors only
+  const generatedTextDiv = document.getElementById("generatedText");
+  const togglePlayPauseButton = document.getElementById(
+    "togglePlayPauseButton"
+  );
+  const playIcon = document.getElementById("playIcon");
+  const pauseIcon = document.getElementById("pauseIcon");
+  const voiceLanguageSelect = document.getElementById("voiceLanguage");
+  const voiceSelect = document.getElementById("voiceSelect");
+  const downloadPdfButton = document.getElementById("downloadPdfButton");
+  const downloadCsvButton = document.getElementById("downloadCsvButton");
+  const contentTypeOptions = document.getElementById("contentTypeOptions");
+  const copyTextButton = document.getElementById("copyTextButton");
+  const toneSelect = document.getElementById("toneSelect");
 
-(function () {
-  // IIFE para encapsular todo el código y asegurar el ámbito
-  // --- Constantes de Configuración ---
-  const CONFIG = {
-    MAX_GENERATIONS_FREE: 5,
-    AD_BONUS_GENERATIONS: 3,
-    MAX_ADS_PER_DAY: 2,
-    AD_VIEW_DURATION_SECONDS: 5,
-    MAX_HISTORY_ITEMS: 10,
-  };
+  const contentModal = document.getElementById("contentModal");
+  const modalCloseButton = document.getElementById("modalCloseButton");
+  const contentHistoryContainer = document.getElementById(
+    "contentHistoryContainer"
+  );
+  const clearHistoryButton = document.getElementById("clearHistoryButton");
+  const copyConfirmationMessage = document.createElement("div");
+  copyConfirmationMessage.id = "copyConfirmationMessage";
+  copyConfirmationMessage.textContent = "¡Copiado al portapapeles!";
+  document.body.appendChild(copyConfirmationMessage);
 
-  // --- Variables de Estado Globales ---
-  let generationsToday = 0;
-  let adsWatchedToday = 0;
-  let lastActivityDate = "";
+  const generationCounterDisplay = document.getElementById(
+    "generationCounterDisplay"
+  );
+  const watchAdButton = document.getElementById("watchAdButton");
+  const adModal = document.getElementById("adModal");
+  const adTimerDisplay = document.getElementById("adTimer");
+
+  // From index.html
+  const cookieConsent = document.getElementById("cookieConsent");
+  const acceptCookiesButton = document.getElementById("acceptCookiesButton");
+  const subscriptionModal = document.getElementById("subscriptionModal");
+  const emailInput = document.getElementById("emailInput");
+  const subscribeButton = document.getElementById("subscribeButton");
+  const noThanksButton = document.getElementById("noThanksButton");
+  const messageModal = document.getElementById("messageModal"); // Generic message modal
+  const messageModalCloseButton = document.getElementById(
+    "messageModalCloseButton"
+  );
+  const messageModalText = document.getElementById("messageModalText");
+  const messageModalIcon = document.getElementById("messageModalIcon");
+
+  const MAX_GENERATIONS_FREE = 5;
+  const AD_BONUS_GENERATIONS = 3;
+  const MAX_ADS_PER_DAY = 2;
+  const AD_VIEW_DURATION_SECONDS = 5;
+
+  const MAX_HISTORY_ITEMS = 10;
 
   let utterance = null;
   let availableVoices = [];
   let isPlayingAudio = false;
 
-  // --- DOMElements (se inicializarán en DOMContentLoaded) ---
-  let DOMElements;
+  let generationsToday = 0;
+  let adsWatchedToday = 0;
+  let lastActivityDate = "";
 
   const placeholders = {
     story:
@@ -58,26 +101,18 @@
     ai_prompt: "fas fa-brain",
   };
 
-  // --- FUNCIONES DE UTILIDAD Y MENSAJES (Ahora usan DOMElements) ---
-
+  // --- General Message Modal Functions (from index.html) ---
   function showCustomMessage(message, type = "info", duration = 3000) {
-    if (!DOMElements || !DOMElements.messageModalText) {
-      console.warn(
-        "Message modal elements not found, cannot display custom message:",
-        message
-      );
-      return;
-    }
-    DOMElements.messageModalText.textContent = message;
-    DOMElements.messageModalIcon.className = `mt-4 text-4xl`;
+    messageModalText.textContent = message;
+    messageModalIcon.className = `mt-4 text-4xl`; // Reset icon class
     if (type === "success") {
-      DOMElements.messageModalIcon.classList.add("success");
+      messageModalIcon.classList.add("success");
     } else if (type === "error") {
-      DOMElements.messageModalIcon.classList.add("error");
+      messageModalIcon.classList.add("error");
     } else {
-      DOMElements.messageModalIcon.classList.add("info");
+      messageModalIcon.classList.add("info");
     }
-    DOMElements.messageModal.classList.add("show");
+    messageModal.classList.add("show");
 
     setTimeout(() => {
       hideCustomMessage();
@@ -85,22 +120,20 @@
   }
 
   function hideCustomMessage() {
-    if (!DOMElements || !DOMElements.messageModal) return;
-    DOMElements.messageModal.classList.remove("show");
-    DOMElements.messageModalText.textContent = "";
-    DOMElements.messageModalIcon.className = "mt-4 text-4xl";
+    messageModal.classList.remove("show");
+    messageModalText.textContent = "";
+    messageModalIcon.className = "mt-4 text-4xl"; // Reset icon class
   }
 
-  // --- PREFERENCIAS Y ALMACENAMIENTO LOCAL ---
+  // --- Preference Saving and Loading ---
   function savePreferences() {
     const preferences = {
       contentType:
-        DOMElements.contentTypeOptions.querySelector(
-          'input[name="contentType"]:checked'
-        )?.value || "story",
-      tone: DOMElements.toneSelect.value,
-      voiceLanguage: DOMElements.voiceLanguageSelect.value,
-      voiceName: DOMElements.voiceSelect.value,
+        document.querySelector('input[name="contentType"]:checked')?.value ||
+        "story",
+      tone: toneSelect.value,
+      voiceLanguage: voiceLanguageSelect.value,
+      voiceName: voiceSelect.value,
     };
     localStorage.setItem("userPreferences", JSON.stringify(preferences));
 
@@ -112,27 +145,26 @@
   function loadPreferences() {
     const preferences = JSON.parse(localStorage.getItem("userPreferences"));
     if (preferences) {
-      const contentTypeRadio = DOMElements.contentTypeOptions.querySelector(
+      const contentTypeRadio = document.querySelector(
         `input[name="contentType"][value="${preferences.contentType}"]`
       );
       if (contentTypeRadio) {
         contentTypeRadio.checked = true;
-        DOMElements.promptInput.placeholder =
+        promptInput.placeholder =
           placeholders[preferences.contentType] || placeholders.story;
       }
       if (preferences.tone) {
-        DOMElements.toneSelect.value = preferences.tone;
+        toneSelect.value = preferences.tone;
       }
-      // Esperar un poco para que las voces se carguen antes de intentar seleccionarlas
       setTimeout(() => {
         if (preferences.voiceLanguage) {
-          DOMElements.voiceLanguageSelect.value = preferences.voiceLanguage;
-          updateSpecificVoices(); // Vuelve a llamar para poblar las voces específicas
+          voiceLanguageSelect.value = preferences.voiceLanguage;
+          updateSpecificVoices();
         }
         if (preferences.voiceName) {
-          DOMElements.voiceSelect.value = preferences.voiceName;
+          voiceSelect.value = preferences.voiceName;
         }
-      }, 500); // Pequeño retraso
+      }, 500);
     }
 
     const storedGenerationsToday = localStorage.getItem("generationsToday");
@@ -154,17 +186,17 @@
     checkGenerationLimit();
   }
 
-  // --- GESTIÓN DE VOCES (TEXT-TO-SPEECH) ---
+  // --- Voice Loading and Management ---
   function loadVoices() {
     availableVoices = speechSynthesis.getVoices();
     updateVoiceOptions();
-    loadPreferences(); // Cargar preferencias después de que las voces estén disponibles
+    loadPreferences();
   }
 
   function updateVoiceOptions() {
     const languages = new Set();
-    DOMElements.voiceLanguageSelect.innerHTML = "";
-    DOMElements.voiceSelect.innerHTML = "";
+    voiceLanguageSelect.innerHTML = "";
+    voiceSelect.innerHTML = "";
 
     availableVoices.forEach((voice) => {
       const langCode = voice.lang.split("-")[0];
@@ -173,41 +205,39 @@
 
     const sortedLanguages = Array.from(languages).sort();
 
-    // Priorizar español si existe
     if (sortedLanguages.includes("es")) {
       const esOption = document.createElement("option");
       esOption.value = "es";
       esOption.textContent = "Español (es)";
-      DOMElements.voiceLanguageSelect.appendChild(esOption);
-      DOMElements.voiceLanguageSelect.value = "es"; // Establecer español por defecto
+      voiceLanguageSelect.appendChild(esOption);
+      voiceLanguageSelect.value = "es";
     } else {
       const defaultOption = document.createElement("option");
       defaultOption.value = "";
       defaultOption.textContent = "Seleccionar idioma";
-      DOMElements.voiceLanguageSelect.appendChild(defaultOption);
+      voiceLanguageSelect.appendChild(defaultOption);
     }
 
     sortedLanguages.forEach((lang) => {
       if (lang !== "es") {
-        // Evitar duplicar español
         const option = document.createElement("option");
         option.value = lang;
         option.textContent = lang;
-        DOMElements.voiceLanguageSelect.appendChild(option);
+        voiceLanguageSelect.appendChild(option);
       }
     });
-    updateSpecificVoices(); // Llama para poblar las voces del idioma seleccionado
+    updateSpecificVoices();
   }
 
   function updateSpecificVoices() {
-    DOMElements.voiceSelect.innerHTML = "";
-    const selectedLangCode = DOMElements.voiceLanguageSelect.value;
+    voiceSelect.innerHTML = "";
+    const selectedLangCode = voiceLanguageSelect.value;
 
     if (!selectedLangCode) {
       const defaultOption = document.createElement("option");
       defaultOption.value = "";
       defaultOption.textContent = "Seleccionar voz";
-      DOMElements.voiceSelect.appendChild(defaultOption);
+      voiceSelect.appendChild(defaultOption);
       return;
     }
 
@@ -219,69 +249,67 @@
       const noVoiceOption = document.createElement("option");
       noVoiceOption.value = "";
       noVoiceOption.textContent = "No hay voces disponibles para este idioma";
-      DOMElements.voiceSelect.appendChild(noVoiceOption);
+      voiceSelect.appendChild(noVoiceOption);
     } else {
       filteredVoices.forEach((voice) => {
         const option = document.createElement("option");
         option.value = voice.name;
         option.textContent = `${voice.name} (${voice.lang})`;
-        DOMElements.voiceSelect.appendChild(option);
+        voiceSelect.appendChild(option);
       });
     }
   }
 
-  // --- GESTIÓN DE ESTADO DE CARGA Y LÍMITES ---
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+  } else {
+    loadVoices();
+  }
+
+  // --- Error Display Functions (Modified to use showCustomMessage for critical errors) ---
+  const displayError = (message) => {
+    showCustomMessage(message, "error", 5000); // Use generic modal for errors
+  };
+
+  const clearError = () => {
+    // messageModal is cleared by hideCustomMessage, so no action needed here.
+  };
+
+  // --- Loading State Management ---
   const setLoadingState = (isLoading) => {
-    if (DOMElements.generateButton)
-      DOMElements.generateButton.disabled = isLoading;
+    generateButton.disabled = isLoading;
     if (isLoading) {
-      if (DOMElements.spinner) DOMElements.spinner.classList.remove("hidden");
-      if (DOMElements.buttonText)
-        DOMElements.buttonText.textContent = "Generando...";
+      spinner.classList.remove("hidden");
+      buttonText.textContent = "Generando...";
     } else {
-      if (DOMElements.spinner) DOMElements.spinner.classList.add("hidden");
-      if (DOMElements.buttonText)
-        DOMElements.buttonText.textContent = "Generar Contenido";
+      spinner.classList.add("hidden");
+      buttonText.textContent = "Generar Contenido";
     }
     checkGenerationLimit();
   };
 
+  // --- Generation Limit Functions ---
   function updateGenerationCounterDisplay() {
     const totalAllowed =
-      CONFIG.MAX_GENERATIONS_FREE +
-      adsWatchedToday * CONFIG.AD_BONUS_GENERATIONS;
-    if (DOMElements.generationCounterDisplay) {
-      DOMElements.generationCounterDisplay.textContent = `Generaciones disponibles hoy: ${Math.max(
-        0,
-        totalAllowed - generationsToday
-      )}/${totalAllowed}`;
-    }
+      MAX_GENERATIONS_FREE + adsWatchedToday * AD_BONUS_GENERATIONS;
+    generationCounterDisplay.textContent = `Generaciones disponibles hoy: ${Math.max(
+      0,
+      totalAllowed - generationsToday
+    )}/${totalAllowed}`;
   }
 
   function checkGenerationLimit() {
     const totalAllowed =
-      CONFIG.MAX_GENERATIONS_FREE +
-      adsWatchedToday * CONFIG.AD_BONUS_GENERATIONS;
+      MAX_GENERATIONS_FREE + adsWatchedToday * AD_BONUS_GENERATIONS;
     if (generationsToday >= totalAllowed) {
-      if (DOMElements.generateButton) {
-        DOMElements.generateButton.disabled = true;
-        DOMElements.generateButton.classList.add(
-          "opacity-50",
-          "cursor-not-allowed"
-        );
-      }
-      if (adsWatchedToday < CONFIG.MAX_ADS_PER_DAY) {
-        if (DOMElements.watchAdButton) {
-          DOMElements.watchAdButton.classList.remove("hidden");
-          DOMElements.watchAdButton.disabled = false;
-          DOMElements.watchAdButton.classList.remove(
-            "opacity-50",
-            "cursor-not-allowed"
-          );
-        }
+      generateButton.disabled = true;
+      generateButton.classList.add("opacity-50", "cursor-not-allowed");
+      if (adsWatchedToday < MAX_ADS_PER_DAY) {
+        watchAdButton.classList.remove("hidden");
+        watchAdButton.disabled = false;
+        watchAdButton.classList.remove("opacity-50", "cursor-not-allowed");
       } else {
-        if (DOMElements.watchAdButton)
-          DOMElements.watchAdButton.classList.add("hidden");
+        watchAdButton.classList.add("hidden");
         showCustomMessage(
           "Has alcanzado el límite de generaciones gratuitas y de anuncios por hoy. Vuelve mañana para más o considera una suscripción premium.",
           "info",
@@ -289,50 +317,43 @@
         );
       }
     } else {
-      if (DOMElements.generateButton) {
-        DOMElements.generateButton.disabled = false;
-        DOMElements.generateButton.classList.remove(
-          "opacity-50",
-          "cursor-not-allowed"
-        );
-      }
-      if (DOMElements.watchAdButton)
-        DOMElements.watchAdButton.classList.add("hidden");
+      generateButton.disabled = false;
+      generateButton.classList.remove("opacity-50", "cursor-not-allowed");
+      watchAdButton.classList.add("hidden");
     }
   }
 
   function simulateAdViewing() {
-    if (!DOMElements.adModal || !DOMElements.adTimerDisplay) return;
-
-    DOMElements.adModal.classList.add("show");
-    let timer = CONFIG.AD_VIEW_DURATION_SECONDS;
-    DOMElements.adTimerDisplay.textContent = `Tiempo restante: ${timer} segundos`;
-
-    if (DOMElements.watchAdButton) {
-      DOMElements.watchAdButton.disabled = true;
-      DOMElements.watchAdButton.classList.add(
-        "opacity-50",
-        "cursor-not-allowed"
-      );
-    }
-
+    adModal.classList.add("show");
+    let timer = AD_VIEW_DURATION_SECONDS;
+    adTimerDisplay.textContent = `Tiempo restante: ${timer} segundos`;
     const adInterval = setInterval(() => {
       timer--;
-      DOMElements.adTimerDisplay.textContent = `Tiempo restante: ${timer} segundos`;
+      adTimerDisplay.textContent = `Tiempo restante: ${timer} segundos`;
       if (timer <= 0) {
         clearInterval(adInterval);
-        DOMElements.adModal.classList.remove("show");
+        adModal.classList.remove("show");
         adsWatchedToday++;
-        generationsToday = Math.max(
-          0,
-          generationsToday - CONFIG.AD_BONUS_GENERATIONS
+        // Reset generationsToday to just MAX_GENERATIONS_FREE for a fresh start,
+        // effectively adding AD_BONUS_GENERATIONS
+        generationsToday = MAX_GENERATIONS_FREE; // Reset to base free
+        // Add bonus, but don't exceed what would be the sum of free + all bonuses
+        generationsToday -= adsWatchedToday * AD_BONUS_GENERATIONS; // Adjust for past watched ads, then add total bonus
+        generationsToday = Math.min(
+          generationsToday,
+          MAX_GENERATIONS_FREE + adsWatchedToday * AD_BONUS_GENERATIONS
         );
+
+        // A simpler logic: Just reduce generationsToday by the bonus amount (or reset to 0 if negative)
+        // This makes it seem like "you just earned N more generations"
+        generationsToday -= AD_BONUS_GENERATIONS;
+        if (generationsToday < 0) generationsToday = 0;
 
         savePreferences();
         updateGenerationCounterDisplay();
         checkGenerationLimit();
         showCustomMessage(
-          `¡Gracias por ver el anuncio! Has recibido +${CONFIG.AD_BONUS_GENERATIONS} generaciones.`,
+          "¡Gracias por ver el anuncio! Has recibido +3 generaciones.",
           "success",
           3000
         );
@@ -340,7 +361,7 @@
     }, 1000);
   }
 
-  // --- FORMATO Y CONTENIDO ---
+  // --- Markdown to HTML Formatting Function ---
   function formatGeneratedText(rawText) {
     let formattedText = rawText;
 
@@ -395,30 +416,28 @@
     return formattedText;
   }
 
-  // --- LÓGICA PRINCIPAL DE GENERACIÓN DE CONTENIDO ---
+  // --- Core Content Generation Logic ---
   const handleGenerateContent = async (event) => {
     event.preventDefault();
 
     const totalAllowed =
-      CONFIG.MAX_GENERATIONS_FREE +
-      adsWatchedToday * CONFIG.AD_BONUS_GENERATIONS;
+      MAX_GENERATIONS_FREE + adsWatchedToday * AD_BONUS_GENERATIONS;
     if (generationsToday >= totalAllowed) {
       checkGenerationLimit();
       return;
     }
 
     setLoadingState(true);
-    if (DOMElements.generatedTextDiv)
-      DOMElements.generatedTextDiv.innerHTML = "";
-    if (DOMElements.contentModal)
-      DOMElements.contentModal.classList.remove("show");
+    generatedTextDiv.innerHTML = "";
+    contentModal.classList.remove("show");
+    // Removed clearError() here because showCustomMessage will display the error, and we don't want to clear it immediately.
     stopAudio();
 
-    const prompt = DOMElements.promptInput.value.trim();
-    const selectedContentType = DOMElements.contentTypeOptions.querySelector(
+    const prompt = promptInput.value.trim();
+    const selectedContentType = document.querySelector(
       'input[name="contentType"]:checked'
-    )?.value;
-    const selectedTone = DOMElements.toneSelect.value;
+    ).value;
+    const selectedTone = toneSelect.value;
 
     if (!prompt) {
       showCustomMessage(
@@ -476,23 +495,24 @@
       const chatHistory = [{ role: "user", parts: [{ text: aiPrompt }] }];
       const payload = { contents: chatHistory };
 
-      const apiUrl = `/api/gemini`; // Llama a tu Serverless Function de Vercel (el proxy)
+      const apiKey = "AIzaSyDB5snbSNgSo-RmCIoKR4JDp-gG3Xm5x7Y";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          apiType: "gemini",
-          prompt: aiPrompt,
-          chatHistory: chatHistory,
-        }), // apiType: 'gemini'
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorText = await response.text();
         showCustomMessage(
           `Error de la API: ${response.status} ${
             response.statusText
-          }. Mensaje: ${errorData.error?.message || "Error desconocido"}`,
+          }. Respuesta: ${errorText.substring(
+            0,
+            Math.min(errorText.length, 100)
+          )}...`,
           "error",
           5000
         );
@@ -500,7 +520,7 @@
           "API response not OK:",
           response.status,
           response.statusText,
-          errorData
+          errorText
         );
         setLoadingState(false);
         return;
@@ -530,10 +550,8 @@
         result.candidates[0].content.parts.length > 0
       ) {
         const rawText = result.candidates[0].content.parts[0].text;
-        if (DOMElements.generatedTextDiv)
-          DOMElements.generatedTextDiv.innerHTML = formatGeneratedText(rawText);
-        if (DOMElements.contentModal)
-          DOMElements.contentModal.classList.add("show");
+        generatedTextDiv.innerHTML = formatGeneratedText(rawText);
+        contentModal.classList.add("show");
         saveGeneratedContentToHistory(
           prompt,
           selectedContentType,
@@ -554,7 +572,7 @@
       }
     } catch (err) {
       showCustomMessage(
-        "Error al conectar con la API o error de red. Por favor, comprueba tu conexión a internet.",
+        "Error al conectar con la API. Por favor, comprueba tu conexión a internet.",
         "error",
         5000
       );
@@ -564,13 +582,9 @@
     }
   };
 
-  // --- REPRODUCCIÓN DE AUDIO (TEXT-TO-SPEECH) ---
+  // --- Audio Playback Functions ---
   const playAudio = () => {
-    if (!DOMElements.generatedTextDiv) {
-      showCustomMessage("No hay contenido para leer.", "info", 3000);
-      return;
-    }
-    const textToSpeak = DOMElements.generatedTextDiv.textContent;
+    const textToSpeak = generatedTextDiv.textContent;
     if (!textToSpeak) {
       showCustomMessage("No hay contenido para leer.", "info", 3000);
       return;
@@ -586,8 +600,8 @@
     stopAudio();
 
     utterance = new SpeechSynthesisUtterance(textToSpeak);
-    const selectedVoiceName = DOMElements.voiceSelect.value;
-    const selectedLangCode = DOMElements.voiceLanguageSelect.value;
+    const selectedVoiceName = voiceSelect.value;
+    const selectedLangCode = voiceLanguageSelect.value;
 
     if (selectedVoiceName) {
       const chosenVoice = availableVoices.find(
@@ -625,10 +639,9 @@
 
     utterance.onend = () => {
       isPlayingAudio = false;
-      if (DOMElements.playIcon) DOMElements.playIcon.classList.remove("hidden");
-      if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.add("hidden");
-      if (DOMElements.togglePlayPauseButton)
-        DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
+      playIcon.classList.remove("hidden");
+      pauseIcon.classList.add("hidden");
+      togglePlayPauseButton.classList.remove("animate-pulse");
     };
     utterance.onerror = (event) => {
       console.error("Error en la reproducción de audio:", event.error);
@@ -640,21 +653,19 @@
         );
       }
       isPlayingAudio = false;
-      if (DOMElements.playIcon) DOMElements.playIcon.classList.remove("hidden");
-      if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.add("hidden");
-      if (DOMElements.togglePlayPauseButton)
-        DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
+      playIcon.classList.remove("hidden");
+      pauseIcon.classList.add("hidden");
+      togglePlayPauseButton.classList.remove("animate-pulse");
     };
 
     utterance.onstart = () => {
-      if (DOMElements.togglePlayPauseButton)
-        DOMElements.togglePlayPauseButton.classList.add("animate-pulse");
+      togglePlayPauseButton.classList.add("animate-pulse");
     };
 
     speechSynthesis.speak(utterance);
     isPlayingAudio = true;
-    if (DOMElements.playIcon) DOMElements.playIcon.classList.add("hidden");
-    if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.remove("hidden");
+    playIcon.classList.add("hidden");
+    pauseIcon.classList.remove("hidden");
   };
 
   const stopAudio = () => {
@@ -662,97 +673,47 @@
       speechSynthesis.cancel();
     }
     isPlayingAudio = false;
-    if (DOMElements.playIcon) DOMElements.playIcon.classList.remove("hidden");
-    if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.add("hidden");
-    if (DOMElements.togglePlayPauseButton)
-      DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
+    playIcon.classList.remove("hidden");
+    pauseIcon.classList.add("hidden");
+    togglePlayPauseButton.classList.remove("animate-pulse");
   };
 
-  // --- FUNCIONES DE PORTAPAPELES Y DESCARGA ---
+  // --- Clipboard and Download Functions ---
   const copyTextToClipboard = () => {
-    if (!DOMElements.generatedTextDiv) {
-      showCustomMessage("No hay contenido para copiar.", "info", 3000);
-      return;
-    }
-    const textToCopy = DOMElements.generatedTextDiv.textContent;
+    const textToCopy = generatedTextDiv.textContent;
     if (!textToCopy) {
-      if (DOMElements.copyConfirmationMessage) {
-        DOMElements.copyConfirmationMessage.textContent =
-          "No hay contenido para copiar.";
-        DOMElements.copyConfirmationMessage.classList.add("show");
-        setTimeout(
-          () => DOMElements.copyConfirmationMessage.classList.remove("show"),
-          2000
-        );
-      }
+      copyConfirmationMessage.textContent = "No hay contenido para copiar.";
+      copyConfirmationMessage.classList.add("show");
+      setTimeout(() => copyConfirmationMessage.classList.remove("show"), 2000);
       return;
     }
-    navigator.clipboard
-      .writeText(textToCopy)
-      .then(() => {
-        if (DOMElements.copyConfirmationMessage) {
-          DOMElements.copyConfirmationMessage.textContent =
-            "¡Copiado al portapapeles!";
-          DOMElements.copyConfirmationMessage.classList.add("show");
-          setTimeout(
-            () => DOMElements.copyConfirmationMessage.classList.remove("show"),
-            2000
-          );
-        }
-      })
-      .catch((err) => {
-        console.error("Error al intentar copiar al portapapeles:", err);
-        const textarea = document.createElement("textarea");
-        textarea.value = textToCopy;
-        textarea.style.position = "fixed";
-        textarea.style.left = "-9999px";
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-          const successful = document.execCommand("copy");
-          const msg = successful
-            ? "¡Copiado al portapapeles! (Fallback)"
-            : "No se pudo copiar el texto.";
-          if (DOMElements.copyConfirmationMessage) {
-            DOMElements.copyConfirmationMessage.textContent = msg;
-            DOMElements.copyConfirmationMessage.classList.add("show");
-            setTimeout(
-              () =>
-                DOMElements.copyConfirmationMessage.classList.remove("show"),
-              2000
-            );
-          }
-        } catch (errFallback) {
-          console.error(
-            "Error en el fallback de copiar al portapapeles:",
-            errFallback
-          );
-          if (DOMElements.copyConfirmationMessage) {
-            DOMElements.copyConfirmationMessage.textContent =
-              "Error al copiar. Tu navegador podría no soportar esta función o hay restricciones de seguridad.";
-            DOMElements.copyConfirmationMessage.classList.add("show");
-            setTimeout(
-              () =>
-                DOMElements.copyConfirmationMessage.classList.remove("show"),
-              3000
-            );
-          }
-        } finally {
-          document.body.removeChild(textarea);
-        }
-      });
+    const textarea = document.createElement("textarea");
+    textarea.value = textToCopy;
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      const successful = document.execCommand("copy");
+      const msg = successful
+        ? "¡Copiado al portapapeles!"
+        : "No se pudo copiar el texto.";
+      copyConfirmationMessage.textContent = msg;
+      copyConfirmationMessage.classList.add("show");
+      setTimeout(() => copyConfirmationMessage.classList.remove("show"), 2000);
+    } catch (err) {
+      console.error("Error al intentar copiar al portapapeles:", err);
+      copyConfirmationMessage.textContent =
+        "Error al copiar. Tu navegador podría no soportar esta función o hay restricciones de seguridad.";
+      copyConfirmationMessage.classList.add("show");
+      setTimeout(() => copyConfirmationMessage.classList.remove("show"), 3000);
+    } finally {
+      document.body.removeChild(textarea);
+    }
   };
 
   const downloadPdf = () => {
-    if (!DOMElements.generatedTextDiv) {
-      showCustomMessage(
-        "No hay contenido para descargar como PDF.",
-        "info",
-        3000
-      );
-      return;
-    }
-    const text = DOMElements.generatedTextDiv.textContent;
+    const text = generatedTextDiv.textContent;
     if (!text) {
       showCustomMessage(
         "No hay contenido para descargar como PDF.",
@@ -761,9 +722,9 @@
       );
       return;
     }
-    if (typeof window.jspdf === "undefined" || !window.jspdf.jsPDF) {
+    if (typeof window.jspdf === "undefined") {
       showCustomMessage(
-        "La librería de PDF (jsPDF) no está cargada. Intenta recargar la página.",
+        "La librería de PDF no está cargada. Intenta recargar la página.",
         "error",
         5000
       );
@@ -773,12 +734,44 @@
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    doc.text(doc.splitTextToSize(text, 180), 10, 10);
+    const lines = doc.splitTextToSize(text, 180);
+    doc.text(lines, 10, 10);
     doc.save("contenido_generado.pdf");
-    showCustomMessage("Contenido descargado como PDF.", "success", 3000);
   };
 
-  // --- FUNCIONES DE HISTORIAL DE CONTENIDO ---
+  const downloadCsv = () => {
+    const text = generatedTextDiv.textContent;
+    if (!text) {
+      showCustomMessage(
+        "No hay contenido para descargar como CSV.",
+        "info",
+        3000
+      );
+      return;
+    }
+    const csvContent = text;
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "contenido_generado.csv");
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      showCustomMessage(
+        "Tu navegador no soporta la descarga directa de archivos.",
+        "info",
+        3000
+      );
+    }
+  };
+
+  // --- Content History Functions ---
   function saveGeneratedContentToHistory(prompt, type, text, tone) {
     let history =
       JSON.parse(localStorage.getItem("generatedContentHistory")) || [];
@@ -786,8 +779,8 @@
     const newItem = { prompt, type, text, tone, timestamp };
 
     history.unshift(newItem);
-    if (history.length > CONFIG.MAX_HISTORY_ITEMS) {
-      history = history.slice(0, CONFIG.MAX_HISTORY_ITEMS);
+    if (history.length > MAX_HISTORY_ITEMS) {
+      history = history.slice(0, MAX_HISTORY_ITEMS);
     }
     localStorage.setItem("generatedContentHistory", JSON.stringify(history));
     renderContentHistory();
@@ -798,21 +791,14 @@
   }
 
   function renderContentHistory() {
-    if (!DOMElements.contentHistoryContainer) return;
-
     const history = loadContentHistory();
-    DOMElements.contentHistoryContainer.innerHTML = "";
+    contentHistoryContainer.innerHTML = "";
 
     if (history.length === 0) {
-      DOMElements.contentHistoryContainer.innerHTML =
+      contentHistoryContainer.innerHTML =
         '<p class="text-gray-500 text-center">No hay contenido en el historial.</p>';
-      if (DOMElements.clearHistoryButton) {
-        DOMElements.clearHistoryButton.classList.add(
-          "opacity-50",
-          "cursor-not-allowed"
-        );
-        DOMElements.clearHistoryButton.disabled = true;
-      }
+      clearHistoryButton.classList.add("opacity-50", "cursor-not-allowed");
+      clearHistoryButton.disabled = true;
       return;
     }
 
@@ -851,88 +837,68 @@
       regenerateButton.title = "Cargar y Regenerar";
       regenerateButton.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (DOMElements.promptInput)
-          DOMElements.promptInput.value = item.prompt;
-        const radio = DOMElements.contentTypeOptions.querySelector(
+        promptInput.value = item.prompt;
+        const radio = document.querySelector(
           `input[name="contentType"][value="${item.type}"]`
         );
         if (radio) radio.checked = true;
-        if (DOMElements.promptInput)
-          DOMElements.promptInput.placeholder =
-            placeholders[item.type] || placeholders.story;
+        promptInput.placeholder = placeholders[item.type] || placeholders.story;
 
-        if (DOMElements.toneSelect)
-          DOMElements.toneSelect.value = item.tone || "";
+        toneSelect.value = item.tone || "";
 
-        hideCustomMessage();
+        clearError();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
       historyItemDiv.appendChild(itemText);
       historyItemDiv.appendChild(regenerateButton);
 
-      DOMElements.contentHistoryContainer.appendChild(historyItemDiv);
+      contentHistoryContainer.appendChild(historyItemDiv);
 
       itemText.addEventListener("click", () => {
-        if (DOMElements.generatedTextDiv)
-          DOMElements.generatedTextDiv.innerHTML = formatGeneratedText(
-            item.text
-          );
-        if (DOMElements.contentModal)
-          DOMElements.contentModal.classList.add("show");
+        generatedTextDiv.innerHTML = formatGeneratedText(item.text);
+        contentModal.classList.add("show");
         stopAudio();
       });
     });
-    if (DOMElements.clearHistoryButton) {
-      DOMElements.clearHistoryButton.classList.remove(
-        "opacity-50",
-        "cursor-not-allowed"
-      );
-      DOMElements.clearHistoryButton.disabled = false;
-    }
+    clearHistoryButton.classList.remove("opacity-50", "cursor-not-allowed");
+    clearHistoryButton.disabled = false;
   }
 
   function clearContentHistory() {
     localStorage.removeItem("generatedContentHistory");
     renderContentHistory();
-    showCustomMessage("Historial de contenido limpiado.", "success", 3000);
   }
 
-  // --- LÓGICA DE COOKIES Y SUSCRIPCIÓN (GENERAL) ---
+  // --- Cookie Consent Logic (from index.html) ---
   function showCookieConsent() {
-    if (DOMElements.cookieConsent && !localStorage.getItem("cookieAccepted")) {
-      DOMElements.cookieConsent.classList.add("show");
+    if (!localStorage.getItem("cookieAccepted")) {
+      cookieConsent.classList.add("show");
     }
   }
 
   function acceptCookies() {
     localStorage.setItem("cookieAccepted", "true");
-    if (DOMElements.cookieConsent)
-      DOMElements.cookieConsent.classList.remove("show");
-    showSubscriptionModal();
+    cookieConsent.classList.remove("show");
+    if (
+      !localStorage.getItem("subscribed") &&
+      !localStorage.getItem("noThanksSubscription")
+    ) {
+      showSubscriptionModal();
+    }
   }
 
+  // --- Subscription Modal Logic (from index.html) ---
   function showSubscriptionModal() {
-    if (DOMElements.subscriptionModal) {
-      DOMElements.subscriptionModal.classList.add("show");
-    }
+    subscriptionModal.classList.add("show");
   }
 
   function handleSubscription() {
-    if (!DOMElements.emailInput) {
-      console.error("emailInput no encontrado.");
-      showCustomMessage(
-        "Error interno: no se pudo procesar la suscripción.",
-        "error"
-      );
-      return;
-    }
-    const email = DOMElements.emailInput.value.trim();
+    const email = emailInput.value.trim();
     if (email) {
       console.log("Correo suscrito:", email);
       localStorage.setItem("subscribed", "true");
-      if (DOMElements.subscriptionModal)
-        DOMElements.subscriptionModal.classList.remove("show");
+      subscriptionModal.classList.remove("show");
       showCustomMessage("¡Gracias por suscribirte!", "success", 3000);
     } else {
       showCustomMessage(
@@ -945,306 +911,71 @@
 
   function dismissSubscription() {
     localStorage.setItem("noThanksSubscription", "true");
-    if (DOMElements.subscriptionModal)
-      DOMElements.subscriptionModal.classList.remove("show");
+    subscriptionModal.classList.remove("show");
   }
 
-  // --- Lógica del Menú Desplegable (para la navbar responsive) ---
-  // Esta función no se usa directamente en este script pero se mantiene para la estructura
-  // si alguna parte de la navbar interna la requiriera específicamente para sus dropdowns
-  function setupDropdown(button, dropdown) {
-    if (!button || !dropdown) return;
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-      document.querySelectorAll(".submenu.show").forEach((openDropdown) => {
-        if (openDropdown && openDropdown !== dropdown) {
-          openDropdown.classList.remove("show");
-        }
-      });
-      dropdown.classList.toggle("show");
-    });
-  }
-
-  function updateActiveClass() {
-    if (!DOMElements.mainNavbar) {
-      console.warn(
-        "Navbar principal no encontrada para actualizar la clase activa. Asegúrate de que tenga id='main-navbar'."
-      );
-      return;
+  // --- Event Listeners ---
+  contentTypeOptions.addEventListener("change", (event) => {
+    if (event.target.name === "contentType") {
+      const selectedType = event.target.value;
+      promptInput.placeholder =
+        placeholders[selectedType] || placeholders.story;
+      savePreferences();
     }
-
-    const navLinks = DOMElements.mainNavbar.querySelectorAll(".nav-item a");
-    const submenuItems =
-      DOMElements.mainNavbar.querySelectorAll(".submenu-item");
-    const navItemGroups =
-      DOMElements.mainNavbar.querySelectorAll(".nav-item.group");
-
-    const currentPath = window.location.pathname;
-
-    navLinks.forEach((link) => {
-      link.classList.remove("active-link");
-      link.removeAttribute("aria-current");
-    });
-    submenuItems.forEach((item) => {
-      item.classList.remove("active-link");
-    });
-    navItemGroups.forEach((group) => {
-      const span = group.querySelector("span.cursor-pointer");
-      if (span) {
-        span.classList.add("active-link");
-      }
-    });
-
-    const normalizePath = (path) => {
-      let normalized = path;
-      if (normalized.endsWith("/index.html")) {
-        normalized = normalized.slice(0, -11);
-      }
-      if (!normalized.endsWith("/")) {
-        normalized += "/";
-      }
-      return normalized;
-    };
-
-    const normalizedCurrentPath = normalizePath(currentPath);
-    const origin = window.location.origin;
-
-    DOMElements.mainNavbar.querySelectorAll("a").forEach((item) => {
-      const href = item.getAttribute("href");
-      if (href) {
-        const itemPath = normalizePath(new URL(href, origin).pathname);
-
-        if (normalizedCurrentPath === itemPath) {
-          item.classList.add("active-link");
-          item.setAttribute("aria-current", "page");
-
-          const parentSubmenu = item.closest(".submenu");
-          if (parentSubmenu) {
-            const parentNavItem = parentSubmenu.closest(".nav-item.group");
-            if (parentNavItem) {
-              const span = parentNavItem.querySelector("span.cursor-pointer");
-              if (span) {
-                span.classList.add("active-link");
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-
-  // --- INICIALIZACIÓN PRINCIPAL (DOMContentLoaded) ---
-  document.addEventListener("DOMContentLoaded", function () {
-    // Asignar todos los elementos DOM a DOMElements
-    DOMElements = {
-      // Elementos del formulario y contenido
-      contentForm: document.getElementById("contentForm"),
-      promptInput: document.getElementById("prompt"),
-      generateButton: document.getElementById("generateButton"),
-      buttonText: document.getElementById("buttonText"),
-      spinner: document.getElementById("spinner"),
-      errorMessage: document.getElementById("errorMessage"),
-      generatedTextDiv: document.getElementById("generatedText"),
-      contentTypeOptions: document.getElementById("contentTypeOptions"),
-      toneSelect: document.getElementById("toneSelect"),
-      copyTextButton: document.getElementById("copyTextButton"),
-
-      // Historial
-      contentHistoryContainer: document.getElementById(
-        "contentHistoryContainer"
-      ),
-      clearHistoryButton: document.getElementById("clearHistoryButton"),
-
-      // Audio/Lector de voz
-      togglePlayPauseButton: document.getElementById("togglePlayPauseButton"),
-      playIcon: document.getElementById("playIcon"),
-      pauseIcon: document.getElementById("pauseIcon"),
-      voiceLanguageSelect: document.getElementById("voiceLanguage"),
-      voiceSelect: document.getElementById("voiceSelect"),
-
-      // Descargas
-      downloadPdfButton: document.getElementById("downloadPdfButton"),
-
-      // Límite de generaciones y anuncios
-      generationCounterDisplay: document.getElementById(
-        "generationCounterDisplay"
-      ),
-      watchAdButton: document.getElementById("watchAdButton"),
-      adModal: document.getElementById("adModal"), // Referencia al modal de anuncio
-      adTimerDisplay: document.getElementById("adTimer"),
-
-      // Modales generales y cookies/suscripción
-      messageModal: document.getElementById("messageModal"),
-      messageModalCloseButton: document.getElementById(
-        "messageModalCloseButton"
-      ),
-      messageModalText: document.getElementById("messageModalText"),
-      messageModalIcon: document.getElementById("messageModalIcon"),
-      cookieConsent: document.getElementById("cookieConsent"),
-      acceptCookiesButton: document.getElementById("acceptCookiesButton"),
-      subscriptionModal: document.getElementById("subscriptionModal"),
-      subscriptionModalCloseButton: document.getElementById(
-        "subscriptionModalCloseButton"
-      ),
-      emailInput: document.getElementById("emailInput"),
-      subscribeButton: document.getElementById("subscribeButton"),
-      noThanksButton: document.getElementById("noThanksButton"),
-
-      // Navbar general
-      mainNavbar: document.getElementById("main-navbar"),
-      menuToggle: document.getElementById("menuToggle"),
-      navLinksContainer: document.querySelector(
-        ".navbar-inner-content .flex-wrap"
-      ),
-    };
-
-    // Cargar preferencias del usuario y contadores
-    loadPreferences();
-    // Mostrar modal de consentimiento de cookies si es la primera vez
-    showCookieConsent();
-
-    // --- Event Listeners ---
-
-    // Formulario de contenido
-    if (DOMElements.contentForm)
-      DOMElements.contentForm.addEventListener("submit", handleGenerateContent);
-    if (DOMElements.contentTypeOptions)
-      DOMElements.contentTypeOptions.addEventListener("change", (event) => {
-        if (event.target.name === "contentType") {
-          const selectedType = event.target.value;
-          if (DOMElements.promptInput)
-            DOMElements.promptInput.placeholder =
-              placeholders[selectedType] || placeholders.story;
-          savePreferences();
-        }
-      });
-    if (DOMElements.toneSelect)
-      DOMElements.toneSelect.addEventListener("change", savePreferences);
-    if (DOMElements.watchAdButton)
-      DOMElements.watchAdButton.addEventListener("click", simulateAdViewing);
-
-    // Funcionalidades de audio
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = loadVoices;
-    } else {
-      loadVoices();
-    }
-    if (DOMElements.voiceLanguageSelect)
-      DOMElements.voiceLanguageSelect.addEventListener("change", () => {
-        updateSpecificVoices();
-        savePreferences();
-      });
-    if (DOMElements.voiceSelect)
-      DOMElements.voiceSelect.addEventListener("change", savePreferences);
-    if (DOMElements.togglePlayPauseButton)
-      DOMElements.togglePlayPauseButton.addEventListener("click", () => {
-        if (isPlayingAudio) {
-          stopAudio();
-        } else {
-          playAudio();
-        }
-      });
-
-    // Copiar y descargar
-    if (DOMElements.copyTextButton)
-      DOMElements.copyTextButton.addEventListener("click", copyTextToClipboard);
-    if (DOMElements.downloadPdfButton)
-      DOMElements.downloadPdfButton.addEventListener("click", downloadPdf);
-
-    // Historial
-    if (DOMElements.clearHistoryButton)
-      DOMElements.clearHistoryButton.addEventListener(
-        "click",
-        clearContentHistory
-      );
-    if (DOMElements.contentModal)
-      DOMElements.contentModal.addEventListener("click", (event) => {
-        if (event.target === DOMElements.contentModal) {
-          DOMElements.contentModal.classList.remove("show");
-          stopAudio();
-        }
-      });
-    if (DOMElements.modalCloseButton)
-      DOMElements.modalCloseButton.addEventListener("click", () => {
-        if (DOMElements.contentModal)
-          DOMElements.contentModal.classList.remove("show");
-        stopAudio();
-      });
-
-    // Modales de cookies y suscripción
-    if (DOMElements.acceptCookiesButton)
-      DOMElements.acceptCookiesButton.addEventListener("click", acceptCookies);
-    if (DOMElements.subscribeButton)
-      DOMElements.subscribeButton.addEventListener("click", handleSubscription);
-    if (DOMElements.noThanksButton)
-      DOMElements.noThanksButton.addEventListener("click", dismissSubscription);
-    if (DOMElements.subscriptionModalCloseButton)
-      DOMElements.subscriptionModalCloseButton.addEventListener(
-        "click",
-        dismissSubscription
-      );
-    if (DOMElements.subscriptionModal)
-      DOMElements.subscriptionModal.addEventListener("click", (event) => {
-        if (event.target === DOMElements.subscriptionModal) {
-          dismissSubscription();
-        }
-      });
-
-    // Modal de mensajes genérico
-    if (DOMElements.messageModalCloseButton)
-      DOMElements.messageModalCloseButton.addEventListener(
-        "click",
-        hideCustomMessage
-      );
-    if (DOMElements.messageModal)
-      DOMElements.messageModal.addEventListener("click", (event) => {
-        if (event.target === DOMElements.messageModal) {
-          hideCustomMessage();
-        }
-      });
-
-    // Navegación responsive
-    if (DOMElements.menuToggle && DOMElements.navLinksContainer) {
-      DOMElements.menuToggle.addEventListener("click", () => {
-        DOMElements.navLinksContainer.classList.toggle("active");
-        DOMElements.menuToggle.querySelector("i").classList.toggle("fa-bars");
-        DOMElements.menuToggle.querySelector("i").classList.toggle("fa-times");
-      });
-      document.addEventListener("click", (event) => {
-        const isClickInsideNav = DOMElements.navLinksContainer.contains(
-          event.target
-        );
-        const isClickOnToggle = DOMElements.menuToggle.contains(event.target);
-        if (
-          !isClickInsideNav &&
-          !isClickOnToggle &&
-          DOMElements.navLinksContainer.classList.contains("active")
-        ) {
-          DOMElements.navLinksContainer.classList.remove("active");
-          DOMElements.menuToggle
-            .querySelector("i")
-            .classList.remove("fa-times");
-          DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
-        }
-      });
-      DOMElements.navLinksContainer.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          if (window.innerWidth <= 768) {
-            DOMElements.navLinksContainer.classList.remove("active");
-            DOMElements.menuToggle
-              .querySelector("i")
-              .classList.remove("fa-times");
-            DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
-          }
-        });
-      });
-    }
-
-    // Actualizar la clase activa de la navegación al cargar la página
-    updateActiveClass();
   });
 
-  // Asegurar que la clase activa se actualice si la URL cambia (por ejemplo, con navegación SPA si se implementa)
-  window.addEventListener("popstate", updateActiveClass);
-  window.addEventListener("hashchange", updateActiveClass);
-})(); // Cierre de la IIFE
+  toneSelect.addEventListener("change", savePreferences);
+  voiceLanguageSelect.addEventListener("change", () => {
+    updateSpecificVoices();
+    savePreferences();
+  });
+  voiceSelect.addEventListener("change", savePreferences);
+
+  contentForm.addEventListener("submit", handleGenerateContent);
+  togglePlayPauseButton.addEventListener("click", () => {
+    if (isPlayingAudio) {
+      stopAudio();
+    } else {
+      playAudio();
+    }
+  });
+  copyTextButton.addEventListener("click", copyTextToClipboard);
+  downloadPdfButton.addEventListener("click", downloadPdf);
+  downloadCsvButton.addEventListener("click", downloadCsv);
+  modalCloseButton.addEventListener("click", () => {
+    contentModal.classList.remove("show");
+    stopAudio();
+  });
+  contentModal.addEventListener("click", (event) => {
+    if (event.target === contentModal) {
+      contentModal.classList.remove("show");
+      stopAudio();
+    }
+  });
+
+  clearHistoryButton.addEventListener("click", clearContentHistory);
+  watchAdButton.addEventListener("click", simulateAdViewing);
+
+  // Event Listeners for new modals from index.html
+  acceptCookiesButton.addEventListener("click", acceptCookies);
+  subscribeButton.addEventListener("click", handleSubscription);
+  noThanksButton.addEventListener("click", dismissSubscription);
+  messageModalCloseButton.addEventListener("click", hideCustomMessage);
+  messageModal.addEventListener("click", (event) => {
+    // Close generic message modal if click on overlay
+    if (event.target === messageModal) {
+      hideCustomMessage();
+    }
+  });
+  subscriptionModal.addEventListener("click", (event) => {
+    // Close subscription modal if click on overlay
+    if (event.target === subscriptionModal) {
+      dismissSubscription();
+    }
+  });
+
+  // Initial load and display
+  loadPreferences();
+  renderContentHistory();
+  showCookieConsent(); // Show cookie consent on initial load
+});
