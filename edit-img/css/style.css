@@ -1,540 +1,326 @@
-/* Estilo para la fuente Inter */
-body {
-  font-family: "Inter", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to right, #1a202c, #2d3748);
-  color: #e2e8f0; /* gris-200 */
-  padding-top: 64px; /* Espacio para la barra de navegación fija */
-}
-
-/* Personalización de colores de Tailwind si es necesario, o directamente en clases */
-.bg-gradient-dark {
-  background-image: linear-gradient(
-    to right,
-    #1a202c,
-    #2d3748
-  ); /* gris oscuro a azul grisáceo */
-}
-.text-cyan-500 {
-  color: #06b6d4; /* Tailwind cyan-500 */
-}
-.bg-cyan-600 {
-  background-color: #0891b2; /* Tailwind cyan-600 */
-}
-.hover\:bg-cyan-700:hover {
-  background-color: #0e7490; /* Tailwind cyan-700 */
-}
-.focus\:ring-cyan-300:focus {
-  --tw-ring-color: #67e8f9; /* Tailwind cyan-300 */
-}
-
-/* Barra de menú superior */
-.menu-bar {
-  background-color: #1a202c; /* gris-900 */
-  border-bottom: 1px solid #2d3748; /* gris-800 */
-  padding: 0.5rem 1rem;
+/* Estilos específicos del editor */
+.editor-main-layout {
   display: flex;
-  justify-content: flex-start; /* Align menus to the left */
-  gap: 1.5rem;
-  position: fixed;
-  top: 64px; /* Below main navigation bar */
-  left: 0;
+  flex-direction: column; /* Columna por defecto para móviles */
   width: 100%;
-  z-index: 9; /* Below main navbar, above editor content */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  max-width: 1200px; /* Alinea con la navbar */
+  margin-top: calc(
+    64px + 1rem
+  ); /* Empuja el layout debajo de la navbar fija + 1rem de espacio */
+  gap: 1rem; /* Espacio entre sidebars y canvas */
+  padding: 0 1rem; /* Padding horizontal */
+  flex-grow: 1; /* Permite que ocupe el espacio vertical disponible */
 }
+
+@media (min-width: 1024px) {
+  /* En pantallas grandes (lg breakpoint) */
+  .editor-main-layout {
+    flex-direction: row; /* El layout se convierte en fila (uno al lado del otro) */
+    align-items: flex-start; /* Alinea los ítems a la parte superior */
+    justify-content: center; /* Centra el contenido si hay espacio extra */
+  }
+}
+
+.menu-bar {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 1rem; /* Margen para separarlo de la navbar (adicional al padding-top del body) */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative; /* CRÍTICO para posicionar los dropdowns */
+  z-index: 900; /* Asegura que la barra de menú esté por encima del layout principal */
+}
+
 .menu-item {
-  position: relative;
+  position: relative; /* Necesario para el posicionamiento absoluto del dropdown */
 }
+
 .menu-item-button {
-  background: none;
-  border: none;
-  color: #e2e8f0;
+  background-color: transparent;
+  color: white;
   padding: 0.5rem 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  border: none;
   border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
 }
-.menu-item-button:hover {
-  background-color: #2d3748; /* gris-800 */
+.menu-item-button:hover,
+.menu-item-button.active {
+  background-color: #4a5568;
+  color: #67e8f9;
 }
+
 .menu-dropdown {
+  /* Esto es para los desplegables de la barra de menú del editor */
   position: absolute;
-  top: 100%;
+  top: 100%; /* Se posiciona justo debajo del botón padre */
   left: 0;
-  background-color: #1a202c; /* gris-900 */
-  border: 1px solid #4a5568; /* gris-700 */
+  background-color: #1a202c;
+  border: 1px solid #4a5568;
   border-radius: 0.5rem;
   min-width: 180px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  z-index: 10;
-  display: none; /* Hidden by default */
+  z-index: 901; /* Un poco más alto que la barra de menú para estar por encima */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
   padding: 0.5rem 0;
+  pointer-events: none; /* Inicialmente ignore mouse events para no bloquear clicks al resto de la página */
 }
 .menu-dropdown.show {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto; /* Habilitar eventos de ratón cuando se muestra */
 }
 .menu-dropdown-item {
   display: block;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   color: #e2e8f0;
   text-align: left;
-  background: none;
+  background-color: transparent;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  white-space: nowrap; /* Prevent text wrapping */
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-.menu-dropdown-item:hover:not(:disabled) {
-  background-color: #2d3748; /* gris-800 */
+.menu-dropdown-item:hover {
+  background-color: #2d3748;
+  color: #67e8f9;
 }
-.menu-dropdown-item:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.menu-dropdown-item.header {
+  font-weight: bold;
+  color: #06b6d4;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  cursor: default;
+}
+.menu-dropdown-item.header:hover {
+  background-color: transparent;
+  color: #06b6d4;
 }
 .menu-dropdown-item.separator {
   border-top: 1px solid #4a5568;
   margin: 0.5rem 0;
+  height: 0;
   padding: 0;
 }
-.menu-dropdown-item.header {
-  font-weight: 600;
-  color: #cbd5e1;
-  padding: 0.75rem 1rem 0.25rem;
-  cursor: default;
-}
 
-/* Contenedor principal del editor */
-.editor-main-layout {
-  display: flex;
-  flex-direction: row; /* Sidebar and main content */
-  width: 100%;
-  max-width: 1400px;
-  gap: 1rem;
-  /* Ajuste para las dos barras superiores: 64px (navbar) + 40px (menu-bar) = 104px. Añadimos un poco más de margen. */
-  margin-top: calc(
-    64px + 40px + 1.5rem
-  ); /* Adjusted for both fixed bars and margin */
-  padding-bottom: 2rem; /* Espacio al final de la página */
-  min-height: calc(
-    100vh - (64px + 40px + 1.5rem + 2rem + 60px)
-  ); /* Ensure it fills height, accounting for footer */
-}
-
-/* Sidebar for tools and properties */
-.editor-sidebar {
-  background-color: #1a202c; /* gris-900 */
-  border-radius: 1rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  padding: 1rem;
-  min-width: 250px; /* Wider sidebar */
-  max-height: calc(
-    100vh - (64px + 40px + 1.5rem + 2rem + 60px)
-  ); /* Altura ajustable, considerando barras y margen y footer */
-  overflow-y: auto; /* Enable scrolling for many controls */
-  border: 1px solid #2d3748;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Canvas and message area */
-.editor-canvas-area {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #1a202c;
-  border-radius: 1rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  padding: 1rem;
-  border: 1px solid #2d3748;
-}
-
-/* Tool groups within sidebar (mimicking old details tag content) */
-.sidebar-tool-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: flex-start;
+/* Sidebars del Editor (Izquierdo y Derecho) */
+.editor-sidebar,
+.editor-right-sidebar {
   background-color: #2d3748;
-  padding: 1rem;
+  border: 1px solid #4a5568;
   border-radius: 0.75rem;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-.sidebar-tool-group-label {
-  font-size: 0.9rem;
-  color: #cbd5e1;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-}
-.sidebar-tool-group-row {
+  padding: 1rem;
+  min-width: 250px;
+  max-width: 100%; /* Full width on mobile */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (min-width: 1024px) {
+  /* lg */
+  .editor-sidebar,
+  .editor-right-sidebar {
+    max-width: 280px; /* Fixed width on desktop */
+    min-height: 700px; /* Ensure minimum height */
+  }
+}
+
+/* Canvas Area Central */
+.editor-canvas-area {
+  flex-grow: 1; /* Ocupa el espacio restante horizontalmente */
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-/* Global styles for elements previously defined outside `details` */
-.tool-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: #4a5568; /* gris-700 */
-  color: #cbd5e1; /* gris-300 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-.tool-btn:hover {
-  background-color: #616e7f;
-}
-.tool-btn.active {
-  background-color: #06b6d4;
-  color: white;
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5);
-}
-.tool-btn-sm {
-  padding: 0.35rem 0.75rem;
-  font-size: 0.875rem;
-  border-radius: 0.375rem;
-}
-
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%; /* Make sliders fill available width in sidebar */
-  height: 8px;
-  background: #4a5568;
-  border-radius: 5px;
-  outline: none;
-  transition: opacity 0.2s;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #06b6d4;
-  cursor: pointer;
-  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
-}
-input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #06b6d4;
-  cursor: pointer;
-  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
-}
-
-input[type="color"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 38px;
-  height: 38px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  border-radius: 0.375rem;
-}
-input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-input[type="color"]::-webkit-color-swatch {
-  border: none;
-  border-radius: 0.375rem;
-  box-shadow: 0 0 0 2px #4a5568;
-}
-input[type="color"]::-moz-color-swatch-wrapper {
-  padding: 0;
-}
-input[type="color"]::-moz-color-swatch {
-  border: none;
-  border-radius: 0.375rem;
-  box-shadow: 0 0 0 2px #4a5568;
-}
-
-#textInput,
-#fontFamilySelect,
-#cropWidth,
-#cropHeight,
-#resizeWidth,
-#resizeHeight {
-  background-color: #4a5568;
-  border: 1px solid #616e7f;
-  border-radius: 0.375rem;
-  padding: 0.5rem 0.75rem;
-  color: white;
-  font-size: 0.9rem;
-  width: 100%;
-}
-#textInput::placeholder {
-  color: #a0aec0;
-}
-#fontFamilySelect {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%23CBD5E1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1.5em 1.5em;
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  min-height: 500px; /* Altura mínima para el canvas area */
+  justify-content: center; /* Centra el contenido verticalmente */
 }
 
 .canvas-container {
-  width: 100%;
-  height: calc(
-    100vh - (64px + 40px + 1.5rem + 2rem + 60px + 150px)
-  ); /* Adjusted height for full view */
-  min-height: 400px; /* Altura mínima para el canvas */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #2d3748;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  border: 1px solid #4a5568;
   position: relative;
-}
-canvas {
-  display: block;
+  background-color: #1a202c;
+  border: 1px solid #4a5568;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  height: 400px; /* Altura predeterminada, se ajustará con la imagen */
   max-width: 100%;
-  max-height: 100%; /* Ensure canvas fits its container */
-  object-fit: contain; /* Maintain aspect ratio within container */
+  margin-top: 1rem;
+}
+
+#imageCanvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  cursor: crosshair;
 }
 #placeholderText {
   position: absolute;
-  color: #718096;
-  font-size: 1.5rem;
+  color: #a0aec0;
+  font-size: 1.2rem;
+  text-align: center;
 }
+
 #cropOverlay {
   position: absolute;
-  border: 2px dashed #06b6d4; /* Cyan dashed border */
-  pointer-events: none;
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  z-index: 5;
-}
-
-.message {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  text-align: center;
-  font-weight: 500;
-}
-.message.success {
-  background-color: #065f46;
-  color: #d1fae5;
-  border: 1px solid #10b981;
-}
-.message.error {
-  background-color: #991b1b;
-  color: #fee2e2;
-  border: 1px solid #ef4444;
-}
-.message.warning {
-  background-color: #92400e;
-  color: #fde68a;
-  border: 1px solid #f59e0b;
-}
-.loading-spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #06b6d4;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  animation: spin 1s linear infinite;
-  display: none;
-  margin-top: 1rem;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.ad-banner {
-  background-color: #1f2937;
-  border: 1px dashed #4b5563;
-  color: #d1d5db;
-  padding: 1rem;
-  text-align: center;
-  border-radius: 0.5rem;
-  font-style: italic;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  width: 100%;
-}
-.ad-banner-top {
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ad-banner-bottom {
-  min-height: 60px;
-}
-
-#downloadCounter {
-  @apply text-gray-400 text-sm mt-2;
-}
-#watchAdButton {
-  @apply bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3;
-}
-
-/* Modals and Cookies - same as before */
-/* .subscription-modal,
-      .cookie-consent {
-        /* ... (styles copied from previous version) ...
-      } */
-.subscription-modal {
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5); /* Oscurece el área no seleccionada */
+}
+
+/* Tool Group Styles (Sidebar elements) */
+.sidebar-tool-group {
+  background-color: #1a202c;
+  border: 1px solid #4a5568;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sidebar-tool-group-label {
+  font-weight: bold;
+  color: #06b6d4;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.sidebar-tool-group-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1010;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  gap: 0.5rem;
 }
-.subscription-modal.show {
-  opacity: 1;
-  visibility: visible;
+.sidebar-tool-group-row.justify-between {
+  justify-content: space-between;
 }
-.subscription-modal-content {
-  background-color: #1a202c;
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  color: white;
-  position: relative;
+.tool-group-label {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
-.subscription-modal-content input {
+
+/* Inputs específicos (sliders, color picker, text/number inputs) */
+.editor-sidebar input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 8px;
+  background: #4a5568;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.2s ease;
+}
+.editor-sidebar input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #06b6d4;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.editor-sidebar input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #06b6d4;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.editor-sidebar input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+.editor-sidebar input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.editor-sidebar input[type="color"]::-webkit-color-swatch {
+  border: 2px solid #4a5568;
+  border-radius: 0.375rem;
+}
+.editor-sidebar input[type="color"]::-moz-color-swatch {
+  border: 2px solid #4a5568;
+  border-radius: 0.375rem;
+}
+
+.editor-sidebar input[type="text"],
+.editor-sidebar input[type="number"],
+.editor-sidebar select {
   background-color: #2d3748;
   border: 1px solid #4a5568;
   color: white;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.subscription-modal-content input::placeholder {
-  color: #a0aec0;
-}
-.subscription-modal-content button {
-  transition: background-color 0.2s ease;
+.editor-sidebar input[type="text"]:focus,
+.editor-sidebar input[type="number"]:focus,
+.editor-sidebar select:focus {
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5);
 }
 
-.cookie-consent {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(26, 32, 44, 0.9);
+.tool-btn {
+  background-color: #0891b2;
   color: white;
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  z-index: 1005;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(100%);
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  font-size: 0.95rem;
 }
-.cookie-consent.show {
-  opacity: 1;
-  visibility: visible;
+.tool-btn:hover {
+  background-color: #0e7490;
+  transform: translateY(-1px);
+}
+.tool-btn:active {
   transform: translateY(0);
 }
-@media (min-width: 768px) {
-  .cookie-consent {
-    flex-direction: row;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    width: auto;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-  }
-  .cookie-consent.show {
-    transform: translateX(-50%) translateY(0);
-  }
+.tool-btn.active-tool {
+  background-color: #0e7490;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+} /* Usar 'active-tool' */
+.tool-btn.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #4a5568;
 }
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  /* Tablet and below */
-  .editor-main-layout {
-    flex-direction: column; /* Stack sidebar and canvas vertically */
-    align-items: center;
-    margin-top: calc(
-      64px + 40px + 0.5rem
-    ); /* Ajuste en móvil para las barras superiores */
-  }
-  .editor-sidebar {
-    min-width: unset; /* Remove min-width to allow shrinking */
-    width: 100%;
-    max-width: 400px; /* Constrain width in tablet */
-  }
-  .editor-canvas-area {
-    width: 100%;
-    height: auto; /* Allow height to be dynamic */
-    min-height: 400px; /* Ensure a minimum height for canvas */
-  }
-  .menu-bar {
-    justify-content: center; /* Center menu items on smaller screens */
-    flex-wrap: wrap; /* Allow menu items to wrap */
-    height: auto;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-  .canvas-container {
-    /* Ajusta la altura del canvas para móvil/tablet para que no quede muy grande */
-    height: calc(
-      100vh - (64px + 40px + 0.5rem + 0.5rem + 60px + 150px)
-    ); /* Adjusted for wrapped menu bar */
-    min-height: 300px;
-  }
-}
-
-@media (max-width: 640px) {
-  /* Mobile */
-  .editor-container {
-    padding: 1rem;
-  }
-  .sidebar-tool-group {
-    padding: 0.75rem;
-  }
-  .sidebar-tool-group-row {
-    justify-content: center;
-  }
-  input[type="range"] {
-    width: 100%;
-  }
+.tool-btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
 }

@@ -1,0 +1,144 @@
+/* Estilos específicos para el carrusel para que se vea bien en el tema oscuro */
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1200px; /* Consistente con el main container */
+  border-radius: 1rem; /* rounded-xl */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid #2d3748; /* gris-700 */
+  height: 350px; /* Altura fija para el carrusel */
+}
+
+.carousel-slides {
+  display: flex;
+  height: 100%;
+  transition: transform 0.8s ease-in-out; /* Transición suave para el slide */
+}
+
+.carousel-slide {
+  flex: 0 0 100%; /* Cada slide ocupa el 100% del ancho del contenedor */
+  width: 100%; /* Asegura que cada slide tome el 100% */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  background-color: #1e293b; /* un tono de gris más oscuro que el fondo del body */
+}
+.carousel-slide h5 {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 800; /* font-extrabold */
+  color: white;
+  margin-bottom: 0.75rem;
+}
+.carousel-slide p {
+  font-size: 1.125rem; /* text-lg */
+  color: #cbd5e1; /* gris-300 */
+  max-width: 800px;
+  margin: 0 auto 1.5rem auto;
+}
+.carousel-slide .slide-image {
+  max-width: 100%;
+  height: 150px; /* Altura fija para la imagen dentro del slide */
+  object-fit: contain; /* Asegura que la imagen se ajuste sin recortarse */
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+}
+
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(45, 55, 72, 0.7); /* gray-700 con opacidad */
+  color: white;
+  border: none;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 10;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+  border-radius: 0.5rem; /* ligeramente redondeado */
+}
+.carousel-nav-btn:hover {
+  opacity: 1;
+  background-color: rgba(74, 85, 104, 0.9); /* gray-600 con más opacidad */
+}
+.carousel-nav-btn.prev {
+  left: 0.5rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.carousel-nav-btn.next {
+  right: 0.5rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.carousel-indicators-container {
+  position: absolute;
+  bottom: 3rem; /* Ajustado para mover la paginación más abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+.carousel-indicator {
+  width: 12px;
+  height: 12px;
+  background-color: rgba(6, 182, 212, 0.4); /* cyan-500 con opacidad */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.carousel-indicator.active {
+  background-color: #06b6d4; /* cyan-500 sólido */
+  transform: scale(1.2);
+}
+
+/* Tarjetas de herramientas */
+.tool-card {
+  background-color: #1a202c; /* gris-900 */
+  border: 1px solid #2d3748; /* gris-800 */
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.tool-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+.tool-card .icon {
+  font-size: 3rem;
+  color: #06b6d4; /* cyan-500 */
+  margin-bottom: 1rem;
+}
+.tool-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+.tool-card p {
+  font-size: 1rem;
+  color: #cbd5e1; /* gris-300 */
+  margin-bottom: 1.25rem;
+}
+.tool-card .btn-card {
+  display: inline-block;
+  background-color: #0891b2; /* bg-cyan-600 */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.tool-card .btn-card:hover {
+  background-color: #0e7490; /* hover:bg-cyan-700 */
+  transform: translateY(-2px);
+}

@@ -711,7 +711,7 @@ async function generatePromptSuggestion() {
     let chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }]; // Prepara el historial para la API
 
     // Llama a tu serverless function en Vercel, no a la API de Google directamente
-    const response = await fetch("/api/generate-image", {
+    const response = await fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -784,7 +784,7 @@ async function improvePrompt() {
     let chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }]; // Prepara el historial
 
     // Llama a tu serverless function en Vercel
-    const response = await fetch("/api/generate-image", {
+    const response = await fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

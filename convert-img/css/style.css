@@ -1,34 +1,6 @@
-/* Estilos personalizados para la fuente y suavizado */
-body {
-  font-family: "Inter", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* Se establece en el body de HTML con bg-gradient-dark */
-  padding-top: 64px; /* Espacio para la barra de navegación fija */
-}
-/* Personalización de colores de Tailwind según lo solicitado */
-.bg-gradient-dark {
-  background-image: linear-gradient(
-    to right,
-    #1a202c,
-    /* gris oscuro */ #2d3748 /* azul grisáceo */
-  );
-}
-/* Las siguientes clases sobrescriben los valores predeterminados de Tailwind con los colores específicos que solicitaste */
-.text-cyan-500 {
-  color: #06b6d4; /* Tailwind cyan-500 */
-}
-.bg-cyan-600 {
-  background-color: #0891b2; /* Tailwind cyan-600 */
-}
-.hover\:bg-cyan-700:hover {
-  background-color: #0e7490; /* Tailwind cyan-700 */
-}
-.focus\:ring-cyan-300:focus {
-  --tw-ring-color: #67e8f9; /* Tailwind cyan-300 */
-}
+/* tu_proyecto_raiz/convert-img/css/style.css */
 
-/* Estilos generales del contenedor y elementos internos */
+/* Contenedor principal de la herramienta */
 .container {
   background-color: #1a202c; /* bg-gray-900 */
   border-radius: 1rem; /* rounded-2xl */
@@ -41,12 +13,17 @@ body {
   align-items: center;
   gap: 1.5rem; /* Espaciado entre elementos */
   border: 1px solid #2d3748; /* border-gray-700 */
-  transform: transition-all duration-300; /* para el hover:scale */
+  transition: all 0.3s ease; /* para el hover:scale */
+  margin-top: calc(
+    64px + 1rem
+  ); /* Empuja el layout debajo de la navbar fija + 1rem de espacio */
+  margin-bottom: 1rem; /* Espacio antes del footer/banners */
 }
 .container:hover {
   transform: scale(1.01);
 }
 
+/* Grupo de entrada de archivo */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -74,16 +51,17 @@ body {
   display: none; /* Ocultar el input de archivo predeterminado */
 }
 
+/* Contenedor del canvas de previsualización */
 .canvas-container {
   width: 100%;
   min-height: 200px; /* Altura mínima para el canvas */
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #2d3748; /* Fondo del canvas - gris-800 */
+  background-color: #1a202c; /* Fondo del canvas - gris-900 */
   border-radius: 0.75rem;
   overflow: hidden; /* Asegurar que la imagen no se desborde */
-  border: 1px solid #4a5568; /* border-gray-700 */
+  border: 1px solid #2d3748; /* border-gray-700 */
 }
 canvas {
   display: block; /* Eliminar espacio extra debajo del canvas */
@@ -92,9 +70,10 @@ canvas {
   border-radius: 0.75rem;
 }
 #placeholderText {
-  color: #718096; /* gris-500 */
+  color: #a0aec0; /* gris-400, o ajusta a gris-500 según tu paleta */
 }
 
+/* Grupo de botones */
 .button-group {
   display: flex;
   flex-wrap: wrap; /* Permitir que los botones se envuelvan */
@@ -150,7 +129,6 @@ canvas {
   border: 1px solid #ef4444; /* rojo-500 */
 }
 .message.warning {
-  /* Nuevo estilo para advertencias */
   background-color: #92400e; /* amarillo-800 oscuro */
   color: #fde68a; /* amarillo-100 claro */
   border: 1px solid #f59e0b; /* amarillo-500 */
@@ -200,142 +178,9 @@ canvas {
   box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5); /* ring-cyan-500 */
 }
 
-/* Estilos para el modal de suscripción */
-.subscription-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1010; /* Superior a otros elementos */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.subscription-modal.show {
-  opacity: 1;
-  visibility: visible;
-}
-.subscription-modal-content {
-  background-color: #1a202c; /* gris oscuro */
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  color: white;
-  position: relative;
-}
-.subscription-modal-content input {
-  background-color: #2d3748; /* gris azulado */
-  border: 1px solid #4a5568; /* gris más claro */
-  color: white;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-.subscription-modal-content input::placeholder {
-  color: #a0aec0; /* gris claro */
-}
-.subscription-modal-content button {
-  transition: background-color 0.2s ease;
-}
-.subscription-modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: #cbd5e1; /* gris-300 */
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-.subscription-modal-close:hover {
-  color: white;
-}
-
-/* Estilos para el mensaje de cookies */
-.cookie-consent {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(26, 32, 44, 0.9); /* gris oscuro con opacidad */
-  color: white;
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  z-index: 1005; /* Entre el contenido y el modal de suscripción */
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(100%);
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-}
-.cookie-consent.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-@media (min-width: 768px) {
-  /* md */
-  .cookie-consent {
-    flex-direction: row;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    width: auto;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-  }
-  .cookie-consent.show {
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* Estilos para los placeholders de anuncios */
-.ad-banner {
-  background-color: #1f2937; /* gray-800 */
-  border: 1px dashed #4b5563; /* gray-600 */
-  color: #d1d5db; /* gray-300 */
-  padding: 1rem;
-  text-align: center;
-  border-radius: 0.5rem;
-  font-style: italic;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  width: 100%; /* Asegurar que ocupan el ancho completo */
-}
-.ad-banner-top {
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ad-banner-bottom {
-  min-height: 60px;
-}
-/* Ajuste para el div principal cuando hay anuncios */
-.main-content-wrapper {
-  width: 100%;
-  max-width: 900px; /* Asegurar que no exceda el ancho del container */
-  margin-top: 1rem; /* Espacio entre el navbar y el primer banner/container */
-  margin-bottom: 1rem; /* Espacio entre el último banner/container y el footer */
-}
-
-/* Estilos para el contador de generaciones y botón de anuncio */
+/* Estilos para el contador de descargas y botón de anuncio */
 #conversionCounterDisplay {
-  @apply text-gray-400 text-sm mt-2;
+  @apply text-gray-400 text-sm mt-2; /* Usamos @apply de Tailwind si está configurado en el proyecto */
 }
 #watchAdButton {
   @apply bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3;
@@ -378,19 +223,18 @@ canvas {
   width: 90%;
   border: 1px solid #06b6d4; /* cyan-500 */
 }
-/* Estilo para la nueva clase del contenido de la barra de navegación */
-.navbar-inner-content {
-  max-width: 960px; /* Un poco más ancho que 4xl (900px) para el contenido principal */
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%; /* Asegura que el contenido ocupe la altura de la nav */
+
+/* Ajuste para el div principal cuando hay anuncios */
+.main-content-wrapper {
+  width: 100%;
+  max-width: 900px; /* Asegurar que no exceda el ancho del container */
+  margin-top: 1rem; /* Espacio entre el navbar y el primer banner/container */
+  margin-bottom: 1rem; /* Espacio entre el último banner/container y el footer */
 }
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
+  /* sm breakpoint en Tailwind */
   .container {
     padding: 1.5rem;
   }
@@ -399,16 +243,5 @@ canvas {
   }
   .btn {
     width: 100%; /* Botones de ancho completo en móvil */
-  }
-  .navbar-inner-content {
-    flex-direction: column; /* Apila los elementos en pantallas pequeñas */
-    text-align: center;
-    gap: 0.5rem; /* Espacio entre el logo y los enlaces */
-  }
-  .navbar-inner-content div.space-x-4 {
-    display: flex; /* Asegura que los enlaces sigan en fila */
-    flex-wrap: wrap; /* Permite que los enlaces se envuelvan */
-    justify-content: center;
-    margin-top: 0.5rem; /* Espacio entre el logo y los enlaces */
   }
 }

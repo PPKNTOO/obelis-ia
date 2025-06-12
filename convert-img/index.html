@@ -7,6 +7,7 @@
       Convertidor de Imágenes Gratuito - Todos los Formatos | ObelisIA
     </title>
     <link rel="icon" href="../img/favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="css/style.css" />
     <meta
       name="description"
@@ -18,13 +19,11 @@
     />
     <meta name="author" content="ObelisIA" />
 
-    <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="software.application" />
     <meta
       property="og:url"
       content="https://tu-dominio.com/convertidor-imagenes"
     />
-    <!-- Reemplaza con la URL real de tu app -->
     <meta
       property="og:title"
       content="Convertidor de Imágenes Gratuito - Todos los Formatos | ObelisIA"
@@ -37,15 +36,12 @@
       property="og:image"
       content="https://tu-dominio.com/imagen-previsualizacion-convertidor.jpg"
     />
-    <!-- Reemplaza con una URL de imagen de previsualización -->
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:url"
       content="https://tu-dominio.com/convertidor-imagenes"
     />
-    <!-- Reemplaza con la URL real de tu app -->
     <meta
       name="twitter:title"
       content="Convertidor de Imágenes Gratuito - Todos los Formatos | ObelisIA"
@@ -58,59 +54,87 @@
       name="twitter:image"
       content="https://tu-dominio.com/imagen-previsualizacion-convertidor.jpg"
     />
-    <!-- Reemplaza con una URL de imagen de previsualización -->
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome para íconos si se necesitan en el futuro, no directamente usado ahora -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
   </head>
   <body class="bg-gradient-dark min-h-screen flex flex-col items-center pb-8">
-    <!-- Barra de Navegación -->
     <nav
-      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
+      id="main-navbar"
+      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-1000 h-16"
     >
       <div class="navbar-inner-content">
         <a
           href="../index.html"
-          class="text-2xl font-bold hover:text-cyan-400 transition-colors duration-200"
-          >Obelis<span style="color: #0891b2"> IA</span></a
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
         >
-        <div class="space-x-4 flex-wrap">
-          <a
-            href="../index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >Inicio</a
-          >
-          <a
-            href="../ia-img/index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >IA Imagen</a
-          >
-          <a
-            href="../ia-text/index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >IA Texto</a
-          >
-          <a
-            href="../edit-img/index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >Editor de Imagen</a
-          >
-          <a
-            href="index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >Convertir Imagen</a
-          >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../ia-img/index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="../ia-text/index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a
+                href="./index.html"
+                class="submenu-item active-link"
+                aria-current="page"
+                >Convertir Imágenes</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Más Herramientas
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
         </div>
       </div>
     </nav>
 
     <div class="main-content-wrapper flex flex-col items-center">
-      <!-- Placeholder para Banner de Anuncio Superior -->
       <div class="ad-banner ad-banner-top w-full max-w-3xl rounded-xl">
         Espacio para Anuncio (Banner Superior)
       </div>
@@ -158,16 +182,20 @@
             <option value="image/jpeg">JPEG</option>
             <option value="image/png">PNG</option>
             <option value="image/webp">WebP</option>
-            <option value="image/gif">
-              GIF (compatibilidad limitada, estático)
-            </option>
-            <option value="image/bmp">BMP (compatibilidad limitada)</option>
-            <option value="image/tiff">
-              TIFF (experimental, muy limitada)
-            </option>
-            <option value="image/x-icon">
-              ICO (experimental, muy limitada)
-            </option>
+            <option value="image/gif">GIF</option>
+            <option value="image/bmp">BMP</option>
+            <option value="image/tiff">TIFF</option>
+            <option value="image/x-icon">ICO</option>
+            <option value="image/avif">AVIF</option>
+            <option value="image/jp2">JPEG 2000 (JP2)</option>
+            <option value="image/jpx">JPEG 2000 (JPX)</option>
+            <option value="application/pdf">PDF</option>
+            <option value="image/vnd.adobe.photoshop">PSD</option>
+            <option value="image/heic">HEIC (Entrada)</option>
+            <option value="image/heif">HEIF (Salida, si soporta)</option>
+            <option value="image/x-raw">RAW (Entrada)</option>
+            <option value="image/dng">DNG (Entrada)</option>
+            <option value="image/svg+xml">SVG (Si es vectorial)</option>
           </select>
         </div>
 
@@ -201,13 +229,11 @@
         <div id="loadingSpinner" class="loading-spinner"></div>
       </div>
 
-      <!-- Placeholder para Banner de Anuncio Inferior -->
       <div class="ad-banner ad-banner-bottom w-full max-w-3xl rounded-xl">
         Espacio para Anuncio (Banner Inferior)
       </div>
     </div>
 
-    <!-- Footer -->
     <footer
       class="w-full bg-gray-900 text-gray-400 text-center py-4 mt-8 rounded-t-xl shadow-inner border-t border-gray-700 max-w-3xl"
     >
@@ -217,7 +243,6 @@
       </p>
     </footer>
 
-    <!-- Modal de Suscripción -->
     <div id="subscriptionModal" class="subscription-modal">
       <div class="subscription-modal-content">
         <button
@@ -256,7 +281,6 @@
       </div>
     </div>
 
-    <!-- Ad Modal for "Watching an Ad" simulation -->
     <div id="adModal" class="ad-modal-overlay">
       <div class="ad-modal-content">
         <h3 class="text-2xl font-bold text-cyan-500 mb-4">
@@ -274,7 +298,6 @@
       </div>
     </div>
 
-    <!-- Mensaje de Consentimiento de Cookies -->
     <div id="cookieConsent" class="cookie-consent">
       <p class="text-sm">
         Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
@@ -288,5 +311,5 @@
       </button>
     </div>
   </body>
-  <script src="js/script.js"></script>
+  <script src="js/script.js" defer></script>
 </html>

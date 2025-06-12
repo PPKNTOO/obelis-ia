@@ -52,6 +52,7 @@
   }
 
   function showMessage(text, type) {
+    // Asegurarse de que DOMElements y messageArea estén inicializados
     if (!DOMElements || !DOMElements.messageArea) {
       console.warn("Message area not found, cannot display message:", text);
       return;
@@ -76,6 +77,7 @@
     let totalBytes = 0;
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
+      // Multiplicar por 2 para caracteres Unicode (UTF-16)
       totalBytes += localStorage.getItem(key).length * 2;
     }
     const totalKB = totalBytes / 1024;
@@ -106,7 +108,7 @@
       DOMElements.loadingSpinner.style.display = show ? "block" : "none";
 
     const allControls = document.querySelectorAll(
-      'button, input[type="file"], input[type="range"], input[type="color"], input[type="text"], select, label[for="imageUpload"]'
+      'button, input[type="file"], input[type="range"], input[type="color"], input[type="text"], select, label[for="imageUpload"]' // Added label for fileUpload
     );
     allControls.forEach((control) => {
       if (control.id === "imageUpload" || control.id === "fileUploadLabel") {
@@ -333,6 +335,7 @@
       showMessage("Carga una imagen para aplicar ajustes.", "warning");
       return;
     }
+    // Update displayed value immediately
     if (DOMElements.brightnessRange && DOMElements.brightnessValue)
       DOMElements.brightnessValue.textContent =
         DOMElements.brightnessRange.value.toString();
@@ -371,6 +374,7 @@
           parseInt(DOMElements.gammaRange.value)
         );
       };
+      // Cargar el estado actual desde el historial para no perder las ediciones previas
       if (historyIndex >= 0) {
         tempImageForAdjustments.src = history[historyIndex];
       } else if (originalImage) {
@@ -378,7 +382,7 @@
       } else {
         return;
       }
-      saveState();
+      saveState(); // Guardar el estado después de aplicar los ajustes
       showMessage("Ajustes aplicados.", "success");
     }, 300);
   };
@@ -405,6 +409,7 @@
     );
     const pixels = imageData.data;
 
+    // Apply filter based on type
     if (filterType === "grayscale") {
       for (let i = 0; i < pixels.length; i += 4) {
         const lightness = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
@@ -1123,7 +1128,7 @@
     // Asignar elementos DOM al inicio de DOMContentLoaded
     DOMElements = {
       imageUpload: document.getElementById("imageUpload"),
-      fileNameSpan: document.getElementById("fileName"),
+      fileNameSpan: document.getElementById("fileName"), // Asegúrate de que este ID exista en tu HTML si lo usas
       imageCanvas: document.getElementById("imageCanvas"),
       placeholderText: document.getElementById("placeholderText"),
       cropOverlay: document.getElementById("cropOverlay"),
@@ -1263,7 +1268,7 @@
       editorCtx.lineCap = "round";
       editorCtx.lineJoin = "round";
       editorCtx.strokeStyle = DOMElements.colorPicker.value;
-      editorCtx.fillStyle = DOMElements.colorPicker.value;
+      editorCtx.fillStyle = DOMElements.colorPicker.value; // CORRECCIÓN
     } else {
       console.error("Error: Canvas element not found!");
       return; // Detener la ejecución si el canvas no se encuentra
@@ -1322,7 +1327,7 @@
     });
 
     // Llama a resetEditorState para inicializar el estado de la UI
-    resetEditorState();
+    resetEditorState(); // Esta llamada es segura ahora.
 
     toggleLoading(false); // Make sure loading is off, then state is set
 
