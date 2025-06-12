@@ -8,6 +8,19 @@
     </title>
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
     <meta
       name="description"
       content="Genera historias, guiones, poemas, canciones, artículos y más con nuestra avanzada IA de texto. Herramienta gratuita para escritores, creativos y profesionales."
@@ -18,13 +31,11 @@
     />
     <meta name="author" content="ObelisIA" />
 
-    <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="software.application" />
     <meta
       property="og:url"
       content="https://obelis-ia.vercel.app/ia-text/index.html"
     />
-    <!-- Reemplaza con la URL real de tu app -->
     <link rel="icon" href="../img/favicon.ico" type="image/ico" />
     <link rel="stylesheet" href="css/style.css" />
     <meta
@@ -36,15 +47,11 @@
       content="Crea textos asombrosos: historias, guiones, poemas, canciones y más con nuestra potente IA. Herramienta gratuita y fácil de usar para todas tus necesidades de escritura."
     />
     <meta property="og:image" content="../img/logo.webp" />
-    <!-- Reemplaza con una URL de imagen de previsualización -->
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:url"
       content="https://obelis-ia.vercel.app/ia-text/index.html"
     />
-    <!-- Reemplaza con la URL real de tu app -->
     <meta
       name="twitter:title"
       content="Generador de Contenido IA Gratuito - Historias, Poemas y Más | ObelisIA"
@@ -54,9 +61,6 @@
       content="Crea textos asombrosos: historias, guiones, poemas, canciones y más con nuestra potente IA. Herramienta gratuita y fácil de usar para todas tus necesidades de escritura."
     />
     <meta name="twitter:image" content="../img/logo.webp" />
-    <!-- Reemplaza con una URL de imagen de previsualización -->
-
-    <!-- Schema.org Markup -->
     <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -65,7 +69,7 @@
         "description": "Aplicación web gratuita para generar diversos tipos de contenido textual (historias, guiones, poemas, etc.) utilizando inteligencia artificial. Incluye lector de voz, opciones de tono y descarga.",
         "applicationCategory": "Utilities",
         "operatingSystem": "Web",
-        "url": "https://obelis-ia.vercel.app/ia-text/index.html", <!-- Reemplaza con la URL real de tu app -->
+        "url": "https://obelis-ia.vercel.app/ia-text/index.html",
         "inLanguage": "es",
         "offers": {
           "@type": "Offer",
@@ -80,18 +84,17 @@
       }
     </script>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- jsPDF CDN for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- Font Awesome CDN for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
   </head>
   <body class="min-h-screen flex flex-col items-center justify-between">
-    <!-- Barra de Navegación -->
+    <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
+    </amp-auto-ads>
+
     <nav
       class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
     >
@@ -141,10 +144,8 @@
         <span class="text-cyan-500">IA</span>
       </h1>
 
-      <!-- Sección para Anuncio Superior -->
       <div class="ad-banner ad-banner-top">
         [Espacio para Anuncio Aquí - Publicidad Superior]
-        <!-- Aquí iría el código de tu red de anuncios (ej. Google AdSense) -->
         <div
           class="w-full h-24 bg-gray-700 flex items-center justify-center rounded-md mt-2"
         >
@@ -370,7 +371,6 @@
         class="mt-6 p-4 bg-red-900 rounded-xl text-red-400 text-center font-semibold shadow-md hidden border border-red-700"
       ></div>
 
-      <!-- Historial de Contenido -->
       <div
         class="mt-10 p-6 bg-gray-800 rounded-xl shadow-xl border border-gray-700"
       >
@@ -378,7 +378,6 @@
           Historial de Contenido
         </h2>
         <div id="contentHistoryContainer" class="max-h-60 overflow-y-auto pr-2">
-          <!-- Los elementos del historial se renderizarán aquí -->
           <p class="text-gray-500 text-center">
             No hay contenido en el historial.
           </p>
@@ -395,10 +394,8 @@
       </div>
     </div>
 
-    <!-- Sección para Anuncio Inferior -->
     <div class="ad-banner ad-banner-bottom w-full max-w-3xl">
       [Espacio para Anuncio Aquí - Publicidad Inferior]
-      <!-- Aquí iría el código de tu red de anuncios (ej. Google AdSense) -->
       <div
         class="w-full h-24 bg-gray-700 flex items-center justify-center rounded-md mt-2"
       >
@@ -406,7 +403,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer
       class="w-full bg-gray-900 text-gray-400 text-center py-4 mt-8 rounded-t-xl shadow-inner border-t border-gray-700"
     >
@@ -416,7 +412,6 @@
       </p>
     </footer>
 
-    <!-- Modal for Generated Content -->
     <div id="contentModal" class="modal-overlay">
       <div class="modal-content">
         <button id="modalCloseButton" class="modal-close-button">
@@ -439,9 +434,7 @@
         <div
           id="generatedText"
           class="bg-gray-800 p-8 rounded-xl text-gray-200 leading-relaxed shadow-xl border border-gray-700 mb-6"
-        >
-          <!-- Generated text will be displayed here -->
-        </div>
+        ></div>
         <div class="flex justify-center mb-6 space-x-4">
           <button
             id="copyTextButton"
@@ -510,26 +503,6 @@
               </svg>
               <span>Descargar PDF</span>
             </button>
-            <button
-              id="downloadCsvButton"
-              class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center space-x-2"
-            >
-              <svg
-                class="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                ></path>
-              </svg>
-              <span>Descargar CSV</span>
-            </button>
           </div>
           <p class="text-sm text-gray-400 mt-4 text-center">
             (La descarga en formatos Word y Excel directamente en el navegador
@@ -539,7 +512,6 @@
       </div>
     </div>
 
-    <!-- Ad Modal for "Watching an Ad" simulation -->
     <div id="adModal" class="ad-modal-overlay">
       <div class="ad-modal-content">
         <h3 class="text-2xl font-bold text-cyan-500 mb-4">
@@ -557,7 +529,6 @@
       </div>
     </div>
 
-    <!-- Modal de Suscripción -->
     <div id="subscriptionModal" class="subscription-modal">
       <div class="subscription-modal-content">
         <h3 class="text-2xl font-bold mb-4 text-cyan-500">
@@ -590,7 +561,6 @@
       </div>
     </div>
 
-    <!-- Mensaje de Consentimiento de Cookies -->
     <div id="cookieConsent" class="cookie-consent">
       <p class="text-sm">
         Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
@@ -604,7 +574,6 @@
       </button>
     </div>
 
-    <!-- Generic Message Modal (from index.html for general messages) -->
     <div
       id="messageModal"
       class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[2000] opacity-0 invisible transition-all duration-300"
