@@ -1,0 +1,414 @@
+/* Estilos personalizados para la fuente y suavizado */
+body {
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Se establece en el body de HTML con bg-gradient-dark */
+  padding-top: 64px; /* Espacio para la barra de navegación fija */
+}
+/* Personalización de colores de Tailwind según lo solicitado */
+.bg-gradient-dark {
+  background-image: linear-gradient(
+    to right,
+    #1a202c,
+    /* gris oscuro */ #2d3748 /* azul grisáceo */
+  );
+}
+/* Las siguientes clases sobrescriben los valores predeterminados de Tailwind con los colores específicos que solicitaste */
+.text-cyan-500 {
+  color: #06b6d4; /* Tailwind cyan-500 */
+}
+.bg-cyan-600 {
+  background-color: #0891b2; /* Tailwind cyan-600 */
+}
+.hover\:bg-cyan-700:hover {
+  background-color: #0e7490; /* Tailwind cyan-700 */
+}
+.focus\:ring-cyan-300:focus {
+  --tw-ring-color: #67e8f9; /* Tailwind cyan-300 */
+}
+
+/* Estilos generales del contenedor y elementos internos */
+.container {
+  background-color: #1a202c; /* bg-gray-900 */
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+  padding: 2rem;
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem; /* Espaciado entre elementos */
+  border: 1px solid #2d3748; /* border-gray-700 */
+  transform: transition-all duration-300; /* para el hover:scale */
+}
+.container:hover {
+  transform: scale(1.01);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.file-input {
+  border: 2px dashed #4a5568; /* Borde punteado - gris-600 */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  background-color: #2d3748; /* gris-800 */
+  color: #cbd5e1; /* gris-300 */
+  font-size: 1.125rem; /* text-lg */
+}
+.file-input:hover {
+  border-color: #06b6d4; /* cyan-500 al pasar el ratón */
+  background-color: #4a5568; /* gris-700 */
+}
+.file-input input[type="file"] {
+  display: none; /* Ocultar el input de archivo predeterminado */
+}
+
+.canvas-container {
+  width: 100%;
+  min-height: 200px; /* Altura mínima para el canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2d3748; /* Fondo del canvas - gris-800 */
+  border-radius: 0.75rem;
+  overflow: hidden; /* Asegurar que la imagen no se desborde */
+  border: 1px solid #4a5568; /* border-gray-700 */
+}
+canvas {
+  display: block; /* Eliminar espacio extra debajo del canvas */
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+#placeholderText {
+  color: #718096; /* gris-500 */
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap; /* Permitir que los botones se envuelvan */
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra más oscura para botones */
+  position: relative;
+  overflow: hidden;
+  font-size: 1.125rem; /* text-lg */
+}
+.btn:active {
+  transform: translateY(1px); /* Efecto de clic */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn-primary {
+  background-color: #0891b2; /* bg-cyan-600 */
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #0e7490; /* hover:bg-cyan-700 */
+}
+.btn-secondary {
+  background-color: #4a5568; /* bg-gray-700 */
+  color: #e2e8f0; /* text-gray-200 */
+}
+.btn-secondary:hover {
+  background-color: #2d3748; /* hover:bg-gray-600 */
+}
+.message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+}
+.message.success {
+  background-color: #065f46; /* verde-800 oscuro */
+  color: #d1fae5; /* verde-100 claro */
+  border: 1px solid #10b981; /* verde-500 */
+}
+.message.error {
+  background-color: #991b1b; /* rojo-800 oscuro */
+  color: #fee2e2; /* rojo-100 claro */
+  border: 1px solid #ef4444; /* rojo-500 */
+}
+.message.warning {
+  /* Nuevo estilo para advertencias */
+  background-color: #92400e; /* amarillo-800 oscuro */
+  color: #fde68a; /* amarillo-100 claro */
+  border: 1px solid #f59e0b; /* amarillo-500 */
+}
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #06b6d4; /* cyan-500 */
+  border-radius: 50%;
+  width: 28px; /* ligeramente más grande */
+  height: 28px;
+  animation: spin 1s linear infinite;
+  display: none; /* Oculto por defecto */
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.disabled-btn {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none; /* Sin sombra cuando deshabilitado */
+}
+
+/* Estilos para el select de formato */
+#outputFormat {
+  background-color: #2d3748; /* gris-800 */
+  color: #e2e8f0; /* gris-200 */
+  border: 1px solid #4a5568; /* gris-700 */
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  appearance: none; /* Eliminar estilo nativo del select */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%23CBD5E1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e"); /* Flecha SVG personalizada */
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.5em 1.5em;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+#outputFormat:focus {
+  outline: none;
+  border-color: #06b6d4; /* cyan-500 */
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5); /* ring-cyan-500 */
+}
+
+/* Estilos para el modal de suscripción */
+.subscription-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1010; /* Superior a otros elementos */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.subscription-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+.subscription-modal-content {
+  background-color: #1a202c; /* gris oscuro */
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+    0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  color: white;
+  position: relative;
+}
+.subscription-modal-content input {
+  background-color: #2d3748; /* gris azulado */
+  border: 1px solid #4a5568; /* gris más claro */
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.subscription-modal-content input::placeholder {
+  color: #a0aec0; /* gris claro */
+}
+.subscription-modal-content button {
+  transition: background-color 0.2s ease;
+}
+.subscription-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #cbd5e1; /* gris-300 */
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.subscription-modal-close:hover {
+  color: white;
+}
+
+/* Estilos para el mensaje de cookies */
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(26, 32, 44, 0.9); /* gris oscuro con opacidad */
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1005; /* Entre el contenido y el modal de suscripción */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100%);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+.cookie-consent.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (min-width: 768px) {
+  /* md */
+  .cookie-consent {
+    flex-direction: row;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+  }
+  .cookie-consent.show {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Estilos para los placeholders de anuncios */
+.ad-banner {
+  background-color: #1f2937; /* gray-800 */
+  border: 1px dashed #4b5563; /* gray-600 */
+  color: #d1d5db; /* gray-300 */
+  padding: 1rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  font-style: italic;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  width: 100%; /* Asegurar que ocupan el ancho completo */
+}
+.ad-banner-top {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ad-banner-bottom {
+  min-height: 60px;
+}
+/* Ajuste para el div principal cuando hay anuncios */
+.main-content-wrapper {
+  width: 100%;
+  max-width: 900px; /* Asegurar que no exceda el ancho del container */
+  margin-top: 1rem; /* Espacio entre el navbar y el primer banner/container */
+  margin-bottom: 1rem; /* Espacio entre el último banner/container y el footer */
+}
+
+/* Estilos para el contador de generaciones y botón de anuncio */
+#conversionCounterDisplay {
+  @apply text-gray-400 text-sm mt-2;
+}
+#watchAdButton {
+  @apply bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3;
+}
+
+/* Ad Modal for "Watching an Ad" simulation */
+.ad-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.95
+  ); /* Fondo muy oscuro para simular bloqueo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Más alto que otros modales */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.ad-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+.ad-modal-content {
+  background-color: #1a202c; /* gray-900 */
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+    0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  color: white;
+  max-width: 500px;
+  width: 90%;
+  border: 1px solid #06b6d4; /* cyan-500 */
+}
+/* Estilo para la nueva clase del contenido de la barra de navegación */
+.navbar-inner-content {
+  max-width: 960px; /* Un poco más ancho que 4xl (900px) para el contenido principal */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%; /* Asegura que el contenido ocupe la altura de la nav */
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    padding: 1.5rem;
+  }
+  .button-group {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%; /* Botones de ancho completo en móvil */
+  }
+  .navbar-inner-content {
+    flex-direction: column; /* Apila los elementos en pantallas pequeñas */
+    text-align: center;
+    gap: 0.5rem; /* Espacio entre el logo y los enlaces */
+  }
+  .navbar-inner-content div.space-x-4 {
+    display: flex; /* Asegura que los enlaces sigan en fila */
+    flex-wrap: wrap; /* Permite que los enlaces se envuelvan */
+    justify-content: center;
+    margin-top: 0.5rem; /* Espacio entre el logo y los enlaces */
+  }
+}

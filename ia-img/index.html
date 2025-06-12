@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ObelisAI - Generador de Imágenes IA</title>
+    <meta
+      name="description"
+      content="Genera imágenes impresionantes con inteligencia artificial de forma gratuita. ObelisAI te ofrece un generador de imágenes IA rápido, fácil de usar y con opciones avanzadas de edición, galería y descarga. Crea arte digital, ilustraciones y visuales únicos a partir de texto."
+    />
+    <meta
+      name="keywords"
+      content="IA, inteligencia artificial, generador de imágenes, herramientas gratuitas, ObelisAI, generar imágenes con IA, texto a imagen, arte digital, IA gratis, editor de imágenes IA, descarga de imágenes IA, AI art generator"
+    />
+    <meta name="author" content="ObelisAI" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://tu-dominio.com/gen-img.html" />
+    <link
+      rel="icon"
+      href="https://placehold.co/32x32/06b6d4/FFFFFF?text=IA"
+      type="image/png"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tu-dominio.com/gen-img.html" />
+    <meta property="og:title" content="ObelisAI - Generador de Imágenes IA" />
+    <meta
+      property="og:description"
+      content="Crea imágenes impresionantes con inteligencia artificial de forma gratuita. ObelisAI te ofrece un generador de imágenes IA rápido, fácil de usar y con opciones avanzadas de edición, galería y descarga. Crea arte digital, ilustraciones y visuales únicos a partir de texto."
+    />
+    <meta
+      property="og:image"
+      content="https://placehold.co/1200x630/2d3748/06b6d4?text=ObelisAI+Image+Gen"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://tu-dominio.com/gen-img.html" />
+    <meta name="twitter:title" content="ObelisAI - Generador de Imágenes IA" />
+    <meta
+      name="twitter:description"
+      content="Crea imágenes impresionantes con inteligencia artificial de forma gratuita. ObelisAI te ofrece un generador de imágenes IA rápido, fácil de usar y con opciones avanzadas de edición, galería y descarga. Crea arte digital, ilustraciones y visuales únicos a partir de texto."
+    />
+    <meta
+      property="twitter:image"
+      content="https://placehold.co/1200x675/2d3748/06b6d4?text=ObelisAI+Image+Gen"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ObelisAI Image Generator",
+        "applicationCategory": "Multimedia",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "150"
+        },
+        "description": "Herramienta gratuita de ObelisAI para generar imágenes de alta calidad a partir de texto utilizando inteligencia artificial, con funciones de edición, galería y descarga.",
+        "softwareHelp": {
+          "@type": "CreativeWork",
+          "url": "https://tu-dominio.com/acerca-de.html"
+        },
+        "url": "https://tu-dominio.com/gen-img.html",
+        "featureList": [
+          "Generación de imágenes por IA",
+          "Edición básica de imágenes",
+          "Galería de imágenes guardadas",
+          "Descarga de imágenes",
+          "Sugerencias de prompts por IA",
+          "Límite de generaciones con anuncios"
+        ],
+        "installUrl": "https://tu-dominio.com/gen-img.html",
+        "screenshot": "https://placehold.co/800x600/2d3748/06b6d4?text=ObelisAI+Screenshot"
+      }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Estilo para la fuente Inter */
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-image: linear-gradient(to right, #1a202c, #2d3748);
+        color: #e2e8f0; /* gris-200 */
+        padding-top: 64px; /* Espacio para la barra de navegación fija */
+      }
+      /* Personalización de colores de Tailwind si es necesario, o directamente en clases */
+      .bg-gradient-dark {
+        background-image: linear-gradient(
+          to right,
+          #1a202c,
+          #2d3748
+        ); /* gris oscuro a azul grisáceo */
+      }
+      .text-cyan-500 {
+        color: #06b6d4; /* Tailwind cyan-500 */
+      }
+      .bg-cyan-600 {
+        background-color: #0891b2; /* Tailwind cyan-600 */
+      }
+      .hover\:bg-cyan-700:hover {
+        background-color: #0e7490; /* Tailwind cyan-700 */
+      }
+      .focus\:ring-cyan-300:focus {
+        --tw-ring-color: #67e8f9; /* Tailwind cyan-300 */
+      }
+      /* Estilos para el lightbox y editor modal */
+      .modal-overlay {
+        /* Unifica estilos para lightbox y editor */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.85
+        ); /* Fondo oscuro semitransparente */
+        backdrop-filter: blur(5px); /* Efecto de desenfoque en el fondo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000; /* Asegura que esté por encima de todo */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal-content {
+        /* Contenido genérico de modal */
+        position: relative;
+        background-color: #1a202c; /* gris oscuro */
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+          0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        color: white;
+        max-width: 90%; /* Ajuste para responsividad */
+        max-height: 90vh; /* Ajuste para responsividad */
+        overflow-y: auto; /* Para scroll si el contenido es grande */
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .modal-close-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(45, 55, 72, 0.7); /* gray-700 con opacidad */
+        border: none;
+        color: white;
+        font-size: 1.5rem; /* Ajuste para ser más pequeño */
+        cursor: pointer;
+        padding: 0.25rem 0.6rem; /* Ajuste para ser más pequeño */
+        line-height: 1;
+        border-radius: 9999px; /* rounded-full */
+        opacity: 0.7;
+        transition: opacity 0.2s ease, background-color 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+      }
+      .modal-close-button:hover {
+        opacity: 1;
+        background-color: rgba(74, 85, 104, 0.8); /* gray-600 con opacidad */
+      }
+      /* Lightbox specific styles */
+      #lightboxContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+      }
+      .lightbox-img {
+        max-width: 100%;
+        max-height: 65vh; /* Ajuste para dejar espacio a miniaturas y controles */
+        object-fit: contain;
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+          0 10px 10px -5px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Navegación del Lightbox */
+      .lightbox-nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(45, 55, 72, 0.7);
+        color: white;
+        border: none;
+        padding: 0.75rem 1rem;
+        border-radius: 9999px;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s ease, background-color 0.2s ease;
+        z-index: 10;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      }
+      .lightbox-nav-button:hover {
+        opacity: 1;
+        background-color: rgba(74, 85, 104, 0.8);
+      }
+      .lightbox-nav-button.prev {
+        left: 1rem;
+      }
+      .lightbox-nav-button.next {
+        right: 1rem;
+      }
+
+      /* Mini Galería en Lightbox */
+      .lightbox-thumbnails-container {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        overflow-x: auto;
+        max-width: 100%;
+        scrollbar-width: thin;
+        scrollbar-color: #06b6d4 #1a202c;
+      }
+      .lightbox-thumbnails-container::-webkit-scrollbar {
+        height: 8px;
+      }
+      .lightbox-thumbnails-container::-webkit-scrollbar-track {
+        background: #1a202c;
+        border-radius: 10px;
+      }
+      .lightbox-thumbnails-container::-webkit-scrollbar-thumb {
+        background-color: #06b6d4;
+        border-radius: 10px;
+        border: 2px solid #1a202c;
+      }
+
+      .lightbox-thumbnail-item {
+        flex-shrink: 0;
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+      .lightbox-thumbnail-item.active {
+        border-color: #06b6d4;
+        transform: scale(1.05);
+      }
+      .lightbox-thumbnail-item:hover:not(.active) {
+        transform: scale(1.02);
+        border-color: #4a5568;
+      }
+
+      /* Estilos para la selección en galería principal */
+      .gallery-item-wrapper {
+        @apply border border-gray-700 transition-all duration-200;
+      }
+      .gallery-item-wrapper.selected {
+        @apply border-cyan-500 ring-2 ring-cyan-500;
+      }
+      .gallery-item-wrapper .selection-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(6, 182, 212, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        border-radius: 0.5rem;
+      }
+      .gallery-item-wrapper.selected .selection-overlay {
+        opacity: 1;
+      }
+      .gallery-item-wrapper .selection-overlay svg {
+        color: white;
+        font-size: 2rem;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      .gallery-item-wrapper.selected .selection-overlay svg {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Estilos para el modal de suscripción */
+      .subscription-modal-content {
+        background-color: #1a202c;
+        padding: 2rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+          0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        color: white;
+        position: relative;
+      }
+      .subscription-modal-content input {
+        background-color: #2d3748;
+        border: 1px solid #4a5568;
+        color: white;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+      .subscription-modal-content input::placeholder {
+        color: #a0aec0;
+      }
+      .subscription-modal-content button {
+        transition: background-color 0.2s ease;
+      }
+
+      /* Estilos para el mensaje de cookies */
+      .cookie-consent {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(26, 32, 44, 0.9);
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1005;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(100%);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+      }
+      .cookie-consent.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      @media (min-width: 768px) {
+        .cookie-consent {
+          flex-direction: row;
+          border-top-left-radius: 0.75rem;
+          border-top-right-radius: 0.75rem;
+          width: auto;
+          left: 50%;
+          transform: translateX(-50%) translateY(100%);
+        }
+        .cookie-consent.show {
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* Estilos para el cuadro de sugerencia de prompt */
+      .prompt-suggestion-box {
+        background-color: #2d3748;
+        border: 1px solid #4a5568;
+        color: white;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin-top: 1rem;
+        text-align: center;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+      }
+      .prompt-suggestion-box.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .prompt-suggestion-box button {
+        @apply bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3;
+      }
+      .prompt-suggestion-box p {
+        @apply text-gray-300 text-sm;
+      }
+
+      /* Estilos para los placeholders de anuncios */
+      .ad-banner {
+        background-color: #1f2937;
+        border: 1px dashed #4b5563;
+        color: #d1d5db;
+        padding: 1rem;
+        text-align: center;
+        border-radius: 0.5rem;
+        font-style: italic;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        width: 100%;
+        max-width: 960px;
+      }
+      .ad-banner-top {
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ad-banner-bottom {
+        min-height: 60px;
+      }
+
+      /* Estilos para el contador de generaciones */
+      #generationCounter {
+        @apply text-gray-400 text-sm mt-2;
+      }
+      #watchAdButton {
+        @apply bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3;
+      }
+
+      /* Estilos para el modal de mensajes genérico (de index.html) */
+      #messageModal {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      #messageModal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      #messageModalContent {
+        background-color: #1a202c;
+        border: 1px solid #2d3748;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+          0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        padding: 2rem;
+        border-radius: 0.75rem;
+        max-width: 400px;
+        width: 11/12;
+        text-align: center;
+        position: relative;
+        color: white;
+      }
+      #messageModalCloseButton {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        color: #a0aec0;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #messageModalCloseButton:hover {
+        color: white;
+      }
+      #messageModalText {
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+      #messageModalIcon {
+        margin-top: 1rem;
+        font-size: 2.5rem;
+      }
+      #messageModalIcon.success {
+        color: #10b981;
+      }
+      #messageModalIcon.error {
+        color: #ef4444;
+      }
+      #messageModalIcon.info {
+        color: #60a5fa;
+      }
+
+      /* Estilo para el GIF de Pocoyo o el spinner de carga */
+      .loading-animation-wrapper {
+        width: 80px; /* Ajusta el tamaño según sea necesario */
+        height: 80px;
+        margin: 20px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pocoyo-gif {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      /* Spinner de carga moderno */
+      .modern-spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #06b6d4; /* Color cyan */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Estilo para la nueva clase del contenido de la barra de navegación */
+      .navbar-inner-content {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+      }
+
+      /* Nuevos estilos para la navegación */
+      .nav-item {
+        position: relative;
+        padding: 0.5rem 0.75rem;
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-item:hover {
+        background-color: #2d3748;
+        color: #67e8f9;
+      }
+
+      .nav-item.active-link {
+        color: #06b6d4;
+        border-bottom: 2px solid #06b6d4;
+        padding-bottom: calc(0.5rem - 2px);
+        background-color: rgba(6, 182, 212, 0.1);
+      }
+
+      .nav-item .nav-icon {
+        font-size: 1rem;
+        color: #cbd5e1;
+        transition: color 0.2s ease;
+      }
+      .nav-item:hover .nav-icon {
+        color: #67e8f9;
+      }
+      .nav-item.active-link .nav-icon {
+        color: #06b6d4;
+      }
+
+      /* Estilos para el submenú */
+      .submenu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #1a202c;
+        border: 1px solid #4a5568;
+        border-radius: 0.5rem;
+        min-width: 180px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        z-index: 20;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        padding: 0.5rem 0;
+      }
+
+      .nav-item:hover .submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .submenu-item {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: #e2e8f0;
+        text-align: left;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+      .submenu-item:hover {
+        background-color: #2d3748;
+        color: #67e8f9;
+      }
+      .submenu-item.active-link {
+        color: #06b6d4;
+        background-color: rgba(6, 182, 212, 0.1);
+        font-weight: 500;
+      }
+
+      /* Icono de flecha para submenús */
+      .nav-item .arrow-icon {
+        margin-left: 0.5rem;
+        transition: transform 0.2s ease;
+      }
+      .nav-item:hover .arrow-icon {
+        transform: rotate(90deg);
+      }
+
+      /* Responsive adjustments for navigation */
+      @media (max-width: 768px) {
+        /* Hide nav links by default on small screens */
+        .navbar-inner-content .flex-wrap {
+          display: none; /* Hidden by default in mobile */
+          flex-direction: column;
+          position: absolute;
+          top: 64px; /* Below the fixed navbar */
+          left: 0;
+          width: 100%;
+          background-color: #1a202c; /* Darker background for mobile menu */
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+          padding-bottom: 1rem;
+          overflow-y: auto;
+          max-height: calc(
+            100vh - 64px
+          ); /* Max height of viewport minus navbar height */
+          transform: translateY(-100%); /* Start off-screen */
+          transition: transform 0.3s ease-out;
+          z-index: 999; /* Ensure it's below the fixed nav but above page content */
+        }
+
+        .navbar-inner-content .flex-wrap.active {
+          display: flex; /* Show when active */
+          transform: translateY(0); /* Slide in */
+        }
+
+        /* Hamburger icon */
+        #menuToggle {
+          display: block; /* Show hamburger icon */
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+          order: 2; /* Position after logo */
+        }
+
+        .navbar-inner-content {
+          justify-content: space-between;
+          align-items: center;
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .navbar-inner-content a.text-2xl {
+          /* Logo */
+          order: 1;
+        }
+
+        .nav-item {
+          width: 100%;
+          justify-content: center;
+          padding: 0.75rem 1rem; /* Adjust padding for mobile items */
+          border-bottom: 1px solid rgba(74, 85, 104, 0.3); /* subtle separator */
+        }
+
+        .nav-item:last-child {
+          border-bottom: none;
+        }
+
+        .nav-item.group {
+          flex-direction: column;
+          align-items: flex-start; /* Align text left */
+          padding: 0;
+        }
+
+        .nav-item.group span {
+          width: 100%;
+          text-align: center;
+          padding: 0.75rem 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .nav-item .submenu {
+          position: static;
+          width: 100%;
+          border: none;
+          box-shadow: none;
+          border-radius: 0;
+          transform: translateY(0);
+          opacity: 1;
+          visibility: visible;
+          padding: 0;
+          background-color: #1a202c; /* Ensure submenu background consistency */
+        }
+        .submenu-item {
+          padding-left: 2.5rem; /* Indent submenu items further */
+          text-align: center; /* Center submenu items */
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+        .nav-item:hover .arrow-icon {
+          transform: rotate(0deg); /* No rotate on mobile */
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-dark min-h-screen flex flex-col items-center pt-24 pb-8"
+  >
+    <nav
+      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
+    >
+      <div class="navbar-inner-content">
+        <a
+          href="../index.html"
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
+        >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="../ia-text/index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="../convert-img/index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Más Herramientas
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div
+      class="bg-gray-900 p-6 rounded-xl shadow-2xl w-full max-w-2xl text-center border border-gray-700 transform transition-all duration-300 hover:scale-[1.01]"
+    >
+      <h1 class="text-3xl font-extrabold text-white mb-4">
+        Generador de Imágenes con <span class="text-cyan-500">IA</span>
+      </h1>
+      <p class="text-gray-300 mb-6 text-base">
+        Describe la imagen que te gustaría generar. Se usará una API de IA
+        gratuita para crearla.
+      </p>
+
+      <div class="ad-banner ad-banner-top">
+        Espacio para Anuncio (Banner Superior)
+      </div>
+
+      <div class="mb-6">
+        <textarea
+          id="promptInput"
+          class="w-full p-3 border border-gray-700 bg-gray-800 text-white rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-base shadow-inner resize-none placeholder-gray-500"
+          rows="3"
+          placeholder="Ej: Un dragón volando sobre un castillo iluminado por la luna."
+        ></textarea>
+        <div id="promptSuggestionBox" class="prompt-suggestion-box hidden">
+          <p>
+            No sabes qué generar? Prueba nuestro generador de prompts con IA.
+          </p>
+          <button id="generatePromptSuggestionButton">Generar Prompt</button>
+          <div id="promptSuggestionLoading" class="hidden mt-2">
+            <div
+              class="animate-spin rounded-full h-6 w-6 border-b-2 border-cyan-400 mx-auto"
+            ></div>
+            <p class="text-gray-400 text-xs mt-1">Generando prompt...</p>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3"
+        >
+          <select
+            id="toneSelect"
+            class="bg-gray-800 border border-gray-700 text-white rounded-lg p-2 focus:ring-cyan-500 focus:border-cyan-500 text-sm"
+          >
+            <option value="Neutro">Tono: Neutro</option>
+            <option value="Creativo">Tono: Creativo</option>
+            <option value="Descriptivo">Tono: Descriptivo</option>
+            <option value="Caprichoso">Tono: Caprichoso</option>
+            <option value="Dramático">Tono: Dramático</option>
+            <option value="Minimalista">Tono: Minimalista</option>
+          </select>
+          <button
+            id="improvePromptButton"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 text-sm"
+          >
+            Mejorar Prompt
+          </button>
+        </div>
+      </div>
+
+      <button
+        id="generateButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300"
+      >
+        Generar Imagen
+      </button>
+      <p id="generationCounter" class="text-gray-400 text-sm mt-2">
+        Generaciones gratuitas restantes: --
+      </p>
+      <button
+        id="watchAdButton"
+        class="hidden bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3"
+      >
+        Ver Anuncio para +3 Generaciones
+      </button>
+
+      <div id="loadingIndicator" class="mt-6 hidden flex-col items-center">
+        <div class="loading-animation-wrapper">
+          <img
+            id="pocoyoGif"
+            src="../img/Pocoyo.gif"
+            alt="Pocoyo bailando"
+            class="pocoyo-gif"
+          />
+          <div id="loadingSpinner" class="modern-spinner hidden"></div>
+        </div>
+        <p id="loadingMessageText" class="text-gray-400 mt-3 text-base">
+          Generando tu imagen, por favor espera...
+        </p>
+      </div>
+
+      <div id="imageDisplay" class="mt-6">
+        <img
+          id="generatedImage"
+          src="https://placehold.co/600x400/374151/D1D5DB?text=Tu+imagen+aparecerá+aquí"
+          alt="Placeholder para imagen generada por IA"
+          class="w-full h-auto rounded-xl shadow-md border border-gray-700"
+          onerror="this.src='https://placehold.co/600x400/374151/D1D5DB?text=Error+al+cargar+la+imagen+de+IA+o+tiempo+excedido'"
+        />
+        <p id="imagePlaceholderText" class="text-gray-500 mt-3 text-sm">
+          Ingresa una descripción y haz clic en "Generar Imagen".
+        </p>
+        <button
+          id="downloadMainImageButton"
+          class="mt-3 bg-gray-700 hover:bg-gray-600 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 hidden text-sm"
+        >
+          Descargar Imagen
+        </button>
+      </div>
+
+      <div class="mt-8 w-full">
+        <h2 class="text-xl font-bold text-white mb-3">Tu Galería</h2>
+        <div class="flex justify-center space-x-3 mb-3">
+          <button
+            id="selectAllButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm"
+          >
+            Seleccionar Todo
+          </button>
+          <button
+            id="downloadSelectedButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 opacity-50 cursor-not-allowed text-sm"
+            disabled
+          >
+            Descargar Seleccionadas
+          </button>
+          <button
+            id="clearSelectionButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 opacity-50 cursor-not-allowed text-sm"
+            disabled
+          >
+            Limpiar Selección
+          </button>
+          <button
+            id="deleteSelectedButton"
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 opacity-50 cursor-not-allowed text-sm"
+            disabled
+          >
+            Eliminar Seleccionadas
+          </button>
+        </div>
+        <div id="localStorageUsage" class="mt-4 text-gray-400 text-sm">
+          Uso del Almacenamiento Local: --
+        </div>
+        <div
+          id="galleryContainer"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-56 overflow-y-auto p-2 bg-gray-800 rounded-lg border border-gray-700 shadow-inner"
+        ></div>
+      </div>
+
+      <div class="ad-banner ad-banner-bottom">
+        Espacio para Anuncio (Banner Inferior)
+      </div>
+
+      <div
+        id="errorMessage"
+        class="mt-6 text-red-400 font-semibold hidden p-3 bg-red-900 rounded-lg border border-red-700 text-sm"
+      ></div>
+    </div>
+
+    <div id="lightbox" class="modal-overlay">
+      <button class="modal-close-button" id="lightboxCloseButton">
+        &times;
+      </button>
+      <button class="lightbox-nav-button prev" id="lightboxPrevButton">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <button class="lightbox-nav-button next" id="lightboxNextButton">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+      <div class="modal-content" id="lightboxContent">
+        <img
+          src=""
+          alt="Imagen en grande del lightbox"
+          class="lightbox-img"
+          id="lightboxImage"
+        />
+        <div
+          id="lightboxThumbnails"
+          class="lightbox-thumbnails-container"
+        ></div>
+      </div>
+    </div>
+
+    <div id="imageEditorModal" class="modal-overlay">
+      <div class="modal-content !max-w-4xl w-11/12 !p-4 !gap-4">
+        <button class="modal-close-button" id="editorCloseButton">
+          &times;
+        </button>
+        <h3 class="text-2xl font-bold text-white mb-2">Editar Imagen</h3>
+
+        <div class="flex flex-col md:flex-row gap-4 flex-grow">
+          <div
+            class="flex-grow flex items-center justify-center bg-gray-800 rounded-lg overflow-hidden relative"
+          >
+            <canvas id="editorCanvas" class="max-w-full max-h-full"></canvas>
+          </div>
+
+          <div
+            class="flex flex-col gap-4 w-full md:w-1/3 p-2 bg-gray-800 rounded-lg shadow-inner overflow-y-auto"
+          >
+            <div>
+              <h4 class="text-lg font-semibold text-cyan-400 mb-2">Filtros</h4>
+              <div
+                id="filterThumbnails"
+                class="flex overflow-x-auto gap-2 pb-2"
+              ></div>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-cyan-400 mb-2">
+                Añadir Texto
+              </h4>
+              <input
+                type="text"
+                id="editorTextInput"
+                placeholder="Escribe tu texto aquí"
+                class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm mb-2"
+              />
+              <div class="flex items-center justify-between mb-2">
+                <input
+                  type="color"
+                  id="editorTextColor"
+                  value="#FFFFFF"
+                  class="h-8 w-8 rounded-lg cursor-pointer"
+                />
+                <input
+                  type="number"
+                  id="editorTextSize"
+                  value="30"
+                  min="10"
+                  max="100"
+                  class="w-20 p-1 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm text-center"
+                />
+                <select
+                  id="editorTextPosition"
+                  class="bg-gray-700 border border-gray-600 text-white rounded-lg p-1 text-sm"
+                >
+                  <option value="bottomRight">Abajo Derecha</option>
+                  <option value="topLeft">Arriba Izquierda</option>
+                  <option value="topRight">Arriba Derecha</option>
+                  <option value="bottomLeft">Abajo Izquierda</option>
+                  <option value="center">Centro</option>
+                </select>
+              </div>
+              <button
+                id="addTextToCanvasButton"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm"
+              >
+                Aplicar Texto
+              </button>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-cyan-400 mb-2">Recorte</h4>
+              <p class="text-gray-400 text-xs mb-2">
+                Recorte centrado. Ingresa las nuevas dimensiones en píxeles.
+              </p>
+              <div class="flex gap-2 mb-3">
+                <input
+                  type="number"
+                  id="cropWidthInput"
+                  placeholder="Ancho (px)"
+                  class="w-1/2 p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm text-center"
+                />
+                <input
+                  type="number"
+                  id="cropHeightInput"
+                  placeholder="Alto (px)"
+                  class="w-1/2 p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm text-center"
+                />
+              </div>
+              <button
+                id="applyCropButton"
+                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg text-sm"
+              >
+                Aplicar Recorte
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-4">
+          <button
+            id="saveEditedImageButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg shadow-md transition duration-200"
+          >
+            Guardar Edición
+          </button>
+          <button
+            id="cancelEditButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg shadow-md transition duration-200"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="subscriptionModal" class="modal-overlay">
+      <div class="subscription-modal-content">
+        <h3 class="text-2xl font-bold mb-4">¡Únete a nuestra comunidad!</h3>
+        <p class="mb-4 text-gray-300">
+          Suscríbete a nuestro boletín para recibir las últimas novedades y
+          trucos de IA.
+        </p>
+        <input
+          type="email"
+          id="emailInput"
+          placeholder="Tu correo electrónico"
+          class="mb-4 p-3 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400"
+        />
+        <div class="flex justify-center space-x-4">
+          <button
+            id="subscribeButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200"
+          >
+            Suscribirse
+          </button>
+          <button
+            id="noThanksButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition duration-200"
+          >
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-sm">
+        Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
+        aceptas su uso.
+      </p>
+      <button
+        id="acceptCookiesButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg transition duration-200 text-sm"
+      >
+        Aceptar
+      </button>
+    </div>
+
+    <div id="messageModal" class="modal-overlay">
+      <div
+        id="messageModalContent"
+        class="p-8 rounded-xl shadow-2xl max-w-sm w-11/12 text-center relative"
+      >
+        <button
+          id="messageModalCloseButton"
+          class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold"
+        >
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script src="js/script.js" defer></script>
+  </body>
+</html>

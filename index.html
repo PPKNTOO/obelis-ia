@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ObelisIA - Herramientas de IA y Edición Gratuita</title>
+    <meta
+      name="description"
+      content="Descubre Obelis IA: tu plataforma gratuita para generación de imágenes y texto con IA, edición y conversión de imágenes, ¡y mucho más! Herramientas potentes y fáciles de usar para todos tus proyectos creativos."
+    />
+    <meta
+      name="keywords"
+      content="IA, inteligencia artificial, generador de imágenes, generador de texto, editor de imágenes, convertidor de imágenes, herramientas gratuitas, ObelisIA, AI, editor de fotos, conversión de formatos, creatividad digital"
+    />
+    <meta name="author" content="ObelisIA" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://theobelis.github.io/obelis-ia/" />
+    <link rel="icon" href="img/favicon.ico" type="image/ico" />
+    <link rel="apple-touch-icon" href="img/logo.webp" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://theobelis.github.io/obelis-ia/" />
+    <meta
+      property="og:site_name"
+      content="ObelisIA - Herramientas de IA y Edición Gratuita"
+    />
+    <meta
+      property="og:title"
+      content="ObelisIA - Herramientas de IA y Edición Gratuita"
+    />
+    <meta
+      property="og:description"
+      content="Crea, edita y transforma con la ayuda de la inteligencia artificial. Genera imágenes, textos y edita tus fotos online con ObelisIA."
+    />
+    <meta property="og:image" content="img/logo.webp" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://theobelis.github.io/obelis-ia/" />
+    <meta
+      name="twitter:title"
+      content="ObelisIA - Herramientas de IA y Edición Gratuita"
+    />
+    <meta
+      name="twitter:description"
+      content="Crea, edita y transforma con la ayuda de la inteligencia artificial. Genera imágenes, textos y edita tus fotos online con ObelisIA."
+    />
+    <meta property="twitter:image" content="img/logo.webp" />
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ObelisIA - Herramientas de IA y Edición Gratuita",
+        "description": "Plataforma web gratuita que ofrece herramientas de inteligencia artificial para generación de imágenes y texto, así como edición y conversión de imágenes.",
+        "applicationCategory": "Utilities",
+        "operatingSystem": "Web",
+        "url": "https://theobelis.github.io/obelis-ia/",
+        "inLanguage": "es",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "category": "Free"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ObelisIA"
+        }
+      }
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Estilo para la fuente Inter */
+      body {
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-image: linear-gradient(to right, #1a202c, #2d3748);
+        color: #e2e8f0; /* gris-200 */
+        padding-top: 64px; /* Espacio para la barra de navegación fija */
+      }
+      /* Asegurar que la fuente Inter se aplique a los componentes de Bootstrap también */
+      .carousel,
+      .carousel-inner,
+      .carousel-item,
+      .btn {
+        font-family: "Inter", sans-serif !important;
+      }
+
+      /* Personalización de colores de Tailwind si es necesario, o directamente en clases */
+      .bg-gradient-dark {
+        background-image: linear-gradient(
+          to right,
+          #1a202c,
+          #2d3748
+        ); /* gris oscuro a azul grisáceo */
+      }
+      .text-cyan-500 {
+        color: #06b6d4; /* Tailwind cyan-500 */
+      }
+      .bg-cyan-600 {
+        background-color: #0891b2; /* Tailwind cyan-600 */
+      }
+      .hover\:bg-cyan-700:hover {
+        background-color: #0e7490; /* Tailwind cyan-700 */
+      }
+      .focus\:ring-cyan-300:focus {
+        --tw-ring-color: #67e8f9; /* Tailwind cyan-300 */
+      }
+
+      /* Estilos para los placeholders de anuncios */
+      .ad-banner {
+        background-color: #1f2937; /* gray-800 */
+        border: 1px dashed #4b5563; /* gray-600 */
+        color: #d1d5db; /* gray-300 */
+        padding: 1rem;
+        text-align: center;
+        border-radius: 0.5rem;
+        font-style: italic;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        width: 100%; /* Asegurar que ocupan el ancho completo */
+        max-width: 960px; /* Consistente con el contenedor principal */
+      }
+      .ad-banner-top {
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ad-banner-bottom {
+        min-height: 60px;
+      }
+
+      /* Estilos para el modal de suscripción */
+      .subscription-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1010; /* Superior a todo */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .subscription-modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .subscription-modal-content {
+        background-color: #1a202c; /* gris oscuro */
+        padding: 2rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+          0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        color: white;
+        position: relative;
+      }
+      .subscription-modal-content input {
+        background-color: #2d3748; /* gris azulado */
+        border: 1px solid #4a5568; /* gris más claro */
+        color: white;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+      .subscription-modal-content input::placeholder {
+        color: #a0aec0; /* gris claro */
+      }
+      .subscription-modal-content button {
+        transition: background-color 0.2s ease;
+      }
+
+      /* Estilos para el mensaje de cookies */
+      .cookie-consent {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(26, 32, 44, 0.9); /* gris oscuro con opacidad */
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1005; /* Entre el contenido y el modal de suscripción */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(100%);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+      }
+      .cookie-consent.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      @media (min-width: 768px) {
+        /* md */
+        .cookie-consent {
+          flex-direction: row;
+          border-top-left-radius: 0.75rem;
+          border-top-right-radius: 0.75rem;
+          width: auto;
+          left: 50%;
+          transform: translateX(-50%) translateY(100%);
+        }
+        .cookie-consent.show {
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* Estilo para la nueva clase del contenido de la barra de navegación */
+      .navbar-inner-content {
+        max-width: 1200px; /* Un poco más ancho que 4xl (900px) para el contenido principal */
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%; /* Asegura que el contenido ocupe la altura de la nav */
+      }
+
+      /* Tarjetas de herramientas */
+      .tool-card {
+        background-color: #1a202c; /* gris-900 */
+        border: 1px solid #2d3748; /* gris-800 */
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      .tool-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      }
+      .tool-card .icon {
+        font-size: 3rem;
+        color: #06b6d4; /* cyan-500 */
+        margin-bottom: 1rem;
+      }
+      .tool-card h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.75rem;
+      }
+      .tool-card p {
+        font-size: 1rem;
+        color: #cbd5e1; /* gris-300 */
+        margin-bottom: 1.25rem;
+      }
+      .tool-card .btn-card {
+        display: inline-block;
+        background-color: #0891b2; /* bg-cyan-600 */
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+      }
+      .tool-card .btn-card:hover {
+        background-color: #0e7490; /* hover:bg-cyan-700 */
+        transform: translateY(-2px);
+      }
+
+      /* Estilos para el modal de mensajes genérico */
+      #messageModal {
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.85
+        ); /* Fondo oscuro semitransparente */
+        backdrop-filter: blur(5px); /* Efecto de desenfoque */
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      #messageModal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      #messageModalContent {
+        background-color: #1a202c; /* gris oscuro */
+        border: 1px solid #2d3748; /* gris-800 */
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+          0 10px 10px -5px rgba(0, 0, 0, 0.4);
+      }
+      #messageModalIcon.success::before {
+        content: "✔️";
+        color: #10b981; /* Tailwind green-500 */
+      }
+      #messageModalIcon.error::before {
+        content: "❌";
+        color: #ef4444; /* Tailwind red-500 */
+      }
+      #messageModalIcon.info::before {
+        content: "💡";
+        color: #60a5fa; /* Tailwind blue-400 */
+      }
+
+      /* Estilos específicos para el carrusel para que se vea bien en el tema oscuro */
+      .hero-carousel {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-width: 1200px; /* Consistente con el main container */
+        border-radius: 1rem; /* rounded-xl */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        border: 1px solid #2d3748; /* gris-700 */
+        height: 350px; /* Altura fija para el carrusel */
+      }
+
+      .carousel-slides {
+        display: flex;
+        height: 100%;
+        transition: transform 0.8s ease-in-out; /* Transición suave para el slide */
+      }
+
+      .carousel-slide {
+        flex: 0 0 100%; /* Cada slide ocupa el 100% del ancho del contenedor */
+        width: 100%; /* Asegura que cada slide tome el 100% */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        background-color: #1e293b; /* un tono de gris más oscuro que el fondo del body */
+      }
+      .carousel-slide h5 {
+        font-size: 2.25rem; /* text-4xl */
+        font-weight: 800; /* font-extrabold */
+        color: white;
+        margin-bottom: 0.75rem;
+      }
+      .carousel-slide p {
+        font-size: 1.125rem; /* text-lg */
+        color: #cbd5e1; /* gris-300 */
+        max-width: 800px;
+        margin: 0 auto 1.5rem auto;
+      }
+      .carousel-slide .slide-image {
+        max-width: 100%;
+        height: 150px; /* Altura fija para la imagen dentro del slide */
+        object-fit: contain; /* Asegura que la imagen se ajuste sin recortarse */
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+      }
+
+      .carousel-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(45, 55, 72, 0.7); /* gray-700 con opacidad */
+        color: white;
+        border: none;
+        padding: 0.75rem 0.5rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+        z-index: 10;
+        opacity: 0.8;
+        transition: opacity 0.3s ease, background-color 0.3s ease;
+        border-radius: 0.5rem; /* ligeramente redondeado */
+      }
+      .carousel-nav-btn:hover {
+        opacity: 1;
+        background-color: rgba(
+          74,
+          85,
+          104,
+          0.9
+        ); /* gray-600 con más opacidad */
+      }
+      .carousel-nav-btn.prev {
+        left: 0.5rem;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      .carousel-nav-btn.next {
+        right: 0.5rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .carousel-indicators-container {
+        position: absolute;
+        bottom: 3rem; /* Ajustado para mover la paginación más abajo */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+      }
+      .carousel-indicator {
+        width: 12px;
+        height: 12px;
+        background-color: rgba(6, 182, 212, 0.4); /* cyan-500 con opacidad */
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+      .carousel-indicator.active {
+        background-color: #06b6d4; /* cyan-500 sólido */
+        transform: scale(1.2);
+      }
+
+      /* Nuevos estilos para la navegación */
+      .nav-item {
+        position: relative;
+        padding: 0.5rem 0.75rem; /* Aumenta el padding para un mejor click/hover */
+        transition: all 0.2s ease-in-out;
+        border-radius: 0.375rem; /* rounded-md */
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; /* Espacio entre texto e icono */
+      }
+
+      .nav-item:hover {
+        background-color: #2d3748; /* gris-800 */
+        color: #67e8f9; /* cyan-300 */
+      }
+
+      .nav-item.active-link {
+        color: #06b6d4; /* cyan-500 */
+        border-bottom: 2px solid #06b6d4; /* Indicador de página activa */
+        padding-bottom: calc(0.5rem - 2px); /* Ajuste de padding por el borde */
+        background-color: rgba(6, 182, 212, 0.1); /* Ligero fondo para activo */
+      }
+
+      .nav-item .nav-icon {
+        font-size: 1rem; /* Tamaño del icono */
+        color: #cbd5e1; /* gris-300 */
+        transition: color 0.2s ease;
+      }
+      .nav-item:hover .nav-icon {
+        color: #67e8f9; /* cyan-300 en hover */
+      }
+      .nav-item.active-link .nav-icon {
+        color: #06b6d4; /* cyan-500 si está activo */
+      }
+
+      /* Estilos para el submenú */
+      .submenu {
+        position: absolute;
+        top: 100%; /* Justo debajo del elemento padre */
+        left: 0;
+        background-color: #1a202c; /* gris-900 */
+        border: 1px solid #4a5568; /* gris-700 */
+        border-radius: 0.5rem;
+        min-width: 180px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        z-index: 20; /* Asegura que esté por encima de otros elementos */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        padding: 0.5rem 0;
+      }
+
+      .nav-item:hover .submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .submenu-item {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: #e2e8f0;
+        text-align: left;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        font-weight: 400;
+        white-space: nowrap; /* Evita que el texto se divida */
+      }
+      .submenu-item:hover {
+        background-color: #2d3748; /* gris-800 */
+        color: #67e8f9; /* cyan-300 */
+      }
+      .submenu-item.active-link {
+        color: #06b6d4;
+        background-color: rgba(6, 182, 212, 0.1);
+        font-weight: 500;
+      }
+
+      /* Icono de flecha para submenús */
+      .nav-item .arrow-icon {
+        margin-left: 0.5rem;
+        transition: transform 0.2s ease;
+      }
+      .nav-item:hover .arrow-icon {
+        transform: rotate(90deg);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        /* md */
+        .navbar-inner-content {
+          flex-direction: column;
+          text-align: center;
+          gap: 0.5rem;
+        }
+        .navbar-inner-content div.flex-wrap {
+          display: flex;
+          flex-direction: column; /* Apila los elementos principales del menú */
+          align-items: center;
+          width: 100%; /* Ocupa todo el ancho disponible */
+        }
+        .nav-item {
+          width: 100%; /* Los ítems principales ocupan todo el ancho */
+          justify-content: center; /* Centrar texto e icono en móvil */
+        }
+        .nav-item .submenu {
+          position: static; /* Cambia a posición estática en móvil */
+          width: 100%; /* Ocupa todo el ancho del padre */
+          border: none;
+          box-shadow: none;
+          border-radius: 0;
+          transform: translateY(0);
+          opacity: 1; /* Siempre visible si el padre está hover/activo */
+          visibility: visible;
+          padding: 0; /* Elimina padding para que se vea como parte del padre */
+        }
+        .submenu-item {
+          padding-left: 2rem; /* Indenta los ítems del submenú */
+        }
+        .nav-item:hover .arrow-icon {
+          transform: rotate(0deg); /* No rota en móvil */
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col items-center pb-8">
+    <!-- Barra de Navegación -->
+    <nav
+      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
+    >
+      <div class="navbar-inner-content">
+        <a
+          href="index.html"
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
+        >
+        <div class="flex-wrap flex items-center">
+          <a href="index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="ia-img/index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="ia-text/index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="convert-img/index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Más Herramientas
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex flex-col items-center w-full max-w-7xl px-4 mt-8">
+      <!-- Sección de Héroe/Banner Principal - Carrusel Personalizado -->
+      <section class="w-full mb-8">
+        <div id="heroCarousel" class="hero-carousel">
+          <div id="carouselSlides" class="carousel-slides">
+            <!-- Slide 1: Contenido original del banner -->
+            <div class="carousel-slide">
+              <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Crea, Edita y Transforma con
+                <span class="text-cyan-500">Inteligencia Artificial</span>
+              </h5>
+              <p
+                class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                ObelisIA te ofrece herramientas gratuitas y potentes para dar
+                vida a tus ideas. Desde la generación de imágenes hasta la
+                edición avanzada de texto y fotos.
+              </p>
+              <a
+                href="ia-img/index.html"
+                class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-lg"
+              >
+                ¡Empieza a Crear Ahora!
+              </a>
+            </div>
+
+            <!-- Slide 2: Destacando IA de Imagen -->
+            <div class="carousel-slide">
+              <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Da Vida a Tus Ideas con
+                <span class="text-cyan-500">IA de Imagen</span>
+              </h5>
+              <p
+                class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                Describe lo que imaginas y nuestra IA lo creará al instante.
+                Perfecto para artistas, diseñadores y mentes creativas.
+              </p>
+              <a
+                href="ia-img/index.html"
+                class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-lg"
+              >
+                Generar Imágenes IA
+              </a>
+            </div>
+
+            <!-- Slide 3: Destacando Edición de Imagen -->
+            <div class="carousel-slide">
+              <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Perfecciona tus Fotos con Nuestro
+                <span class="text-cyan-500">Editor Online</span>
+              </h5>
+              <p
+                class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                Ajusta, recorta, dibuja y aplica filtros con facilidad. Tus
+                imágenes, a tu manera.
+              </p>
+              <a
+                href="edit-img/index.html"
+                class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-lg"
+              >
+                Editar Fotos Ahora
+              </a>
+            </div>
+          </div>
+
+          <!-- Controles de Navegación -->
+          <button id="prevSlide" class="carousel-nav-btn prev">&#10094;</button>
+          <button id="nextSlide" class="carousel-nav-btn next">&#10095;</button>
+
+          <!-- Indicadores de Posición -->
+          <div
+            id="carouselIndicators"
+            class="carousel-indicators-container"
+          ></div>
+        </div>
+      </section>
+
+      <!-- Placeholder para Banner de Anuncio Superior -->
+      <div class="ad-banner ad-banner-top">
+        Espacio para Anuncio (Banner Superior)
+      </div>
+
+      <!-- Sección de Herramientas Destacadas -->
+      <section class="w-full py-12">
+        <h2
+          class="text-3xl md:text-4xl font-extrabold text-center text-white mb-10"
+        >
+          Nuestras <span class="text-cyan-500">Herramientas</span> Principales
+        </h2>
+        <div
+          class="tool-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <!-- Tarjeta 1: Generador de Imágenes IA -->
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3>Generador de Imágenes IA</h3>
+            <p>
+              Transforma tus descripciones en impresionantes obras de arte
+              digital con nuestra potente IA.
+            </p>
+            <a href="ia-img/index.html" class="btn-card">Generar Imágenes</a>
+          </div>
+
+          <!-- Tarjeta 2: Generador de Texto IA -->
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-pen-fancy"></i>
+            </div>
+            <h3>Generador de Texto IA</h3>
+            <p>
+              Crea historias, poemas, guiones, artículos y más con nuestra IA de
+              contenido creativo.
+            </p>
+            <a href="ia-text/index.html" class="btn-card">Generar Texto</a>
+          </div>
+
+          <!-- Tarjeta 3: Editor de Imágenes Online -->
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-paint-brush"></i>
+            </div>
+            <h3>Editor de Imágenes Online</h3>
+            <p>
+              Edita tus fotos con facilidad: dibuja, borra, transforma y ajusta
+              colores directamente en tu navegador.
+            </p>
+            <a href="edit-img/index.html" class="btn-card">Editar Imágenes</a>
+          </div>
+
+          <!-- Tarjeta 4: Convertidor de Imágenes -->
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <h3>Convertidor de Imágenes</h3>
+            <p>
+              Cambia el formato de tus imágenes a JPEG, PNG, WebP y más, de
+              forma rápida y sencilla.
+            </p>
+            <a href="convert-img/index.html" class="btn-card"
+              >Convertir Imágenes</a
+            >
+          </div>
+
+          <!-- Puedes añadir más tarjetas de herramientas aquí si tienes más páginas -->
+          <!-- Ejemplo de otra tarjeta ficticia -->
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-cogs"></i>
+            </div>
+            <h3>Generador de Videos IA</h3>
+            <p>
+              Genera videos impresionantes a partir de texto con inteligencia
+              artificial de forma gratuita.
+            </p>
+            <a href="ia-video/index.html" class="btn-card">Generar Videos</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Placeholder para Banner de Anuncio Inferior -->
+      <div class="ad-banner ad-banner-bottom">
+        Espacio para Anuncio (Banner Inferior)
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="w-full bg-gray-900 text-gray-400 text-center py-6 mt-12 rounded-t-xl shadow-inner border-t border-gray-700"
+    >
+      <p class="text-sm">
+        © 2024 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+        derechos reservados.
+      </p>
+      <p class="text-xs mt-2">
+        <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
+        <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
+      </p>
+    </footer>
+
+    <!-- Modal de Suscripción -->
+    <div id="subscriptionModal" class="subscription-modal">
+      <div class="subscription-modal-content">
+        <h3 class="text-2xl font-bold mb-4 text-cyan-500">
+          ¡Únete a nuestra comunidad!
+        </h3>
+        <p class="mb-4 text-gray-300">
+          Suscríbete a nuestro boletín para recibir las últimas novedades y
+          herramientas de IA.
+        </p>
+        <input
+          type="email"
+          id="emailInput"
+          placeholder="Tu correo electrónico"
+          class="mb-4 p-3 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <div class="flex justify-center space-x-4">
+          <button
+            id="subscribeButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            Suscribirse
+          </button>
+          <button
+            id="noThanksButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje de Consentimiento de Cookies -->
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-sm">
+        Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
+        aceptas su uso.
+      </p>
+      <button
+        id="acceptCookiesButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg transition duration-200 text-sm shadow-md"
+      >
+        Aceptar
+      </button>
+    </div>
+
+    <!-- Generic Message Modal -->
+    <div
+      id="messageModal"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[2000] opacity-0 invisible transition-all duration-300"
+    >
+      <div
+        id="messageModalContent"
+        class="p-8 rounded-xl shadow-2xl max-w-sm w-11/12 text-center relative"
+      >
+        <button
+          id="messageModalCloseButton"
+          class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold"
+        >
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script>
+      // Referencias a los elementos del DOM de los modales
+      const cookieConsent = document.getElementById("cookieConsent");
+      const acceptCookiesButton = document.getElementById(
+        "acceptCookiesButton"
+      );
+      const subscriptionModal = document.getElementById("subscriptionModal");
+      const emailInput = document.getElementById("emailInput");
+      const subscribeButton = document.getElementById("subscribeButton");
+      const noThanksButton = document.getElementById("noThanksButton");
+
+      // Referencias a los elementos del DOM del modal de mensajes
+      const messageModal = document.getElementById("messageModal");
+      const messageModalCloseButton = document.getElementById(
+        "messageModalCloseButton"
+      );
+      const messageModalText = document.getElementById("messageModalText");
+      const messageModalIcon = document.getElementById("messageModalIcon");
+
+      // Referencias a los elementos del DOM del carrusel
+      const carouselContainer = document.getElementById("heroCarousel");
+      const carouselSlides = document.getElementById("carouselSlides");
+      const prevSlideButton = document.getElementById("prevSlide");
+      const nextSlideButton = document.getElementById("nextSlide");
+      const carouselIndicatorsContainer =
+        document.getElementById("carouselIndicators");
+      const slides = document.querySelectorAll(".carousel-slide");
+
+      let currentIndex = 0;
+      let slideInterval;
+      const slideDuration = 5000; // 5 segundos por slide
+
+      // Función para mostrar un mensaje personalizado en un modal
+      function showCustomMessage(message, type = "info", duration = 3000) {
+        messageModalText.textContent = message;
+        messageModalIcon.className = `mt-4 text-4xl ${type}`; // Limpiar clases anteriores, añadir nuevo tipo
+        messageModal.classList.add("show");
+
+        setTimeout(() => {
+          hideCustomMessage();
+        }, duration);
+      }
+
+      // Función para ocultar el modal de mensajes
+      function hideCustomMessage() {
+        messageModal.classList.remove("show");
+        messageModalText.textContent = "";
+        messageModalIcon.className = "mt-4 text-4xl"; // Resetear clase de icono
+      }
+
+      // --- Funcionalidad del Carrusel ---
+
+      /**
+       * Muestra el slide en el índice especificado.
+       * @param {number} index - El índice del slide a mostrar.
+       */
+      function showSlide(index) {
+        if (index >= slides.length) {
+          currentIndex = 0;
+        } else if (index < 0) {
+          currentIndex = slides.length - 1;
+        } else {
+          currentIndex = index;
+        }
+
+        const offset = -currentIndex * 100;
+        carouselSlides.style.transform = `translateX(${offset}%)`;
+
+        updateIndicators();
+      }
+
+      /**
+       * Muestra el siguiente slide.
+       */
+      function nextSlide() {
+        showSlide(currentIndex + 1);
+      }
+
+      /**
+       * Muestra el slide anterior.
+       */
+      function prevSlide() {
+        showSlide(currentIndex - 1);
+      }
+
+      /**
+       * Actualiza los indicadores para resaltar el slide activo.
+       */
+      function updateIndicators() {
+        carouselIndicatorsContainer.innerHTML = ""; // Limpiar indicadores existentes
+        slides.forEach((_, index) => {
+          const indicator = document.createElement("div");
+          indicator.classList.add("carousel-indicator");
+          if (index === currentIndex) {
+            indicator.classList.add("active");
+          }
+          indicator.addEventListener("click", () => {
+            showSlide(index);
+            resetSlideInterval(); // Resetear el intervalo al hacer clic en un indicador
+          });
+          carouselIndicatorsContainer.appendChild(indicator);
+        });
+      }
+
+      /**
+       * Inicia el avance automático de los slides.
+       */
+      function startSlideInterval() {
+        slideInterval = setInterval(nextSlide, slideDuration);
+      }
+
+      /**
+       * Detiene el avance automático de los slides.
+       */
+      function stopSlideInterval() {
+        clearInterval(slideInterval);
+      }
+
+      /**
+       * Resetea el intervalo de los slides (detiene y reinicia).
+       */
+      function resetSlideInterval() {
+        stopSlideInterval();
+        startSlideInterval();
+      }
+
+      // --- Lógica de Modales y Cookies (existente) ---
+
+      function showCookieConsent() {
+        if (!localStorage.getItem("cookieAccepted")) {
+          cookieConsent.classList.add("show");
+        }
+      }
+
+      function acceptCookies() {
+        localStorage.setItem("cookieAccepted", "true");
+        cookieConsent.classList.remove("show");
+        if (
+          !localStorage.getItem("subscribed") &&
+          !localStorage.getItem("noThanksSubscription")
+        ) {
+          showSubscriptionModal();
+        }
+      }
+
+      function showSubscriptionModal() {
+        subscriptionModal.classList.add("show");
+      }
+
+      function handleSubscription() {
+        const email = emailInput.value.trim();
+        if (email) {
+          console.log("Correo suscrito:", email);
+          localStorage.setItem("subscribed", "true");
+          subscriptionModal.classList.remove("show");
+          showCustomMessage("¡Gracias por suscribirte!", "success");
+        } else {
+          showCustomMessage(
+            "Por favor, introduce un correo electrónico válido.",
+            "error"
+          );
+        }
+      }
+
+      function dismissSubscription() {
+        localStorage.setItem("noThanksSubscription", "true");
+        subscriptionModal.classList.remove("show");
+      }
+
+      // --- Control de la clase active-link en la barra de navegación ---
+      function updateActiveClass() {
+        // Seleccionar todos los enlaces principales y elementos de submenú
+        const navLinks = document.querySelectorAll(".navbar-inner-content a");
+        const submenuItems = document.querySelectorAll(".submenu-item");
+        const navItemParents = document.querySelectorAll(".nav-item.group");
+
+        const currentPath = window.location.pathname;
+
+        // Limpiar todas las clases 'active-link' y 'aria-current'
+        navLinks.forEach((link) => {
+          link.classList.remove("active-link");
+          link.removeAttribute("aria-current");
+        });
+        submenuItems.forEach((item) => {
+          item.classList.remove("active-link");
+        });
+        navItemParents.forEach((parent) => {
+          parent
+            .querySelector("span.cursor-pointer")
+            ?.classList.remove("active-link");
+        });
+
+        // Función para normalizar rutas
+        const normalizePath = (path) => {
+          let normalized = path;
+          if (normalized.endsWith("/index.html")) {
+            normalized = normalized.replace("/index.html", "/");
+          }
+          if (!normalized.endsWith("/")) {
+            normalized += "/";
+          }
+          return normalized;
+        };
+
+        const normalizedCurrentPath = normalizePath(currentPath);
+
+        // Iterar sobre todos los enlaces (principales y submenú)
+        document
+          .querySelectorAll(".navbar-inner-content a, .submenu-item")
+          .forEach((item) => {
+            const href = item.getAttribute("href");
+            if (href) {
+              const itemPath = normalizePath(
+                new URL(href, window.location.origin).pathname
+              );
+
+              // Si es un enlace de página de inicio y la ruta actual es la raíz
+              if (itemPath === "/" && normalizedCurrentPath === "/") {
+                item.classList.add("active-link");
+                item.setAttribute("aria-current", "page");
+              }
+              // Si la ruta actual comienza con la ruta del elemento (para subdirectorios)
+              else if (
+                itemPath !== "/" &&
+                normalizedCurrentPath.startsWith(itemPath)
+              ) {
+                item.classList.add("active-link");
+                item.setAttribute("aria-current", "page");
+
+                // Si este elemento es un sub-ítem, también activar su padre
+                const parentSubmenu = item.closest(".submenu");
+                if (parentSubmenu) {
+                  const parentNavItem =
+                    parentSubmenu.closest(".nav-item.group");
+                  if (parentNavItem) {
+                    parentNavItem
+                      .querySelector("span.cursor-pointer")
+                      ?.classList.add("active-link");
+                  }
+                }
+              }
+            }
+          });
+      }
+
+      // --- Event Listeners y Inicialización ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // Inicializar el carrusel
+        showSlide(currentIndex); // Muestra el primer slide al cargar
+        startSlideInterval(); // Inicia el auto-slide
+
+        // Pausar/reanudar el carrusel al pasar el ratón
+        carouselContainer.addEventListener("mouseenter", stopSlideInterval);
+        carouselContainer.addEventListener("mouseleave", resetSlideInterval);
+
+        // Eventos de los botones de navegación del carrusel
+        prevSlideButton.addEventListener("click", () => {
+          prevSlide();
+          resetSlideInterval(); // Resetear el intervalo al hacer clic en el botón
+        });
+        nextSlideButton.addEventListener("click", () => {
+          nextSlide();
+          resetSlideInterval(); // Resetear el intervalo al hacer clic en el botón
+        });
+
+        // Lógica de Modales y Cookies
+        showCookieConsent();
+        acceptCookiesButton.addEventListener("click", acceptCookies);
+        subscribeButton.addEventListener("click", handleSubscription);
+        noThanksButton.addEventListener("click", dismissSubscription);
+
+        subscriptionModal.addEventListener("click", (event) => {
+          if (event.target === subscriptionModal) {
+            dismissSubscription();
+          }
+        });
+
+        messageModalCloseButton.addEventListener("click", hideCustomMessage);
+        messageModal.addEventListener("click", (event) => {
+          if (event.target === messageModal) {
+            hideCustomMessage();
+          }
+        });
+
+        // Actualizar la clase activa de la navegación al cargar la página
+        updateActiveClass();
+      });
+
+      // Asegurarse de que la clase activa se actualice si la URL cambia (por ejemplo, con navegación SPA si se implementa)
+      window.addEventListener("popstate", updateActiveClass);
+      window.addEventListener("hashchange", updateActiveClass);
+    </script>
+  </body>
+</html>
