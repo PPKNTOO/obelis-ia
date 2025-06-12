@@ -476,8 +476,7 @@
       const chatHistory = [{ role: "user", parts: [{ text: aiPrompt }] }];
       const payload = { contents: chatHistory };
 
-      // Llama a tu Serverless Function de Vercel para la API de Gemini (TEXTO)
-      const apiUrl = `/api/gemini`;
+      const apiUrl = `/api/gemini`; // Llama a tu Serverless Function de Vercel (el proxy)
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -951,6 +950,8 @@
   }
 
   // --- Lógica del Menú Desplegable (para la navbar responsive) ---
+  // Esta función no se usa directamente en este script pero se mantiene para la estructura
+  // si alguna parte de la navbar interna la requiriera específicamente para sus dropdowns
   function setupDropdown(button, dropdown) {
     if (!button || !dropdown) return;
     button.addEventListener("click", (event) => {
@@ -1069,7 +1070,7 @@
         "generationCounterDisplay"
       ),
       watchAdButton: document.getElementById("watchAdButton"),
-      adModal: document.getElementById("adModal"),
+      adModal: document.getElementById("adModal"), // Referencia al modal de anuncio
       adTimerDisplay: document.getElementById("adTimer"),
 
       // Modales generales y cookies/suscripción
@@ -1096,13 +1097,6 @@
         ".navbar-inner-content .flex-wrap"
       ),
     };
-
-    // Crear el mensaje de confirmación de copiado (no existe en HTML, se crea dinámicamente)
-    const copyConfirmationMessage = document.createElement("div");
-    copyConfirmationMessage.id = "copyConfirmationMessage";
-    copyConfirmationMessage.textContent = "¡Copiado al portapapeles!";
-    document.body.appendChild(copyConfirmationMessage);
-    DOMElements.copyConfirmationMessage = copyConfirmationMessage; // Añadirlo a DOMElements
 
     // Cargar preferencias del usuario y contadores
     loadPreferences();

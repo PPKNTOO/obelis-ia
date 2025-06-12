@@ -22,7 +22,7 @@
     <meta property="og:type" content="software.application" />
     <meta
       property="og:url"
-      content="https://tu-dominio.com/generador-contenido-ia"
+      content="https://obelis-ia.vercel.app/ia-text/index.html"
     />
     <meta
       property="og:title"
@@ -32,15 +32,12 @@
       property="og:description"
       content="Crea textos asombrosos: historias, guiones, poemas, canciones y más con nuestra potente IA. Herramienta gratuita y fácil de usar para todas tus necesidades de escritura."
     />
-    <meta
-      property="og:image"
-      content="https://tu-dominio.com/imagen-previsualizacion.jpg"
-    />
+    <meta property="og:image" content="../img/logo.webp" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:url"
-      content="https://tu-dominio.com/generador-contenido-ia"
+      content="https://obelis-ia.vercel.app/ia-text/index.html"
     />
     <meta
       name="twitter:title"
@@ -50,10 +47,7 @@
       name="twitter:description"
       content="Crea textos asombrosos: historias, guiones, poemas, canciones y más con nuestra potente IA. Herramienta gratuita y fácil de usar para todas tus necesidades de escritura."
     />
-    <meta
-      name="twitter:image"
-      content="https://tu-dominio.com/imagen-previsualizacion.jpg"
-    />
+    <meta name="twitter:image" content="../img/logo.webp" />
 
     <script type="application/ld+json">
       {
@@ -63,7 +57,7 @@
         "description": "Aplicación web gratuita para generar diversos tipos de contenido textual (historias, guiones, poemas, etc.) utilizando inteligencia artificial. Incluye lector de voz, opciones de tono y descarga.",
         "applicationCategory": "Utilities",
         "operatingSystem": "Web",
-        "url": "https://tu-dominio.com/generador-contenido-ia",
+        "url": "https://obelis-ia.vercel.app/ia-text/index.html",
         "inLanguage": "es",
         "offers": {
           "@type": "Offer",
@@ -110,7 +104,7 @@
               <i class="fas fa-chevron-right arrow-icon"></i>
             </span>
             <div class="submenu">
-              <a href="../ia-img/index.html" class="submenu-item"
+              <a href="../ia-text/index.html" class="submenu-item"
                 >Generador de Imágenes IA</a
               >
               <a
@@ -169,7 +163,23 @@
       </h1>
 
       <div class="ad-banner ad-banner-top">
-        [Espacio para Anuncio Aquí - Publicidad Superior]
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+          crossorigin="anonymous"
+        ></script>
+        <!-- BlockADS_Horizontal -->
+        <ins
+          class="adsbygoogle"
+          style="display: block"
+          data-ad-client="ca-pub-9956937945939380"
+          data-ad-slot="8411312179"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
         <div
           class="w-full h-24 bg-gray-700 flex items-center justify-center rounded-md mt-2"
         >
@@ -418,12 +428,18 @@
       </div>
     </div>
 
-    <div class="ad-banner ad-banner-bottom w-full max-w-3xl">
-      [Espacio para Anuncio Aquí - Publicidad Inferior]
-      <div
-        class="w-full h-24 bg-gray-700 flex items-center justify-center rounded-md mt-2"
-      >
-        <span class="text-gray-500">Anuncio 2</span>
+    <div id="adModal" class="ad-modal-overlay">
+      <div class="ad-modal-content">
+        <h3 class="text-2xl font-bold text-cyan-500 mb-4">
+          ¡Reproduciendo Anuncio!
+        </h3>
+        <p class="text-gray-300 mb-4">Cargando anuncio. Por favor, espera...</p>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-4 border-cyan-500 mx-auto"
+        ></div>
+        <p id="adTimer" class="mt-4 text-gray-400 text-sm">
+          Tiempo restante: 5 segundos
+        </p>
       </div>
     </div>
 
@@ -533,21 +549,6 @@
             es más compleja y no está disponible en esta versión.)
           </p>
         </div>
-      </div>
-    </div>
-
-    <div id="adModal" class="ad-modal-overlay">
-      <div class="ad-modal-content">
-        <h3 class="text-2xl font-bold text-cyan-500 mb-4">
-          ¡Reproduciendo Anuncio!
-        </h3>
-        <p class="text-gray-300 mb-4">Cargando anuncio. Por favor, espera...</p>
-        <div
-          class="animate-spin rounded-full h-12 w-12 border-b-4 border-cyan-500 mx-auto"
-        ></div>
-        <p id="adTimer" class="mt-4 text-gray-400 text-sm">
-          Tiempo restante: 5 segundos
-        </p>
       </div>
     </div>
 
