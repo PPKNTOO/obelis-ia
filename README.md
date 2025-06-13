@@ -7,7 +7,7 @@ ObelisIA/
 ├── node_modules/             # Dependencias de Node.js (ignorada por Git)
 ├── .env                      # Variables de entorno LOCALES (NO se sube a GitHub para producción)
 ├── api/                      # Carpeta para funciones Serverless (backend en Vercel)
-│   └── generate-image.js     # Función proxy para la API de IA (oculta la API Key)
+│   └── gemini.js     # Función proxy para la API de IA (oculta la API Key)
 ├── img/                      # Recursos de imagen compartidos en todo el sitio
 │   └── Pocoyo.gif            # GIF del cargador de Pocoyó
 │   └── marca_de_agua.webp    # Imagen de marca de agua personalizada

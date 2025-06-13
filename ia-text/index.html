@@ -37,7 +37,6 @@
       content="https://obelis-ia.vercel.app/ia-text/index.html"
     />
     <link rel="icon" href="../img/favicon.ico" type="image/ico" />
-    <link rel="stylesheet" href="css/style.css" />
     <meta
       property="og:title"
       content="Generador de Contenido IA Gratuito - Historias, Poemas y Más | ObelisIA"
@@ -101,39 +100,67 @@
       <div class="navbar-inner-content">
         <a
           href="../index.html"
-          class="text-2xl font-bold hover:text-cyan-400 transition-colors duration-200"
-          >Obelis<span style="color: #0891b2"> IA</span></a
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
         >
-        <div class="space-x-4 flex-wrap">
-          <a
-            href="../index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >Inicio</a
-          >
-          <a
-            href="../ia-img/index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >IA Imagen</a
-          >
-          <a
-            href="index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >IA Texto</a
-          >
-          <a
-            href="../edit-img/index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >Editor de Imagen</a
-          >
-          <a
-            href="../convert-img/index.html"
-            class="hover:text-cyan-400 transition-colors duration-200"
-            >Convertir Imagen</a
-          >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../ia-img/index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="../convert-img/index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Más Herramientas
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
         </div>
       </div>
     </nav>
-
     <div
       class="bg-gray-900 p-8 rounded-2xl shadow-2xl w-full max-w-3xl border border-gray-700 transform transition-all duration-300 hover:scale-[1.01] mt-8"
     >
@@ -593,6 +620,7 @@
       </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="../js/global.js" defer></script>
+    <script src="js/script.js" defer></script>
   </body>
 </html>

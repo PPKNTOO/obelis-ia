@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/style.css" />
 
-    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
     <meta
       name="description"
       content="Descubre Obelis IA: tu plataforma gratuita para generación de imágenes y texto con IA, edición y conversión de imágenes, ¡y mucho más! Herramientas potentes y fáciles de usar para todos tus proyectos creativos."
@@ -19,13 +18,13 @@
     />
     <meta name="author" content="ObelisIA" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://theobelis.github.io/obelis-ia/" />
+    <link rel="canonical" href="https://obelis-ia.vercel.app" />
     <link rel="icon" href="img/favicon.ico" type="image/ico" />
     <link rel="apple-touch-icon" href="img/logo.webp" />
 
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://theobelis.github.io/obelis-ia/" />
+    <meta property="og:url" content="https://obelis-ia.vercel.app" />
     <meta
       property="og:site_name"
       content="ObelisIA - Herramientas de IA y Edición Gratuita"
@@ -42,7 +41,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://theobelis.github.io/obelis-ia/" />
+    <meta name="twitter:url" content="https://obelis-ia.vercel.app" />
     <meta
       name="twitter:title"
       content="ObelisIA - Herramientas de IA y Edición Gratuita"
@@ -62,7 +61,7 @@
         "description": "Plataforma web gratuita que ofrece herramientas de inteligencia artificial para generación de imágenes y texto, así como edición y conversión de imágenes.",
         "applicationCategory": "Utilities",
         "operatingSystem": "Web",
-        "url": "https://theobelis.github.io/obelis-ia/",
+        "url": "https://obelis-ia.vercel.app",
         "inLanguage": "es",
         "offers": {
           "@type": "Offer",
@@ -84,8 +83,30 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <!-- ADSENSE -->
+
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- ADS-AMP -->
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
+    <!-- FIN ADS-AMP -->
+
+    <!-- FIN ADSENSE -->
   </head>
   <body class="min-h-screen flex flex-col items-center pb-8">
+    <!-- AMP Auto Ads -->
+    <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
+    </amp-auto-ads>
+
     <!-- Barra de Navegación -->
     <nav
       class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
@@ -96,7 +117,10 @@
           class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
           >Obelis <span style="color: #0891b2">IA</span></a
         >
-        <div class="flex-wrap flex items-center">
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
           <a href="index.html" class="nav-item">
             <i class="fas fa-home nav-icon"></i> Inicio
           </a>
@@ -233,7 +257,23 @@
 
       <!-- Placeholder para Banner de Anuncio Superior -->
       <div class="ad-banner ad-banner-top">
-        Espacio para Anuncio (Banner Superior)
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+          crossorigin="anonymous"
+        ></script>
+        <!-- BlockADS_Horizontal -->
+        <ins
+          class="adsbygoogle"
+          style="display: block"
+          data-ad-client="ca-pub-9956937945939380"
+          data-ad-slot="8411312179"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
       </div>
 
       <!-- Sección de Herramientas Destacadas -->
@@ -318,7 +358,23 @@
 
       <!-- Placeholder para Banner de Anuncio Inferior -->
       <div class="ad-banner ad-banner-bottom">
-        Espacio para Anuncio (Banner Inferior)
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+          crossorigin="anonymous"
+        ></script>
+        <!-- BlockADS_Horizontal -->
+        <ins
+          class="adsbygoogle"
+          style="display: block"
+          data-ad-client="ca-pub-9956937945939380"
+          data-ad-slot="8411312179"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
       </div>
     </main>
 
@@ -529,126 +585,7 @@
         startSlideInterval();
       }
 
-      // --- Lógica de Modales y Cookies (existente) ---
-
-      function showCookieConsent() {
-        if (!localStorage.getItem("cookieAccepted")) {
-          cookieConsent.classList.add("show");
-        }
-      }
-
-      function acceptCookies() {
-        localStorage.setItem("cookieAccepted", "true");
-        cookieConsent.classList.remove("show");
-        if (
-          !localStorage.getItem("subscribed") &&
-          !localStorage.getItem("noThanksSubscription")
-        ) {
-          showSubscriptionModal();
-        }
-      }
-
-      function showSubscriptionModal() {
-        subscriptionModal.classList.add("show");
-      }
-
-      function handleSubscription() {
-        const email = emailInput.value.trim();
-        if (email) {
-          console.log("Correo suscrito:", email);
-          localStorage.setItem("subscribed", "true");
-          subscriptionModal.classList.remove("show");
-          showCustomMessage("¡Gracias por suscribirte!", "success");
-        } else {
-          showCustomMessage(
-            "Por favor, introduce un correo electrónico válido.",
-            "error"
-          );
-        }
-      }
-
-      function dismissSubscription() {
-        localStorage.setItem("noThanksSubscription", "true");
-        subscriptionModal.classList.remove("show");
-      }
-
-      // --- Control de la clase active-link en la barra de navegación ---
-      function updateActiveClass() {
-        // Seleccionar todos los enlaces principales y elementos de submenú
-        const navLinks = document.querySelectorAll(".navbar-inner-content a");
-        const submenuItems = document.querySelectorAll(".submenu-item");
-        const navItemParents = document.querySelectorAll(".nav-item.group");
-
-        const currentPath = window.location.pathname;
-
-        // Limpiar todas las clases 'active-link' y 'aria-current'
-        navLinks.forEach((link) => {
-          link.classList.remove("active-link");
-          link.removeAttribute("aria-current");
-        });
-        submenuItems.forEach((item) => {
-          item.classList.remove("active-link");
-        });
-        navItemParents.forEach((parent) => {
-          parent
-            .querySelector("span.cursor-pointer")
-            ?.classList.remove("active-link");
-        });
-
-        // Función para normalizar rutas
-        const normalizePath = (path) => {
-          let normalized = path;
-          if (normalized.endsWith("/index.html")) {
-            normalized = normalized.replace("/index.html", "/");
-          }
-          if (!normalized.endsWith("/")) {
-            normalized += "/";
-          }
-          return normalized;
-        };
-
-        const normalizedCurrentPath = normalizePath(currentPath);
-
-        // Iterar sobre todos los enlaces (principales y submenú)
-        document
-          .querySelectorAll(".navbar-inner-content a, .submenu-item")
-          .forEach((item) => {
-            const href = item.getAttribute("href");
-            if (href) {
-              const itemPath = normalizePath(
-                new URL(href, window.location.origin).pathname
-              );
-
-              // Si es un enlace de página de inicio y la ruta actual es la raíz
-              if (itemPath === "/" && normalizedCurrentPath === "/") {
-                item.classList.add("active-link");
-                item.setAttribute("aria-current", "page");
-              }
-              // Si la ruta actual comienza con la ruta del elemento (para subdirectorios)
-              else if (
-                itemPath !== "/" &&
-                normalizedCurrentPath.startsWith(itemPath)
-              ) {
-                item.classList.add("active-link");
-                item.setAttribute("aria-current", "page");
-
-                // Si este elemento es un sub-ítem, también activar su padre
-                const parentSubmenu = item.closest(".submenu");
-                if (parentSubmenu) {
-                  const parentNavItem =
-                    parentSubmenu.closest(".nav-item.group");
-                  if (parentNavItem) {
-                    parentNavItem
-                      .querySelector("span.cursor-pointer")
-                      ?.classList.add("active-link");
-                  }
-                }
-              }
-            }
-          });
-      }
-
-      // --- Event Listeners y Inicialización ---
+      // --- Event Listeners e Inicialización ---
       document.addEventListener("DOMContentLoaded", () => {
         // Inicializar el carrusel
         showSlide(currentIndex); // Muestra el primer slide al cargar
@@ -667,33 +604,8 @@
           nextSlide();
           resetSlideInterval(); // Resetear el intervalo al hacer clic en el botón
         });
-
-        // Lógica de Modales y Cookies
-        showCookieConsent();
-        acceptCookiesButton.addEventListener("click", acceptCookies);
-        subscribeButton.addEventListener("click", handleSubscription);
-        noThanksButton.addEventListener("click", dismissSubscription);
-
-        subscriptionModal.addEventListener("click", (event) => {
-          if (event.target === subscriptionModal) {
-            dismissSubscription();
-          }
-        });
-
-        messageModalCloseButton.addEventListener("click", hideCustomMessage);
-        messageModal.addEventListener("click", (event) => {
-          if (event.target === messageModal) {
-            hideCustomMessage();
-          }
-        });
-
-        // Actualizar la clase activa de la navegación al cargar la página
-        updateActiveClass();
       });
-
-      // Asegurarse de que la clase activa se actualice si la URL cambia (por ejemplo, con navegación SPA si se implementa)
-      window.addEventListener("popstate", updateActiveClass);
-      window.addEventListener("hashchange", updateActiveClass);
     </script>
+    <script src="js/global.js"></script>
   </body>
 </html>

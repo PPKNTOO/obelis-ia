@@ -9,6 +9,19 @@
     <link rel="icon" href="../img/favicon.ico" type="image/ico" />
     <link rel="stylesheet" href="../css/main.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
     <meta
       name="description"
       content="Convierte tus imágenes a diferentes formatos como JPEG, PNG, WebP, GIF, BMP, TIFF, ICO de forma gratuita y sencilla. Herramienta online rápida y segura."
@@ -22,7 +35,7 @@
     <meta property="og:type" content="software.application" />
     <meta
       property="og:url"
-      content="https://tu-dominio.com/convertidor-imagenes"
+      content="https://obelis-ia.vercel.app/convert-img/index.html"
     />
     <meta
       property="og:title"
@@ -32,15 +45,12 @@
       property="og:description"
       content="Convierte tus imágenes a diferentes formatos como JPEG, PNG, WebP, GIF, BMP, TIFF, ICO de forma gratuita y sencilla. Herramienta online rápida y segura."
     />
-    <meta
-      property="og:image"
-      content="https://tu-dominio.com/imagen-previsualizacion-convertidor.jpg"
-    />
+    <meta property="og:image" content="../img/logo.webp" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:url"
-      content="https://tu-dominio.com/convertidor-imagenes"
+      content="https://obelis-ia.vercel.app/convert-img/index.html"
     />
     <meta
       name="twitter:title"
@@ -50,10 +60,7 @@
       name="twitter:description"
       content="Convierte tus imágenes a diferentes formatos como JPEG, PNG, WebP, GIF, BMP, TIFF, ICO de forma gratuita y sencilla. Herramienta online rápida y segura."
     />
-    <meta
-      name="twitter:image"
-      content="https://tu-dominio.com/imagen-previsualizacion-convertidor.jpg"
-    />
+    <meta name="twitter:image" content="../img/logo.webp" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -62,9 +69,11 @@
     />
   </head>
   <body class="bg-gradient-dark min-h-screen flex flex-col items-center pb-8">
+    <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
+    </amp-auto-ads>
+
     <nav
-      id="main-navbar"
-      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-1000 h-16"
+      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
     >
       <div class="navbar-inner-content">
         <a
@@ -107,10 +116,7 @@
               <a href="../edit-img/index.html" class="submenu-item"
                 >Editor de Imágenes</a
               >
-              <a
-                href="./index.html"
-                class="submenu-item active-link"
-                aria-current="page"
+              <a href="./index.html" class="submenu-item" aria-current="page"
                 >Convertir Imágenes</a
               >
             </div>
@@ -133,7 +139,6 @@
         </div>
       </div>
     </nav>
-
     <div class="main-content-wrapper flex flex-col items-center">
       <div class="ad-banner ad-banner-top w-full max-w-3xl rounded-xl">
         Espacio para Anuncio (Banner Superior)
@@ -245,12 +250,6 @@
 
     <div id="subscriptionModal" class="subscription-modal">
       <div class="subscription-modal-content">
-        <button
-          id="subscriptionModalCloseButton"
-          class="subscription-modal-close"
-        >
-          &times;
-        </button>
         <h3 class="text-2xl font-bold mb-4 text-cyan-500">
           ¡Únete a nuestra comunidad!
         </h3>
@@ -310,6 +309,27 @@
         Aceptar
       </button>
     </div>
+
+    <div
+      id="messageModal"
+      class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[2000] opacity-0 invisible transition-all duration-300"
+    >
+      <div
+        id="messageModalContent"
+        class="p-8 rounded-xl shadow-2xl max-w-sm w-11/12 text-center relative bg-gray-900 border border-gray-800"
+      >
+        <button
+          id="messageModalCloseButton"
+          class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold"
+        >
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script src="../js/global.js" defer></script>
+    <script src="js/script.js" defer></script>
   </body>
-  <script src="js/script.js" defer></script>
 </html>

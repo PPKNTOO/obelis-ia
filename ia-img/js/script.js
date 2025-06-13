@@ -1,6 +1,6 @@
-// js/script.js
+// ia-img/js/script.js
 
-// --- Constantes de Configuración ---
+// --- Constantes de Configuración (específicas de este módulo) ---
 const CONFIG = {
   API_BASE_URL: "https://image.pollinations.ai/prompt/",
   MAX_RETRIES: 2,
@@ -8,9 +8,8 @@ const CONFIG = {
   TIMEOUT_MS: 10000,
   MAX_GALLERY_IMAGES: 12,
   PROMPT_SUGGESTION_DELAY_SECONDS: 10,
-  // RUTA ACTUALIZADA para tu marca de agua personalizada
   OBELISAI_LOGO_URL: "../img/marca_de_agua.webp",
-  IMAGE_CROP_BOTTOM_PX: 60, // Cantidad de píxeles a recortar de la parte inferior
+  IMAGE_CROP_BOTTOM_PX: 60,
   MAX_FREE_GENERATIONS: 5,
   GENERATIONS_PER_AD_WATCH: 3,
   FALLBACK_IMAGES: [
@@ -21,17 +20,17 @@ const CONFIG = {
     "https://placehold.co/600x400/EDE7F6/5E35B1?alt=Retrato+surrealista+simulado",
   ],
   MIN_IMPROVED_PROMPT_LENGTH: 150,
-  GALLERY_MAX_WIDTH: 600, // Ancho máximo para imágenes guardadas en galería (para optimización)
-  GALLERY_JPEG_QUALITY: 0.85, // Calidad JPEG para imágenes de galería (0 a 1)
+  GALLERY_MAX_WIDTH: 600,
+  GALLERY_JPEG_QUALITY: 0.85,
 };
 
-// --- Variables de Estado Globales ---
+// --- Variables de Estado Globales (específicas de este módulo) ---
 let freeGenerationsLeft = CONFIG.MAX_FREE_GENERATIONS;
 let selectedGalleryImages = new Set();
 let currentLightboxIndex = 0;
 let fallbackImageIndex = 0;
 
-let editorCtx; // Se inicializa en initApp
+let editorCtx;
 let originalEditorImage = new Image();
 let currentEditorImage = new Image();
 let editorCurrentFilter = "none";
@@ -43,86 +42,10 @@ let editorTextData = {
 };
 let editingImageUrl = null;
 
-// --- DOMElements (se inicializará en initApp) ---
-let DOMElements;
+// ¡¡IMPORTANTE!! ELIMINA LA LÍNEA 'let DOMElements;' DE AQUÍ.
+// DOMElements ahora es una variable global declarada y manejada en global.js.
 
-// --- FUNCIONES ---
-
-/**
- * Descarga una imagen dada su URL.
- */
-function downloadImage(imageUrl, filename = "imagen-generada.png") {
-  const link = document.createElement("a");
-  link.href = imageUrl;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-/**
- * Muestra un mensaje personalizado en el modal genérico.
- */
-function showCustomMessage(message, type = "info", duration = 3000) {
-  DOMElements.messageModalText.textContent = message;
-  switch (type) {
-    case "success":
-      DOMElements.messageModalIcon.textContent = "✔️";
-      DOMElements.messageModalIcon.className = "mt-4 text-4xl success";
-      break;
-    case "error":
-      DOMElements.messageModalIcon.textContent = "❌";
-      DOMElements.messageModalIcon.className = "mt-4 text-4xl error";
-      break;
-    case "info":
-    default:
-      DOMElements.messageModalIcon.textContent = "💡";
-      DOMElements.messageModalIcon.className = "mt-4 text-4xl info";
-      break;
-  }
-  DOMElements.messageModal.classList.add("show");
-  setTimeout(() => {
-    hideCustomMessage();
-  }, duration);
-}
-
-/** Oculta el modal de mensajes genérico. */
-function hideCustomMessage() {
-  DOMElements.messageModal.classList.remove("show");
-  DOMElements.messageModalText.textContent = "";
-  DOMElements.messageModalIcon.textContent = "";
-  DOMElements.messageModalIcon.className = "mt-4 text-4xl";
-}
-
-/**
- * Calcula y muestra el uso del almacenamiento local.
- */
-function updateLocalStorageUsage() {
-  let totalBytes = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    totalBytes += localStorage.getItem(key).length * 2; // Multiplicar por 2 para Unicode
-  }
-  const totalKB = totalBytes / 1024;
-  const totalMB = totalKB / 1024;
-
-  let usageText = "";
-  if (totalMB >= 1) {
-    usageText = `${totalMB.toFixed(2)} MB`;
-  } else {
-    usageText = `${totalKB.toFixed(2)} KB`;
-  }
-  DOMElements.localStorageUsage.textContent = `Uso del Almacenamiento Local: ${usageText}`;
-
-  const QUOTA_WARNING_MB = 4; // Umbral de advertencia, localStorage suele ser 5MB
-  if (totalMB >= QUOTA_WARNING_MB) {
-    showCustomMessage(
-      `¡Advertencia! El almacenamiento local se está llenando (${usageText}). Considera limpiar la galería.`,
-      "info",
-      7000
-    );
-  }
-}
+// --- FUNCIONES (específicas de este módulo - todas las funciones globales se han eliminado) ---
 
 /**
  * Procesa una imagen: recorta la parte inferior (para eliminar marcas de agua de terceros)
@@ -150,7 +73,6 @@ function processImageWithLogo(imageUrl) {
         console.warn(
           "La altura de la imagen después del recorte es cero o negativa. No se aplicará el recorte inferior ni la marca de agua."
         );
-        // Si el recorte hace que la imagen sea muy pequeña o nula, simplemente devuelve la imagen original
         resolve(imageUrl);
         return;
       }
@@ -193,7 +115,7 @@ function processImageWithLogo(imageUrl) {
         const y = canvas.height - watermarkHeight - padding;
 
         ctx.drawImage(customWatermark, x, y, watermarkWidth, watermarkHeight);
-        resolve(canvas.toDataURL("image/png")); // O 'image/webp' si prefieres
+        resolve(canvas.toDataURL("image/png"));
       };
 
       customWatermark.onerror = (e) => {
@@ -201,7 +123,7 @@ function processImageWithLogo(imageUrl) {
           "Error al cargar la imagen de marca de agua (personalizada), la imagen se mostrará sin ella:",
           e
         );
-        resolve(canvas.toDataURL("image/png")); // Resolver con la imagen (recortada) original si la marca de agua falla
+        resolve(canvas.toDataURL("image/png"));
       };
     };
 
@@ -261,7 +183,7 @@ function saveImageToGallery(imageUrl) {
   }
   try {
     localStorage.setItem("generatedImages", JSON.stringify(images));
-    updateLocalStorageUsage(); // Actualizar el uso después de guardar
+    updateLocalStorageUsage(); // Llama a la función global
   } catch (e) {
     if (e.name === "QuotaExceededError") {
       showCustomMessage(
@@ -512,7 +434,7 @@ function deleteImageFromGallery(imageUrlToDelete) {
   if (images.length < initialLength) {
     localStorage.setItem("generatedImages", JSON.stringify(images));
     renderGallery();
-    updateLocalStorageUsage(); // Actualizar uso después de eliminar
+    updateLocalStorageUsage(); // Llama a la función global
     showCustomMessage("Imagen eliminada de la galería.", "success", 2000);
   } else {
     showCustomMessage("No se encontró la imagen para eliminar.", "error", 2000);
@@ -536,7 +458,7 @@ function deleteSelectedImagesFromGallery() {
   if (images.length < initialLength) {
     localStorage.setItem("generatedImages", JSON.stringify(images));
     renderGallery();
-    updateLocalStorageUsage(); // Actualizar uso después de eliminar
+    updateLocalStorageUsage(); // Llama a la función global
     showCustomMessage(
       `Se eliminaron ${initialLength - images.length} imágenes seleccionadas.`,
       "success",
@@ -977,118 +899,6 @@ async function generateImage() {
   DOMElements.loadingSpinner.classList.add("hidden");
 }
 
-function showCookieConsent() {
-  if (!localStorage.getItem("cookieAccepted")) {
-    DOMElements.cookieConsent.classList.add("show");
-  }
-}
-
-function acceptCookies() {
-  localStorage.setItem("cookieAccepted", "true");
-  DOMElements.cookieConsent.classList.remove("show");
-  if (
-    !localStorage.getItem("subscribed") &&
-    !localStorage.getItem("noThanksSubscription")
-  ) {
-    showSubscriptionModal();
-  }
-}
-
-function showSubscriptionModal() {
-  if (
-    !localStorage.getItem("subscribed") &&
-    !localStorage.getItem("noThanksSubscription")
-  ) {
-    DOMElements.subscriptionModal.classList.add("show");
-  }
-}
-
-function handleSubscription() {
-  const email = DOMElements.emailInput.value.trim();
-  if (email) {
-    console.log("Correo suscrito:", email);
-    localStorage.setItem("subscribed", "true");
-    DOMElements.subscriptionModal.classList.remove("show");
-    showCustomMessage("¡Gracias por suscribirte!", "success");
-  } else {
-    showCustomMessage(
-      "Por favor, introduce un correo electrónico válido.",
-      "error"
-    );
-  }
-}
-
-function dismissSubscription() {
-  localStorage.setItem("noThanksSubscription", "true");
-  DOMElements.subscriptionModal.classList.remove("show");
-}
-
-function updateActiveClass() {
-  const navLinks = document.querySelectorAll(".navbar-inner-content a");
-  const submenuItems = document.querySelectorAll(".submenu-item");
-  const navItemParents = document.querySelectorAll(".nav-item.group");
-
-  const currentPath = window.location.pathname;
-
-  navLinks.forEach((link) => {
-    link.classList.remove("active-link");
-    link.removeAttribute("aria-current");
-  });
-  submenuItems.forEach((item) => {
-    item.classList.remove("active-link");
-  });
-  navItemParents.forEach((parent) => {
-    parent
-      .querySelector("span.cursor-pointer")
-      ?.classList.remove("active-link");
-  });
-
-  const normalizePath = (path) => {
-    let normalized = path;
-    if (normalized.endsWith("/index.html")) {
-      normalized = normalized.replace("/index.html", "/");
-    }
-    if (!normalized.endsWith("/")) {
-      normalized += "/";
-    }
-    return normalized;
-  };
-
-  const normalizedCurrentPath = normalizePath(currentPath);
-
-  document
-    .querySelectorAll(".navbar-inner-content a, .submenu-item")
-    .forEach((item) => {
-      const href = item.getAttribute("href");
-      if (href) {
-        const itemPath = normalizePath(
-          new URL(href, window.location.origin).pathname
-        );
-
-        if (itemPath === "/" && normalizedCurrentPath === "/") {
-          item.classList.add("active-link");
-          item.setAttribute("aria-current", "page");
-        } else if (
-          itemPath !== "/" &&
-          normalizedCurrentPath.startsWith(itemPath)
-        ) {
-          item.classList.add("active-link");
-          item.setAttribute("aria-current", "page");
-
-          const parentSubmenu = item.closest(".submenu");
-          if (parentSubmenu) {
-            const parentNavItem = parentSubmenu.closest(".nav-item.group");
-            if (parentNavItem) {
-              parentNavItem
-                .querySelector("span.cursor-pointer")
-                ?.classList.add("active-link");
-            }
-          }
-        }
-      }
-    });
-}
-
 function openImageEditor(imageUrl) {
   editingImageUrl = imageUrl;
   originalEditorImage.src = imageUrl;
@@ -1348,13 +1158,15 @@ function renderFilterThumbnails() {
 // --- initApp: la función principal de inicialización ---
 function initApp() {
   // Inicializa DOMElements aquí, para asegurarte de que el DOM esté completamente cargado.
-  DOMElements = {
+  // ¡¡IMPORTANTE!! Usa Object.assign para fusionar con el DOMElements global
+  Object.assign(DOMElements, {
     promptInput: document.getElementById("promptInput"),
     generateButton: document.getElementById("generateButton"),
     loadingIndicator: document.getElementById("loadingIndicator"),
     pocoyoGif: document.getElementById("pocoyoGif"),
     loadingSpinner: document.getElementById("loadingSpinner"),
-    localStorageUsage: document.getElementById("localStorageUsage"),
+    // Elimina elementos globales que ahora se inicializan en global.js
+    // localStorageUsage: document.getElementById("localStorageUsage"),
     loadingMessageText: document.getElementById("loadingMessageText"),
     generatedImage: document.getElementById("generatedImage"),
     imagePlaceholderText: document.getElementById("imagePlaceholderText"),
@@ -1378,16 +1190,17 @@ function initApp() {
     promptSuggestionLoading: document.getElementById("promptSuggestionLoading"),
     toneSelect: document.getElementById("toneSelect"),
     improvePromptButton: document.getElementById("improvePromptButton"),
-    cookieConsent: document.getElementById("cookieConsent"),
-    acceptCookiesButton: document.getElementById("acceptCookiesButton"),
-    subscriptionModal: document.getElementById("subscriptionModal"),
-    emailInput: document.getElementById("emailInput"),
-    subscribeButton: document.getElementById("subscribeButton"),
-    noThanksButton: document.getElementById("noThanksButton"),
-    messageModal: document.getElementById("messageModal"),
-    messageModalCloseButton: document.getElementById("messageModalCloseButton"),
-    messageModalText: document.getElementById("messageModalText"),
-    messageModalIcon: document.getElementById("messageModalIcon"),
+    // Elimina elementos globales que ahora se inicializan en global.js
+    // cookieConsent: document.getElementById("cookieConsent"),
+    // acceptCookiesButton: document.getElementById("acceptCookiesButton"),
+    // subscriptionModal: document.getElementById("subscriptionModal"),
+    // emailInput: document.getElementById("emailInput"),
+    // subscribeButton: document.getElementById("subscribeButton"),
+    // noThanksButton: document.getElementById("noThanksButton"),
+    // messageModal: document.getElementById("messageModal"),
+    // messageModalCloseButton: document.getElementById("messageModalCloseButton"),
+    // messageModalText: document.getElementById("messageModalText"),
+    // messageModalIcon: document.getElementById("messageModalIcon"),
     generationCounter: document.getElementById("generationCounter"),
     watchAdButton: document.getElementById("watchAdButton"),
     imageEditorModal: document.getElementById("imageEditorModal"),
@@ -1404,16 +1217,16 @@ function initApp() {
     cropHeightInput: document.getElementById("cropHeightInput"),
     saveEditedImageButton: document.getElementById("saveEditedImageButton"),
     cancelEditButton: document.getElementById("cancelEditButton"),
-    menuToggle: document.getElementById("menuToggle"),
-    navLinksContainer: document.querySelector(
-      ".navbar-inner-content .flex-wrap"
-    ),
-  };
+    // Elimina elementos globales que ahora se inicializan en global.js
+    // menuToggle: document.getElementById("menuToggle"),
+    // navLinksContainer: document.querySelector(".navbar-inner-content .flex-wrap"),
+  });
 
-  // Actualizar el uso del almacenamiento local al inicio
-  updateLocalStorageUsage();
+  // Se eliminan las llamadas a funciones globales que ahora están en global.js
+  // updateLocalStorageUsage();
+  // showCookieConsent();
 
-  // Cargar estado inicial y actualizar UI
+  // Cargar estado inicial y actualizar UI (específico de este módulo)
   const storedGenerations = localStorage.getItem("freeGenerationsLeft");
   if (storedGenerations !== null) {
     freeGenerationsLeft = parseInt(storedGenerations, 10);
@@ -1445,14 +1258,14 @@ function initApp() {
     DOMElements.imagePlaceholderText.classList.remove("hidden");
   }
   renderGallery();
-  showCookieConsent();
+  // showCookieConsent(); // MOVÍ ESTO A GLOBAL.JS
 
   setTimeout(
     showPromptSuggestionBox,
     CONFIG.PROMPT_SUGGESTION_DELAY_SECONDS * 1000
   );
 
-  // --- Configuración de Event Listeners ---
+  // --- Configuración de Event Listeners (específicos de este módulo) ---
   DOMElements.generateButton.addEventListener("click", generateImage);
   DOMElements.downloadMainImageButton.addEventListener("click", () => {
     const imageUrl = DOMElements.generatedImage.src;
@@ -1482,9 +1295,10 @@ function initApp() {
   DOMElements.lightboxPrevButton.addEventListener("click", showPrevImage);
   DOMElements.lightboxNextButton.addEventListener("click", showNextImage);
 
-  DOMElements.acceptCookiesButton.addEventListener("click", acceptCookies);
-  DOMElements.subscribeButton.addEventListener("click", handleSubscription);
-  DOMElements.noThanksButton.addEventListener("click", dismissSubscription);
+  // Event listeners de cookies y suscripción movidos a global.js
+  // DOMElements.acceptCookiesButton.addEventListener("click", acceptCookies);
+  // DOMElements.subscribeButton.addEventListener("click", handleSubscription);
+  // DOMElements.noThanksButton.addEventListener("click", dismissSubscription);
 
   DOMElements.generatePromptSuggestionButton.addEventListener(
     "click",
@@ -1498,18 +1312,15 @@ function initApp() {
 
   DOMElements.watchAdButton.addEventListener("click", watchAdForGenerations);
 
-  DOMElements.messageModalCloseButton.addEventListener(
-    "click",
-    hideCustomMessage
-  );
-  DOMElements.messageModal.addEventListener("click", (event) => {
-    if (event.target === DOMElements.messageModal) {
-      hideCustomMessage();
-    }
-  });
+  // Event listeners del modal de mensajes movidos a global.js
+  // DOMElements.messageModalCloseButton.addEventListener("click", hideCustomMessage);
+  // DOMElements.messageModal.addEventListener("click", (event) => {
+  //   if (event.target === DOMElements.messageModal) {
+  //     hideCustomMessage();
+  //   }
+  // });
 
   // Editor de imagen
-  // Asegurarse de que editorCanvas existe antes de obtener el contexto
   if (DOMElements.editorCanvas) {
     editorCtx = DOMElements.editorCanvas.getContext("2d");
   }
@@ -1538,48 +1349,42 @@ function initApp() {
   DOMElements.cropWidthInput.addEventListener("input", redrawEditorCanvas);
   DOMElements.cropHeightInput.addEventListener("input", redrawEditorCanvas);
 
-  // Navegación responsive
-  DOMElements.menuToggle.addEventListener("click", () => {
-    DOMElements.navLinksContainer.classList.toggle("active");
-    DOMElements.menuToggle.querySelector("i").classList.toggle("fa-bars");
-    DOMElements.menuToggle.querySelector("i").classList.toggle("fa-times");
-  });
+  // Navegación responsive (movido a global.js)
+  // DOMElements.menuToggle.addEventListener("click", () => {
+  //   DOMElements.navLinksContainer.classList.toggle("active");
+  //   DOMElements.menuToggle.querySelector("i").classList.toggle("fa-bars");
+  //   DOMElements.menuToggle.querySelector("i").classList.toggle("fa-times");
+  // });
+  // document.addEventListener("click", (event) => {
+  //   const isClickInsideNav = DOMElements.navLinksContainer.contains(event.target);
+  //   const isClickOnToggle = DOMElements.menuToggle && DOMElements.menuToggle.contains(event.target);
+  //   if (
+  //     !isClickInsideNav &&
+  //     !isClickOnToggle &&
+  //     DOMElements.navLinksContainer.classList.contains("active")
+  //   ) {
+  //     DOMElements.navLinksContainer.classList.remove("active");
+  //     if (DOMElements.menuToggle) {
+  //       DOMElements.menuToggle.querySelector("i").classList.remove("fa-times");
+  //       DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
+  //     }
+  //   }
+  // });
+  // DOMElements.navLinksContainer.querySelectorAll("a").forEach((link) => {
+  //   link.addEventListener("click", () => {
+  //     if (window.innerWidth <= 768) {
+  //       DOMElements.navLinksContainer.classList.remove("active");
+  //       if (DOMElements.menuToggle) {
+  //         DOMElements.menuToggle
+  //           .querySelector("i")
+  //           .classList.remove("fa-times");
+  //         DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
+  //       }
+  //     }
+  //   });
+  // });
 
-  document.addEventListener("click", (event) => {
-    const isClickInsideNav = DOMElements.navLinksContainer.contains(
-      event.target
-    );
-    const isClickOnToggle =
-      DOMElements.menuToggle && DOMElements.menuToggle.contains(event.target);
-
-    if (
-      !isClickInsideNav &&
-      !isClickOnToggle &&
-      DOMElements.navLinksContainer.classList.contains("active")
-    ) {
-      DOMElements.navLinksContainer.classList.remove("active");
-      if (DOMElements.menuToggle) {
-        DOMElements.menuToggle.querySelector("i").classList.remove("fa-times");
-        DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
-      }
-    }
-  });
-
-  DOMElements.navLinksContainer.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      if (window.innerWidth <= 768) {
-        DOMElements.navLinksContainer.classList.remove("active");
-        if (DOMElements.menuToggle) {
-          DOMElements.menuToggle
-            .querySelector("i")
-            .classList.remove("fa-times");
-          DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
-        }
-      }
-    });
-  });
-
-  updateActiveClass();
+  // updateActiveClass(); // MOVÍ ESTO A GLOBAL.JS
 }
 
 // Llama a initApp cuando el DOM esté completamente cargado

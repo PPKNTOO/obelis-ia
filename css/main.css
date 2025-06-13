@@ -375,7 +375,7 @@ body {
 }
 
 /* Navbar Responsive (Hamburguesa) */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .navbar-inner-content .flex-wrap {
     display: none; /* Oculto por defecto en móvil */
     flex-direction: column;
