@@ -1,14 +1,25 @@
+/* Nuevo contenedor para el menú y el editor */
+.main-content-wrapper {
+  width: 100%;
+  max-width: 1200px; /* Alinea con la navbar */
+  margin-top: calc(
+    64px + 1rem
+  ); /* Empuja el contenido debajo de la navbar fija + 1rem de espacio */
+  padding: 0 1rem; /* Padding horizontal consistente */
+  display: flex;
+  flex-direction: column; /* Apila el menú y el layout principal verticalmente */
+  gap: 1rem; /* Espacio entre la barra de menú y el layout principal */
+  flex-grow: 1; /* Permite que ocupe el espacio vertical disponible */
+  align-items: center; /* Centra el contenido dentro del wrapper */
+}
+
 /* Estilos específicos del editor */
 .editor-main-layout {
   display: flex;
   flex-direction: column; /* Columna por defecto para móviles */
   width: 100%;
-  max-width: 1200px; /* Alinea con la navbar */
-  margin-top: calc(
-    64px + 1rem
-  ); /* Empuja el layout debajo de la navbar fija + 1rem de espacio */
+  /* Eliminados max-width, margin-top, padding ya que son manejados por .main-content-wrapper */
   gap: 1rem; /* Espacio entre sidebars y canvas */
-  padding: 0 1rem; /* Padding horizontal */
   flex-grow: 1; /* Permite que ocupe el espacio vertical disponible */
 }
 
@@ -30,8 +41,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   width: 100%;
-  max-width: 1200px;
-  margin-top: 1rem; /* Margen para separarlo de la navbar (adicional al padding-top del body) */
+  /* Eliminados max-width y margin-top ya que son manejados por .main-content-wrapper */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   position: relative; /* CRÍTICO para posicionar los dropdowns */
   z-index: 900; /* Asegura que la barra de menú esté por encima del layout principal */
@@ -154,7 +164,7 @@
 
 .canvas-container {
   position: relative;
-  background-color: #1a202c;
+  background-color: #fff;
   border: 1px solid #4a5568;
   border-radius: 0.5rem;
   display: flex;

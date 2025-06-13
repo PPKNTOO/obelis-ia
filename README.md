@@ -21,11 +21,32 @@ ObelisIA/
 │   └── css/
 │       └── style.css
 ├── edit-img/                 # Módulo: Herramienta de edición de imágenes
-│   ├── index.html
-│   ├── js/
-│   │   └── script.js
+│   ├── index.html            # Página del editor de imágenes
+│   ├── js/                   # Carpeta para los scripts del editor
+│   │   ├── main.js             # Punto de entrada principal del editor
+│   │   ├── ui.js               # Lógica de la interfaz de usuario (mensajes, modales, etc.)
+│   │   ├── canvas.js           # Funciones de manipulación del elemento Canvas
+│   │   ├── history.js          # Lógica para Deshacer/Rehacer
+│   │   ├── tools/              # Lógicas individuales para cada herramienta
+│   │   │   ├── toolManager.js  # Gestor de activación de herramientas
+│   │   │   ├── brushTool.js    # Lógica del Pincel
+│   │   │   ├── eraserTool.js   # Lógica del Borrador
+│   │   │   ├── textTool.js     # Lógica de la herramienta de Texto
+│   │   │   ├── eyedropperTool.js # Lógica del Cuentagotas
+│   │   │   └── cropTool.js     # Lógica de la herramienta de Recorte
+│   │   ├── filters/            # Lógicas individuales para cada filtro
+│   │   │   ├── filterManager.js # Gestor de aplicación de filtros
+│   │   │   ├── grayscaleFilter.js
+│   │   │   ├── sepiaFilter.js
+│   │   │   ├── invertFilter.js
+│   │   │   ├── blurFilter.js
+│   │   │   └── sharpenFilter.js
+│   │   ├── adjustments/        # Lógicas individuales para cada ajuste de imagen
+│   │   │   └── colorAdjustments.js # Brillo, Contraste, Saturación, etc.
+│   │   └── utils/
+│   │       └── constants.js    # Constantes y configuraciones específicas del editor
 │   └── css/
-│       └── style.css
+│       └── style.css           # Estilos específicos del editor
 ├── ia-img/                   # Módulo: Generador de imágenes IA
 │   ├── index.html            # La página del generador de imágenes
 │   ├── js/
@@ -41,10 +62,7 @@ ObelisIA/
 └── (otras_carpetas_o_archivos_en_la_raiz)/
 
 
-
-
 -----------------------------------------------------------------------------------------------
-
 
 
 🚀 Configuración y Despliegue
@@ -93,13 +111,13 @@ node_modules/
 # Archivos de configuración y logs de Vercel (generados localmente)
 .vercel/
 Guarda y cierra el archivo.
-Crea tu Serverless Function (api/generate-image.js):
+Crea tu Serverless Function (api/gemini.js):
 
-En la raíz de tu proyecto, crea la carpeta api/.
-Dentro de api/, crea el archivo generate-image.js y pega el siguiente código:
+En la raíz de tu proyecto, crea la carpeta api/ (si no existe).
+Dentro de api/, crea o actualiza el archivo gemini.js y pega el siguiente código:
 JavaScript
 
-// tu_proyecto_raiz/api/generate-image.js
+// tu_proyecto_raiz/api/gemini.js
 
 // Esta función se ejecutará en el servidor de Vercel (Serverless Function)
 // No necesita importar node-fetch en Vercel, ya que `fetch` es globalmente disponible.
@@ -143,7 +161,7 @@ export default async function (req, res) {
 }
 Asegura las Rutas en tus Archivos JavaScript del Frontend:
 
-Para cada script.js en tus módulos (ej. ia-img/js/script.js, ia-text/js/script.js, convert-img/js/script.js, edit-img/js/script.js):
+Para cada script.js en tus módulos (ej. ia-img/js/script.js, ia-text/js/script.js, convert-img/js/script.js) y para el nuevo `edit-img/js/main.js`:
 Asegúrate de que las llamadas a la Serverless Function utilicen la ruta absoluta desde la raíz del dominio:
 JavaScript
 
@@ -151,7 +169,7 @@ JavaScript
 
 // ... (dentro de generatePromptSuggestion, improvePrompt, o donde hagas la llamada a la API) ...
 
-const response = await fetch('/api/generate-image', { // <-- ¡Siempre con /api/...!
+const response = await fetch('/api/gemini', { // <-- ¡Siempre con /api/gemini!
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
@@ -160,17 +178,32 @@ const response = await fetch('/api/generate-image', { // <-- ¡Siempre con /api/
     }) 
 });
 // ...
+
+**Importante para el Editor de Imágenes (`edit-img/`):**
+
+Dado que el editor de imágenes ha sido modularizado, su archivo principal ahora es `edit-img/js/main.js`. Todos los archivos JavaScript dentro de `edit-img/js/` deben cargarse como módulos ES, lo que requiere un servidor local para funcionar correctamente (no se abrirá directamente desde el navegador con `file://`).
+
+En `edit-img/index.html`, asegúrate de que la etiqueta script para tu archivo principal sea:
+```html
+<script src="js/main.js" type="module"></script>
+```
+Además, las rutas dentro de los archivos JavaScript modulares deben ser relativas entre sí. Por ejemplo, en `edit-img/js/main.js`, una importación a `ui.js` sería:
+```javascript
+import { showMessage } from './ui.js'; // Ruta relativa dentro de la misma carpeta
+```
+Y una importación a `brushTool.js` (que está en una subcarpeta `tools`):
+```javascript
+import { startBrush } from './tools/brushTool.js'; // Ruta relativa a la subcarpeta
+```
+
 Asegúrate de que las rutas a recursos compartidos desde tus módulos anidados sean correctas.
-Por ejemplo, en ia-img/js/script.js, si Pocoyo.gif está en tu_proyecto_raiz/img/Pocoyo.gif, entonces la constante en CONFIG debe ser:
+Por ejemplo, si `marca_de_agua.webp` está en `tu_proyecto_raiz/img/marca_de_agua.webp`, entonces la ruta en tus scripts de módulo (como `edit-img/js/main.js` o `ia-img/js/script.js`) debe ser:
 JavaScript
 
-// Dentro de js/script.js
-const CONFIG = {
-    // ...
-    OBELISAI_LOGO_URL: '../img/marca_de_agua.webp', // Asume que img/ está en la raíz, un nivel arriba de ia-img/
-    // ...
-};
-Y en el HTML para Pocoyo: <img id="pocoyoGif" src="../img/Pocoyo.gif" ...>
+// Dentro de js/main.js (o script.js de otros módulos)
+const SOME_IMAGE_URL = '../img/marca_de_agua.webp'; // Asume que img/ está en la raíz, un nivel arriba del módulo.
+// ...
+Y en el HTML para Pocoyo: `<img id="pocoyoGif" src="../img/Pocoyo.gif" ...>`
 3. Prueba Localmente (en tu máquina MX Linux)
 Crea el archivo .env para pruebas locales:
 
@@ -197,33 +230,4 @@ Navega a tu Aplicación en el Navegador:
 
 Abre tu navegador y ve a la URL local de Vercel, pero añade la ruta a tu módulo específico.
 Para el generador de imágenes: http://localhost:3000/ia-img/
-Para el editor de imágenes: http://localhost:3000/edit-img/
-...y así para cada módulo.
-Prueba todas las funcionalidades (generar, mejorar prompt, galería, etc.).
-4. Despliegue en Vercel (Producción)
-Sube los Cambios a GitHub:
-
-En tu terminal (en la raíz de tu proyecto):
-Bash
-
-git add .
-git commit -m "feat: Completa serverless proxy y configuración de rutas"
-git push
-Verifica en GitHub que api/, package.json, package-lock.json estén en la raíz, pero que node_modules/ y .env NO estén.
-Despliega el Proyecto en Vercel:
-
-Vercel detectará los nuevos commits en GitHub y comenzará un despliegue automático.
-Configura la Variable de Entorno en Vercel Dashboard (¡Obligatorio para producción!):
-
-Ve a tu Vercel Dashboard (en la web).
-Haz clic en tu Proyecto.
-Ve a Settings -> Environment Variables.
-Añade la variable:
-Name: GEMINI_API_KEY
-Value: Pega tu clave de API real de Google Gemini.
-Haz clic en "Add".
-Redepliega el Proyecto en Vercel:
-
-Ve a la pestaña Deployments de tu proyecto en Vercel.
-Haz clic en el botón "Redeploy" junto al despliegue más reciente.
-Con estos pasos, tu proyecto modular se desplegará correctamente, tus serverless functions funcionarán como proxy seguro, y todas las rutas deberían resolverse bien en el entorno de producción de Vercel.
+Para el editor de imágenes: http://localhos

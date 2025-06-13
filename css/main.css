@@ -465,9 +465,9 @@ body {
   flex-direction: column; /* Default to column for small screens */
   width: 100%;
   max-width: 1200px;
-  margin-top: calc(
+  /* margin-top: calc(
     64px + 1rem
-  ); /* Empuja el layout debajo de la navbar fija + 1rem */
+  ); Empuja el layout debajo de la navbar fija + 1rem */
   gap: 1rem;
   padding: 0 1rem;
   flex-grow: 1;
