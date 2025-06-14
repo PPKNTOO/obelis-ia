@@ -18,21 +18,103 @@ let lastActivityDate = ""; // Para reiniciar los contadores diariamente
 
 let ctx; // Contexto del canvas, usado en este script
 
-// --- FUNCIONES DE UTILIDAD Y MENSAJES (Las funciones showMessage y hideMessage se han movido a global.js como showCustomMessage y hideCustomMessage) ---
+// --- FUNCIONES DE UTILIDAD Y MENSAJES ---
 
+// showCustomMessage y hideCustomMessage vienen de global.js
+
+// Función para mostrar/ocultar el modal de carga global
+// Adaptada para usar el loadingOverlayModal de main.css
+function showLoadingOverlay(
+  message = "Procesando imagen, por favor espera...",
+  isError = false
+) {
+  // Asegurarse de que los elementos existan antes de manipularlos
+  if (
+    !DOMElements.loadingOverlayModal ||
+    !DOMElements.loadingMessageTextModal ||
+    !DOMElements.loadingErrorTextModal ||
+    !DOMElements.loadingModalCloseButton
+  ) {
+    console.error(
+      "Loading overlay modal elements (required for basic functionality) not found in DOMElements. Falling back to simple alert.",
+      DOMElements
+    ); // Más detalles para depurar
+    alert(message); // Fallback si los elementos no se encuentran
+    return;
+  }
+  // Optional elements, check before use
+  const pocoyoGif = DOMElements.pocoyoGifModal;
+  const loadingSpinner = DOMElements.loadingSpinnerModal;
+
+  DOMElements.loadingMessageTextModal.textContent = message;
+  DOMElements.loadingErrorTextModal.classList.add("hidden"); // Ocultar errores previos
+
+  if (isError) {
+    DOMElements.loadingErrorTextModal.textContent = message;
+    DOMElements.loadingErrorTextModal.classList.remove("hidden");
+    DOMElements.loadingMessageTextModal.textContent = "¡Ha ocurrido un error!";
+    if (pocoyoGif) pocoyoGif.classList.add("hidden");
+    if (loadingSpinner) loadingSpinner.classList.add("hidden");
+    DOMElements.loadingModalCloseButton.classList.remove("hidden");
+  } else {
+    DOMElements.loadingModalCloseButton.classList.add("hidden");
+    // Decidir si mostrar Pocoyo o spinner
+    if (pocoyoGif) {
+      pocoyoGif.classList.remove("hidden");
+      if (loadingSpinner) loadingSpinner.classList.add("hidden");
+      pocoyoGif.onerror = () => {
+        if (pocoyoGif) pocoyoGif.classList.add("hidden");
+        if (loadingSpinner) loadingSpinner.classList.remove("hidden");
+        console.warn("Pocoyo GIF failed to load, switching to spinner.");
+      };
+    } else if (loadingSpinner) {
+      loadingSpinner.classList.remove("hidden");
+    }
+  }
+  DOMElements.loadingOverlayModal.classList.add("show");
+}
+
+function hideLoadingOverlay() {
+  if (!DOMElements.loadingOverlayModal) return;
+  DOMElements.loadingOverlayModal.classList.remove("show");
+  // Resetear mensajes y visibilidad de elementos internos
+  if (DOMElements.loadingMessageTextModal)
+    DOMElements.loadingMessageTextModal.textContent = "";
+  if (DOMElements.loadingErrorTextModal) {
+    DOMElements.loadingErrorTextModal.textContent = "";
+    DOMElements.loadingErrorTextModal.classList.add("hidden");
+  }
+  if (DOMElements.pocoyoGifModal)
+    DOMElements.pocoyoGifModal.classList.remove("hidden");
+  if (DOMElements.loadingSpinnerModal)
+    DOMElements.loadingSpinnerModal.classList.add("hidden");
+  if (DOMElements.loadingModalCloseButton)
+    DOMElements.loadingModalCloseButton.classList.add("hidden");
+}
+
+// Función toggleLoading ahora usa el modal global de carga
 function toggleLoading(show) {
-  if (DOMElements.loadingSpinner)
-    DOMElements.loadingSpinner.style.display = show ? "block" : "none";
+  if (show) {
+    showLoadingOverlay("Procesando imagen, por favor espera...");
+  } else {
+    hideLoadingOverlay();
+  }
 
-  // Deshabilitar/Habilitar todos los controles
+  // Deshabilitar/Habilitar controles (los botones principales se manejan individualmente)
   const allControls = document.querySelectorAll(
     'button, input[type="file"], select, label[for="imageUpload"]'
   );
   allControls.forEach((control) => {
-    if (control.id === "imageUpload" || control.id === "fileInputArea") {
-      control.disabled = false; // Siempre se puede cargar una imagen
+    // Si el control es el input de archivo o la etiqueta, no se deshabilita
+    if (
+      control.id === "imageUpload" ||
+      control.getAttribute("for") === "imageUpload"
+    ) {
+      control.disabled = false;
     } else if (control.id === "watchAdButton") {
-      control.disabled = show; // Deshabilitar durante la carga general
+      // El botón de anuncio se deshabilita durante la carga general,
+      // pero su estado final se define en checkConversionLimit
+      control.disabled = show;
       control.classList.toggle("disabled-btn", show);
     } else {
       control.disabled = show;
@@ -41,6 +123,7 @@ function toggleLoading(show) {
   });
 
   // Habilitar/deshabilitar botones de convertir y descargar según el estado de carga y blob
+  // Esto sobrescribe el comportamiento general para estos dos botones específicos
   if (DOMElements.convertBtn) {
     DOMElements.convertBtn.disabled = show || !originalImage;
     DOMElements.convertBtn.classList.toggle(
@@ -55,8 +138,6 @@ function toggleLoading(show) {
       show || !convertedBlob
     );
   }
-
-  checkConversionLimit(); // Re-evaluar límites después de cambiar el estado de carga
 }
 
 // --- Lógica de Límite de Conversiones y Anuncios ---
@@ -107,18 +188,17 @@ function checkConversionLimit() {
     }
     if (DOMElements.watchAdButton)
       DOMElements.watchAdButton.classList.add("hidden");
-    // Si el mensaje de límite estaba activo y ahora hay conversiones disponibles, ocúltalo
-    if (
-      DOMElements.messageArea &&
-      DOMElements.messageArea.textContent.includes("límite de conversiones")
-    ) {
-      hideCustomMessage(); // Usar la función global
-    }
   }
 }
 
 function simulateAdViewing() {
-  if (!DOMElements.adModal || !DOMElements.adTimerDisplay) return;
+  if (!DOMElements.adModal || !DOMElements.adTimerDisplay) {
+    showCustomMessage(
+      "Error: Elementos del modal de anuncio no encontrados.",
+      "error"
+    );
+    return;
+  }
 
   DOMElements.adModal.classList.add("show");
   let timer = CONFIG.AD_VIEW_DURATION_SECONDS;
@@ -186,8 +266,8 @@ function handleImageUpload(event) {
   if (file) {
     if (DOMElements.fileNameSpan)
       DOMElements.fileNameSpan.textContent = file.name;
-    hideCustomMessage(); // Usar la función global
-    toggleLoading(true);
+    showCustomMessage("Cargando imagen...", "info", 2000); // Usar la función global
+    toggleLoading(true); // Mostrar modal de carga
 
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -204,7 +284,8 @@ function handleImageUpload(event) {
           DOMElements.downloadBtn.classList.add("disabled-btn");
         }
         convertedBlob = null;
-        toggleLoading(false);
+        toggleLoading(false); // Ocultar modal de carga
+        showCustomMessage("Imagen cargada exitosamente.", "success", 2000);
         checkConversionLimit();
       };
       img.onerror = function () {
@@ -237,7 +318,7 @@ function handleImageUpload(event) {
           DOMElements.imageCanvas.style.width = "";
           DOMElements.imageCanvas.style.height = "";
         }
-        toggleLoading(false);
+        toggleLoading(false); // Ocultar modal de carga
         checkConversionLimit();
       };
       img.src = e.target.result;
@@ -269,13 +350,13 @@ function handleImageUpload(event) {
       DOMElements.imageCanvas.style.width = "";
       DOMElements.imageCanvas.style.height = "";
     }
-    hideCustomMessage(); // Usar la función global
+    hideCustomMessage();
   }
 }
 
 function convertImage() {
   if (!originalImage) {
-    showCustomMessage("Por favor, selecciona una imagen primero.", "error"); // Usar la función global
+    showCustomMessage("Por favor, selecciona una imagen primero.", "error");
     return;
   }
   const totalAllowed =
@@ -286,7 +367,7 @@ function convertImage() {
     return;
   }
 
-  hideCustomMessage(); // Usar la función global
+  showCustomMessage("Realizando conversión...", "info", 5000);
   toggleLoading(true);
 
   const targetFormat = DOMElements.outputFormatSelect.value;
@@ -315,6 +396,7 @@ function convertImage() {
 
   const quality = 0.9;
 
+  // Manejo de formatos no soportados directamente por toBlob o que requieren consideración
   if (
     targetFormat === "application/pdf" ||
     targetFormat === "image/vnd.adobe.photoshop" ||
@@ -329,14 +411,14 @@ function convertImage() {
       "warning",
       8000
     );
-    tempCanvas.toBlob(handleBlobConversion, "image/png", quality);
+    tempCanvas.toBlob(handleBlobConversion, "image/png", quality); // Se convierte a PNG como fallback
   } else if (
     targetFormat === "image/gif" ||
     targetFormat === "image/bmp" ||
     targetFormat === "image/tiff" ||
     targetFormat === "image/x-icon" ||
     targetFormat === "image/avif" ||
-    targetFormat === "image/heif" ||
+    targetFormat === "image/heif" || // HEIF es complejo de salida
     targetFormat === "image/jp2" ||
     targetFormat === "image/jpx"
   ) {
@@ -349,6 +431,7 @@ function convertImage() {
     );
     tempCanvas.toBlob(handleBlobConversion, targetFormat, quality);
   } else {
+    // Formatos comunes y bien soportados
     tempCanvas.toBlob(handleBlobConversion, targetFormat, quality);
   }
 }
@@ -364,7 +447,7 @@ function handleBlobConversion(blob) {
     showCustomMessage(
       `Imagen convertida a ${targetFormat.split("/")[1].toUpperCase()}.`,
       "success"
-    ); // Usar la función global
+    );
 
     conversionsToday++;
     savePreferences();
@@ -376,14 +459,14 @@ function handleBlobConversion(blob) {
         .split("/")[1]
         .toUpperCase()}. Es posible que su navegador no admita este formato de salida o la conversión falló.`,
       "error"
-    ); // Usar la función global
+    );
   }
-  toggleLoading(false);
+  toggleLoading(false); // Ocultar el modal de carga
 }
 
 function downloadImageFromBlob() {
   if (!convertedBlob) {
-    showCustomMessage("No hay imagen convertida para descargar.", "error"); // Usar la función global
+    showCustomMessage("No hay imagen convertida para descargar.", "error");
     return;
   }
 
@@ -458,23 +541,109 @@ function loadPreferences() {
   checkConversionLimit();
 }
 
-// --- Lógica de Cookies y Suscripción (ELIMINADAS - AHORA EN GLOBAL.JS) ---
-// showCookieConsent ya no está aquí
-// acceptCookies ya no está aquí
-// showSubscriptionModal ya no está aquí
-// handleSubscription ya no está aquí
-// dismissSubscription ya no está aquí
+// --- Lógica del FAQ (Copada de ia-text/script.js) ---
+const setupFaqToggle = () => {
+  console.log("Setting up FAQ toggles..."); // Depuración: Confirmar que la función se ejecuta
+  const faqItems = document.querySelectorAll(".faq-item");
+  faqItems.forEach((item) => {
+    const question = item.querySelector(".faq-question");
+    const answer = item.querySelector(".faq-answer");
+    const arrow = item.querySelector(".faq-arrow");
 
-// --- Lógica del Menú Desplegable (para la navbar responsive - ELIMINADA - AHORA EN GLOBAL.JS) ---
-// setupDropdown ya no está aquí
-// updateActiveClass ya no está aquí
+    // Solo añadir el listener si todos los elementos existen
+    if (question && answer && arrow) {
+      // Initialize state: Ensure maxHeight is 0 and overflow is hidden, and padding is 0.
+      // This is crucial to ensure 'isOpen' check works reliably.
+      // We do this here directly on the style object to ensure JS has control.
+      answer.style.maxHeight = "0px";
+      answer.style.paddingTop = "0px";
+      answer.style.paddingBottom = "0px";
+      // overflow: hidden ya está en CSS, pero lo aseguramos
+
+      question.addEventListener("click", () => {
+        console.log("FAQ question clicked!"); // Depuración: Confirmar clic
+
+        // Determine if it's currently open based on maxHeight
+        // Check computed style to be robust against initial CSS values
+        const currentMaxHeight = getComputedStyle(answer).maxHeight;
+        const isOpen = currentMaxHeight !== "0px";
+        console.log(
+          "Current isOpen state:",
+          isOpen,
+          "computed maxHeight:",
+          currentMaxHeight
+        ); // Depuración
+
+        // Close all other open FAQs
+        faqItems.forEach((otherItem) => {
+          if (otherItem !== item) {
+            const otherAnswer = otherItem.querySelector(".faq-answer");
+            const otherArrow = otherItem.querySelector(".faq-arrow");
+            if (
+              otherAnswer &&
+              otherArrow &&
+              getComputedStyle(otherAnswer).maxHeight !== "0px"
+            ) {
+              console.log("Closing other FAQ.");
+              otherAnswer.style.maxHeight = "0px";
+              otherAnswer.style.paddingTop = "0px";
+              otherAnswer.style.paddingBottom = "0px";
+              otherArrow.classList.remove("rotated");
+            }
+          }
+        });
+
+        // Toggle the current FAQ
+        if (isOpen) {
+          console.log("Attempting to close current FAQ.");
+          answer.style.maxHeight = "0px";
+          answer.style.paddingTop = "0px"; // Reset padding
+          answer.style.paddingBottom = "0px"; // Reset padding
+          arrow.classList.remove("rotated");
+        } else {
+          console.log("Attempting to open current FAQ.");
+          // Temporarily set max-height to 'auto' to get the true scrollHeight
+          // and apply paddings to ensure they are included in scrollHeight calculation
+          answer.style.maxHeight = "auto";
+          answer.style.paddingTop = "1.5rem"; // Apply target padding for calculation
+          answer.style.paddingBottom = "2rem"; // Apply target padding for calculation
+
+          // Force reflow to get correct scrollHeight immediately
+          void answer.offsetWidth; // This forces a reflow
+
+          const scrollHeight = answer.scrollHeight;
+          console.log("Calculated scrollHeight:", scrollHeight); // Depuración: Ver el scrollHeight calculado
+
+          // Set max-height to the calculated scrollHeight
+          answer.style.maxHeight = scrollHeight + "px";
+
+          arrow.classList.add("rotated");
+        }
+      });
+    } else {
+      console.warn(
+        "Elementos FAQ no encontrados para un item. Asegúrate que las clases .faq-question, .faq-answer, .faq-arrow existen dentro de .faq-item.",
+        item
+      );
+    }
+  });
+};
 
 // --- Inicialización Principal (DOMContentLoaded) ---
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("convert-img/script.js DOMContentLoaded fired."); // Depuración
+  // Asegurarse de que DOMElements ya esté declarado globalmente en global.js
+  if (typeof DOMElements === "undefined") {
+    console.error(
+      "DOMElements no está declarado. Asegúrate de que global.js se cargue primero y declare 'let DOMElements = {};'"
+    );
+    window.DOMElements = {}; // Fallback para evitar errores, pero indica un problema de carga.
+  }
+
   // Asignar elementos DOM al inicio de DOMContentLoaded
-  // ¡¡IMPORTANTE!! Usa Object.assign para fusionar con el DOMElements global
+  // Es crucial que estos IDs existan en el HTML
   Object.assign(DOMElements, {
-    // Conversor específico
+    // Convertidor específico
     imageUpload: document.getElementById("imageUpload"),
     fileNameSpan: document.getElementById("fileName"),
     imageCanvas: document.getElementById("imageCanvas"),
@@ -486,42 +655,41 @@ document.addEventListener("DOMContentLoaded", function () {
       "conversionCounterDisplay"
     ),
     watchAdButton: document.getElementById("watchAdButton"),
+
+    // Elementos del modal de carga global (DEBEN EXISTIR EN EL HTML)
+    loadingOverlayModal: document.getElementById("loadingOverlayModal"),
+    pocoyoGifModal: document.getElementById("pocoyoGifModal"),
+    loadingSpinnerModal: document.getElementById("loadingSpinnerModal"),
+    loadingMessageTextModal: document.getElementById("loadingMessageTextModal"),
+    loadingErrorTextModal: document.getElementById("loadingErrorTextModal"),
+    loadingModalCloseButton: document.getElementById("loadingModalCloseButton"),
+
+    // AdModal (DEBEN EXISTIR EN EL HTML)
     adModal: document.getElementById("adModal"),
     adTimerDisplay: document.getElementById("adTimer"),
 
-    // Modales y mensajes generales (Eliminados de aquí si ya están en global.js)
-    messageArea: document.getElementById("messageArea"), // Si este es único para convert-img
-    loadingSpinner: document.getElementById("loadingSpinner"), // Si este es único para convert-img
-    // cookieConsent: document.getElementById("cookieConsent"), // ELIMINADO
-    // acceptCookiesButton: document.getElementById("acceptCookiesButton"), // ELIMINADO
-    // subscriptionModal: document.getElementById("subscriptionModal"), // ELIMINADO
-    // emailInput: document.getElementById("emailInput"), // ELIMINADO
-    // subscribeButton: document.getElementById("subscribeButton"), // ELIMINADO
-    // noThanksButton: document.getElementById("noThanksButton"), // ELIMINADO
-    // subscriptionModalCloseButton: document.getElementById("subscriptionModalCloseButton"), // ELIMINADO
-    // messageModal: document.getElementById("messageModal"), // ELIMINADO
-    // messageModalCloseButton: document.getElementById("messageModalCloseButton"), // ELIMINADO
-    // messageModalText: document.getElementById("messageModalText"), // ELIMINADO
-    // messageModalIcon: document.getElementById("messageModalIcon"), // ELIMINADO
+    // MessageModal (DEBEN EXISTIR EN EL HTML)
+    messageModal: document.getElementById("messageModal"),
+    messageModalContent: document.getElementById("messageModalContent"),
+    messageModalCloseButton: document.getElementById("messageModalCloseButton"),
+    messageModalText: document.getElementById("messageModalText"),
+    messageModalIcon: document.getElementById("messageModalIcon"),
 
-    // Navbar general (Eliminados de aquí si ya están en global.js)
-    // mainNavbar: document.getElementById("main-navbar"), // ELIMINADO
-    // menuToggle: document.getElementById("menuToggle"), // ELIMINADO
-    // navLinksContainer: document.querySelector(".navbar-inner-content .flex-wrap"), // ELIMINADO
+    // Elemento para arrastrar y soltar (la etiqueta del input de archivo)
+    fileInputArea: document.querySelector('label[for="imageUpload"]'),
   });
 
   // Asignar contexto del canvas una vez que el elemento esté en DOMElements
   if (DOMElements.imageCanvas) {
     ctx = DOMElements.imageCanvas.getContext("2d");
   } else {
-    console.error("Error: Canvas element not found!");
-    return;
+    console.error(
+      "Error: Canvas element not found! Conversion functionality might be limited."
+    );
   }
 
   // Cargar preferencias de conversiones al inicio
   loadPreferences();
-  // Mostrar el mensaje de cookies al cargar la página (ELIMINADO - Ahora global.js lo maneja)
-  // showCookieConsent();
 
   // --- Event Listeners ESPECÍFICOS DEL MÓDULO ---
 
@@ -529,7 +697,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (DOMElements.imageUpload)
     DOMElements.imageUpload.addEventListener("change", handleImageUpload);
   if (DOMElements.fileInputArea) {
-    // Asegúrate que el elemento fileInputArea existe
     DOMElements.fileInputArea.addEventListener("dragover", (e) => {
       e.preventDefault();
       DOMElements.fileInputArea.classList.add("border-cyan-500", "bg-gray-700");
@@ -592,7 +759,7 @@ document.addEventListener("DOMContentLoaded", function () {
           8000
         );
       } else {
-        hideCustomMessage(); // Usar la función global
+        hideCustomMessage();
       }
     });
   if (DOMElements.convertBtn)
@@ -604,26 +771,16 @@ document.addEventListener("DOMContentLoaded", function () {
   if (DOMElements.watchAdButton)
     DOMElements.watchAdButton.addEventListener("click", simulateAdViewing);
 
-  // Modales de cookies y suscripción (ELIMINADOS - Ahora global.js los maneja)
-  // if (DOMElements.acceptCookiesButton) DOMElements.acceptCookiesButton.addEventListener("click", acceptCookies);
-  // if (DOMElements.subscribeButton) DOMElements.subscribeButton.addEventListener("click", handleSubscription);
-  // if (DOMElements.noThanksButton) DOMElements.noThanksButton.addEventListener("click", dismissSubscription);
-  // if (DOMElements.subscriptionModalCloseButton) DOMElements.subscriptionModalCloseButton.addEventListener("click", dismissSubscription);
-  // if (DOMElements.subscriptionModal) DOMElements.subscriptionModal.addEventListener("click", (event) => {
-  //   if (event.target === DOMElements.subscriptionModal) { dismissSubscription(); }
-  // });
+  // Listener para cerrar el modal de carga/error manualmente
+  if (DOMElements.loadingModalCloseButton) {
+    DOMElements.loadingModalCloseButton.addEventListener(
+      "click",
+      hideLoadingOverlay
+    );
+  }
 
-  // Generic Message Modal (ELIMINADOS - Ahora global.js los maneja)
-  // if (DOMElements.messageModalCloseButton) DOMElements.messageModalCloseButton.addEventListener("click", hideMessage);
-  // if (DOMElements.messageModal) DOMElements.messageModal.addEventListener("click", (event) => {
-  //   if (event.target === DOMElements.messageModal) { hideMessage(); }
-  // });
-
-  // Navegación responsive (ELIMINADOS - Ahora global.js los maneja)
-  // if (DOMElements.menuToggle && DOMElements.navLinksContainer) { /* ... */ }
-
-  // Actualizar la clase activa de la navegación al cargar la página (ELIMINADO - Ahora global.js lo maneja)
-  // updateActiveClass();
+  // Inicialización de la lógica de FAQ
+  setupFaqToggle(); // ¡Asegurarse de que esta función se llama aquí!
 });
 
 // Reajustar canvas al cambiar el tamaño de la ventana

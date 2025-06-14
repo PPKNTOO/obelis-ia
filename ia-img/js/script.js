@@ -235,10 +235,8 @@ function renderGallery() {
     const imgElement = document.createElement("img");
     imgElement.src = imageUrl;
     imgElement.alt = `Imagen de galería ${index + 1}`;
-    imgElement.classList.add(
-      "w-full",
-      "h-32", // Altura fija para la galería principal
-      "object-cover",
+    itemWrapper.classList.add(
+      // Ya tiene width/height/object-fit en CSS. Aquí solo clases visuales.
       "cursor-pointer",
       "transition-transform",
       "duration-200"
@@ -276,6 +274,7 @@ function renderGallery() {
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    // Usar la personalización de checkboxes de main.css (si aplica)
     checkbox.classList.add(
       "form-checkbox",
       "h-5",
@@ -388,10 +387,8 @@ function renderRecentGenerations() {
     const imgElement = document.createElement("img");
     imgElement.src = imageUrl;
     imgElement.alt = `Historial ${i + 1}`;
+    // Clases CSS se aplicarán desde style.css para width/height/object-fit
     imgElement.classList.add(
-      "w-full",
-      "h-20",
-      "object-cover",
       "rounded-md",
       "cursor-pointer",
       "border",
@@ -454,8 +451,9 @@ async function downloadSelectedImages() {
 
   let downloadCount = 0;
   for (const imageUrl of selectedGalleryImages) {
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    downloadImage(imageUrl, `seleccion_ia_${downloadCount + 1}.png`);
+    // AÑADIDO: Pequeño retraso para evitar que el navegador bloquee descargas múltiples
+    await new Promise((resolve) => setTimeout(resolve, 300)); // Esperar 300ms entre descargas
+    await downloadImage(imageUrl, `seleccion_ia_${downloadCount + 1}.png`); // Usar await
     downloadCount++;
   }
   clearSelection();
@@ -513,14 +511,14 @@ function deleteSelectedImagesFromGallery() {
   clearSelection();
 }
 
-function clearSelection() {
-  selectedGalleryImages.clear();
-  DOMElements.galleryContainer
-    .querySelectorAll('input[type="checkbox"]')
-    .forEach((checkbox) => {
-      checkbox.checked = false;
-      checkbox.closest(".gallery-item-wrapper").classList.remove("selected");
-    });
+function toggleImageSelection(imageUrl, checkbox, itemWrapper) {
+  if (checkbox.checked) {
+    selectedGalleryImages.add(imageUrl);
+    itemWrapper.classList.add("selected");
+  } else {
+    selectedGalleryImages.delete(imageUrl);
+    itemWrapper.classList.remove("selected");
+  }
   updateDownloadSelectedButtonState();
 }
 
@@ -708,8 +706,7 @@ async function generatePromptSuggestion() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        prompt: promptForLLM,
-        chatHistory: chatHistory,
+        contents: chatHistory, // Usar 'contents' para Gemini, no 'prompt'
       }),
     });
 
@@ -774,8 +771,7 @@ async function improvePrompt() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        prompt: promptForLLM,
-        chatHistory: chatHistory,
+        contents: chatHistory, // Usar 'contents' para Gemini
       }),
     });
 
@@ -794,6 +790,7 @@ async function improvePrompt() {
       result.candidates.length > 0 &&
       result.candidates[0].content &&
       result.candidates[0].content.parts &&
+      result.candidates[0].content[0] && // Acceso correcto al contenido para Gemini 2.0
       result.candidates[0].content.parts.length > 0
     ) {
       let generatedText = result.candidates[0].content.parts[0].text.trim();

@@ -1,26 +1,264 @@
 /* tu_proyecto_raiz/convert-img/css/style.css */
 
-/* Contenedor principal de la herramienta */
-.container {
+/* --- Estilos para las secciones de contenido generales (intro, how-to, tips, use-cases, faq) --- */
+/* Estas secciones son compartidas con ia-text/style.css para consistencia visual */
+.ia-text-section {
+  width: 100%;
+  padding: 3.5rem 2rem; /* Más padding para espacio */
+  margin-top: 3rem; /* Más margen para separación */
+  margin-bottom: 3rem; /* Más margen para separación */
+  background-color: #1a202c; /* Fondo oscuro */
+  border: 1px solid #2d3748; /* Borde sutil */
+  border-radius: 1.25rem; /* Bordes más redondeados */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada y suave */
+  text-align: center;
+  position: relative; /* Para posibles efectos internos */
+  overflow: hidden; /* Para que los bordes redondeados no se vean cortados por sombras internas */
+}
+/* Efecto de fondo sutil para las secciones (opcional, como ia-text/about-section) */
+.ia-text-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(31, 41, 55, 0.05),
+    /* Ligero brillo */ rgba(31, 41, 55, 0.2)
+  );
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 1.25rem; /* Asegura que el efecto respete el border-radius */
+}
+.ia-text-section > * {
+  /* Asegura que el contenido esté sobre el pseudoelemento */
+  position: relative;
+  z-index: 1;
+}
+
+.section-title {
+  font-size: 2.75rem; /* Título un poco más grande */
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.75rem; /* Más espacio */
+  line-height: 1.2;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); /* Sombra de texto sutil */
+}
+
+.section-description {
+  font-size: 1.15rem; /* Un poco más grande */
+  color: #cbd5e1;
+  max-width: 800px;
+  margin: 0 auto 2.5rem auto; /* Más margen */
+  line-height: 1.7; /* Mejor legibilidad */
+}
+
+/* Estilos para la sección de introducción (feature-grid) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  ); /* Min-width un poco mayor */
+  gap: 2rem; /* Más espacio */
+  margin-top: 2.5rem;
+}
+
+.feature-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem; /* Más redondeado */
+  padding: 1.75rem; /* Más padding */
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature-item:hover {
+  transform: translateY(-8px); /* Efecto de levitación más pronunciado */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.feature-item .feature-icon {
+  font-size: 3rem; /* Icono más grande */
+  color: #06b6d4; /* Color cyan */
+  margin-bottom: 1rem; /* Más espacio */
+}
+.feature-item p {
+  font-size: 1rem; /* Tamaño de texto base */
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+.feature-item p strong {
+  color: white;
+  font-weight: 700; /* Más negrita */
+}
+
+/* Estilos para la sección "Cómo Convertir" (how-to-steps-grid) */
+.how-to-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem; /* Más espacio */
+  max-width: 960px; /* Más ancho */
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .how-to-steps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step-card-ia {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1.25rem; /* Más redondeado */
+  padding: 2rem; /* Más padding */
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step-card-ia:hover {
+  transform: translateY(-8px); /* Efecto de levitación más pronunciado */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+.step-card-ia .step-number {
+  font-size: 3.5rem; /* Número más grande */
+  font-weight: bold;
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.15); /* Fondo más opaco */
+  border-radius: 50%;
+  width: 90px; /* Tamaño del círculo */
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto; /* Más espacio */
+  border: 3px solid #06b6d4; /* Borde más grueso */
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5); /* Resplandor */
+}
+.step-card-ia h3 {
+  font-size: 1.75rem; /* Título más grande */
+  font-weight: 700;
+  margin-bottom: 1rem; /* Más espacio */
+  color: white;
+}
+.step-card-ia p {
+  font-size: 1.05rem; /* Un poco más grande */
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+/* Estilos para la sección de consejos (tips-list) */
+.tips-list {
+  list-style: none; /* Quita viñetas por defecto */
+  padding: 0;
+  margin: 2.5rem auto 0 auto; /* Más margen */
+  max-width: 750px;
+  text-align: left;
+}
+.tips-list li {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem; /* Más redondeado */
+  padding: 1.25rem 1.75rem; /* Más padding */
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start; /* Alinea ícono y texto al inicio */
+  gap: 1.25rem; /* Más espacio */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+  transition: background-color 0.2s ease;
+}
+.tips-list li:hover {
+  background-color: #374151;
+}
+.tips-list li::before {
+  content: "\f058"; /* Icono de check (Font Awesome) */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #34d399; /* Verde de éxito */
+  font-size: 1.5rem; /* Más grande */
+  flex-shrink: 0;
+  margin-top: 0.125rem; /* Ajuste vertical */
+}
+.tips-list li strong {
+  color: #06b6d4; /* Color cyan */
+}
+.tips-list li p {
+  color: #e2e8f0;
+  font-size: 1.05rem; /* Un poco más grande */
+  line-height: 1.6;
+  margin: 0; /* Reiniciar margin para p dentro de li */
+}
+
+/* Estilos para la sección de Casos de Uso (use-cases-grid) */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* Min-width un poco mayor */
+  gap: 2rem; /* Más espacio */
+  margin-top: 2.5rem;
+}
+.use-case-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem; /* Más redondeado */
+  padding: 1.75rem; /* Más padding */
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.use-case-item:hover {
+  transform: translateY(-8px); /* Efecto de levitación más pronunciado */
+  background-color: #374151;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.use-case-item .use-case-icon {
+  font-size: 3rem; /* Icono más grande */
+  color: #34d399; /* Un verde vibrante */
+  margin-bottom: 1rem; /* Más espacio */
+}
+.use-case-item h3 {
+  font-size: 1.6rem; /* Título más grande */
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+.use-case-item p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* --- Estilos para el contenedor principal de la aplicación --- */
+.ia-convert-app-main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%; /* Ocupa el 100% de la altura de su padre (body) */
+  width: 100%; /* Ocupa todo el ancho */
+}
+/* El main dentro de este contenedor tendrá flex-grow: 1 para empujar el footer */
+
+/* --- Estilos para la herramienta principal de conversión (anteriormente .container) --- */
+.main-tool-section {
   background-color: #1a202c; /* bg-gray-900 */
-  border-radius: 1rem; /* rounded-2xl */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
-  padding: 2rem;
-  max-width: 900px;
+  border-radius: 1.25rem; /* Bordes más redondeados */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); /* Sombra más pronunciada y oscura */
+  padding: 2.5rem; /* Más padding */
+  max-width: 960px; /* Ancho máximo un poco mayor */
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem; /* Espaciado entre elementos */
+  gap: 1.75rem; /* Espaciado entre elementos un poco mayor */
   border: 1px solid #2d3748; /* border-gray-700 */
   transition: all 0.3s ease; /* para el hover:scale */
-  margin-top: calc(
-    64px + 1rem
-  ); /* Empuja el layout debajo de la navbar fija + 1rem de espacio */
-  margin-bottom: 1rem; /* Espacio antes del footer/banners */
+  margin-top: 3rem; /* Espacio para separarse de la sección anterior */
+  margin-bottom: 3rem; /* Espacio antes del footer/banners */
 }
-.container:hover {
-  transform: scale(1.01);
+.main-tool-section:hover {
+  transform: scale(1.005); /* Efecto de zoom más sutil */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); /* Sombra más intensa al hover */
 }
 
 /* Grupo de entrada de archivo */
@@ -28,24 +266,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem; /* Más espacio */
   width: 100%;
 }
 .file-input {
   border: 2px dashed #4a5568; /* Borde punteado - gris-600 */
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  border-radius: 1rem; /* Más redondeado */
+  padding: 2rem; /* Más padding para hacer el área más grande */
   text-align: center;
   cursor: pointer;
   width: 100%;
   transition: all 0.2s ease-in-out;
   background-color: #2d3748; /* gris-800 */
   color: #cbd5e1; /* gris-300 */
-  font-size: 1.125rem; /* text-lg */
+  font-size: 1.25rem; /* Texto más grande */
+  font-weight: 500; /* Un poco más de peso */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra interna sutil */
 }
 .file-input:hover {
   border-color: #06b6d4; /* cyan-500 al pasar el ratón */
   background-color: #4a5568; /* gris-700 */
+  box-shadow: inset 0 2px 8px rgba(6, 182, 212, 0.3); /* Sombra interna con resplandor al hover */
 }
 .file-input input[type="file"] {
   display: none; /* Ocultar el input de archivo predeterminado */
@@ -54,106 +295,54 @@
 /* Contenedor del canvas de previsualización */
 .canvas-container {
   width: 100%;
-  min-height: 200px; /* Altura mínima para el canvas */
+  min-height: 250px; /* Altura mínima para el canvas un poco mayor */
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #1a202c; /* Fondo del canvas - gris-900 */
-  border-radius: 0.75rem;
+  border-radius: 1rem; /* Más redondeado */
   overflow: hidden; /* Asegurar que la imagen no se desborde */
   border: 1px solid #2d3748; /* border-gray-700 */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra interna */
 }
 canvas {
   display: block; /* Eliminar espacio extra debajo del canvas */
   max-width: 100%;
   height: auto;
-  border-radius: 0.75rem;
+  border-radius: 1rem; /* Más redondeado */
 }
 #placeholderText {
-  color: #a0aec0; /* gris-400, o ajusta a gris-500 según tu paleta */
+  color: #a0aec0; /* gris-400 */
+  font-size: 1.5rem; /* Texto de placeholder más grande */
 }
 
 /* Grupo de botones */
 .button-group {
   display: flex;
   flex-wrap: wrap; /* Permitir que los botones se envuelvan */
-  gap: 1rem;
+  gap: 1.25rem; /* Más espacio */
   justify-content: center;
   width: 100%;
 }
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra más oscura para botones */
-  position: relative;
-  overflow: hidden;
-  font-size: 1.125rem; /* text-lg */
-}
-.btn:active {
-  transform: translateY(1px); /* Efecto de clic */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.btn-primary {
-  background-color: #0891b2; /* bg-cyan-600 */
-  color: white;
-}
-.btn-primary:hover {
-  background-color: #0e7490; /* hover:bg-cyan-700 */
+/* .btn-primary y .btn-secondary ahora heredan de main.css para estilos base */
+.btn.disabled-btn {
+  opacity: 0.5; /* Más opaco */
+  cursor: not-allowed;
+  box-shadow: none; /* Sin sombra cuando deshabilitado */
 }
 .btn-secondary {
+  /* Reafirmar estilo de botón secundario si es necesario */
   background-color: #4a5568; /* bg-gray-700 */
   color: #e2e8f0; /* text-gray-200 */
+  padding: 0.9rem 1.8rem; /* Ajustar padding para coherencia */
+  border-radius: 0.6rem; /* Ajustar border-radius */
+  font-size: 1.15rem; /* Ajustar tamaño de fuente */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .btn-secondary:hover {
   background-color: #2d3748; /* hover:bg-gray-600 */
-}
-.message {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  text-align: center;
-  font-weight: 500;
-}
-.message.success {
-  background-color: #065f46; /* verde-800 oscuro */
-  color: #d1fae5; /* verde-100 claro */
-  border: 1px solid #10b981; /* verde-500 */
-}
-.message.error {
-  background-color: #991b1b; /* rojo-800 oscuro */
-  color: #fee2e2; /* rojo-100 claro */
-  border: 1px solid #ef4444; /* rojo-500 */
-}
-.message.warning {
-  background-color: #92400e; /* amarillo-800 oscuro */
-  color: #fde68a; /* amarillo-100 claro */
-  border: 1px solid #f59e0b; /* amarillo-500 */
-}
-.loading-spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #06b6d4; /* cyan-500 */
-  border-radius: 50%;
-  width: 28px; /* ligeramente más grande */
-  height: 28px;
-  animation: spin 1s linear infinite;
-  display: none; /* Oculto por defecto */
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.disabled-btn {
-  opacity: 0.6;
-  cursor: not-allowed;
-  box-shadow: none; /* Sin sombra cuando deshabilitado */
+  transform: translateY(-2px); /* Efecto de levitación */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* Estilos para el select de formato */
@@ -161,9 +350,9 @@ canvas {
   background-color: #2d3748; /* gris-800 */
   color: #e2e8f0; /* gris-200 */
   border: 1px solid #4a5568; /* gris-700 */
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  border-radius: 0.6rem; /* Más redondeado */
+  padding: 0.9rem 1.25rem; /* Más padding */
+  font-size: 1.05rem; /* Un poco más grande */
   appearance: none; /* Eliminar estilo nativo del select */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%23CBD5E1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e"); /* Flecha SVG personalizada */
   background-repeat: no-repeat;
@@ -171,77 +360,220 @@ canvas {
   background-size: 1.5em 1.5em;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Sombra interna sutil */
 }
 #outputFormat:focus {
   outline: none;
   border-color: #06b6d4; /* cyan-500 */
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.5); /* ring-cyan-500 */
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.4); /* ring-cyan-500 más pronunciado */
 }
 
-/* Estilos para el contador de descargas y botón de anuncio */
+/* Estilos para el contador de conversiones y botón de anuncio */
 #conversionCounterDisplay {
-  @apply text-gray-400 text-sm mt-2; /* Usamos @apply de Tailwind si está configurado en el proyecto */
+  color: #9ca3af; /* gray-400 */
+  font-size: 0.95rem; /* Texto un poco más grande */
+  margin-top: 0.75rem; /* Más margen */
 }
 #watchAdButton {
-  @apply bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3;
+  background-color: #6d28d9; /* blue-700 -> purple-700 para variar */
+  color: white;
+  font-weight: 700; /* bold */
+  padding: 0.5rem 1rem; /* Un poco más de padding */
+  border-radius: 0.6rem; /* Más redondeado */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más fuerte */
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+  font-size: 0.95rem; /* Texto un poco más grande */
+  margin-top: 1rem; /* Más margen */
+}
+#watchAdButton:hover {
+  background-color: #5b21b6; /* purple-800 */
+  transform: translateY(-2px); /* Efecto de levitación */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Ad Modal for "Watching an Ad" simulation */
+/* Ad Modal for "Watching an Ad" simulation - Ahora usa clases globales de main.css */
 .ad-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.95
-  ); /* Fondo muy oscuro para simular bloqueo */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000; /* Más alto que otros modales */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.ad-modal-overlay.show {
-  opacity: 1;
-  visibility: visible;
+  z-index: 2000;
 }
 .ad-modal-content {
-  background-color: #1a202c; /* gray-900 */
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  color: white;
-  max-width: 500px;
-  width: 90%;
-  border: 1px solid #06b6d4; /* cyan-500 */
+  background-color: #1a202c; /* Fondo más oscuro para el anuncio */
+  border: 1px solid #06b6d4; /* Borde cian distintivo */
+  border-radius: 1.25rem; /* Más redondeado */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); /* Sombra más intensa */
 }
 
-/* Ajuste para el div principal cuando hay anuncios */
-.main-content-wrapper {
+/* --- Estilos para las Preguntas Frecuentes (FAQ) - Ajuste Final --- */
+/* NOTA: Los estilos base de FAQ ya deberían estar en main.css. Aquí solo sobrescribimos si es necesario. */
+.faq-container {
   width: 100%;
-  max-width: 900px; /* Asegurar que no exceda el ancho del container */
-  margin-top: 1rem; /* Espacio entre el navbar y el primer banner/container */
-  margin-bottom: 1rem; /* Espacio entre el último banner/container y el footer */
+  max-width: 800px; /* Limita el ancho del contenido de FAQ */
+  margin: 0 auto;
+  text-align: left;
+}
+.faq-item {
+  background-color: #1a202c; /* Fondo del item */
+  border: 1px solid #2d3748; /* Borde del item */
+  border-radius: 1rem; /* Más redondeado */
+  margin-bottom: 1.25rem; /* Más espacio entre ítems */
+  overflow: hidden; /* CRÍTICO: Oculta el contenido desbordado para la transición */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem; /* Más padding */
+  font-size: 1.25rem; /* Texto más grande */
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background-color: #2d3748; /* Fondo del encabezado */
+  transition: background-color 0.3s ease;
+}
+.faq-question:hover {
+  background-color: #374151; /* Fondo al pasar el ratón */
+}
+.faq-arrow {
+  font-size: 1.15rem; /* Flecha un poco más grande */
+  transition: transform 0.3s ease;
+}
+.faq-arrow.rotated {
+  transform: rotate(180deg);
+}
+.faq-answer {
+  /* CRÍTICO! Definir el estado CERRADO por CSS */
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  /* Padding horizontal se mantiene siempre, por eso no se transiciona */
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  /* Asegurar que el contenido interno no se salga del flujo */
+  display: block; /* Asegura que se comporte como un bloque y su contenido contribuya a la altura */
+  box-sizing: border-box; /* Asegura que padding y border estén incluidos en el ancho/alto */
+
+  transition: max-height 0.4s ease-out, padding-top 0.4s ease-out,
+    padding-bottom 0.4s ease-out; /* Transición suave */
+  background-color: #1a202c;
+  color: #cbd5e1;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* El JavaScript establecerá el max-height y los paddings cuando se abra. */
+
+.faq-answer ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-top: 1rem; /* Más margen superior para la lista */
+  color: #a0aec0;
+}
+.faq-answer ul li {
+  margin-bottom: 0.6rem; /* Más espacio entre ítems de lista */
 }
 
 /* Responsive adjustments */
-@media (max-width: 640px) {
-  /* sm breakpoint en Tailwind */
-  .container {
+@media (max-width: 768px) {
+  /* Ajustes para tablet y móvil */
+  .ia-text-section {
+    padding: 2.5rem 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .section-title {
+    font-size: 2.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-description {
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+  }
+  .feature-grid,
+  .how-to-steps-grid,
+  .use-cases-grid {
+    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+    gap: 1.5rem;
+  }
+  .feature-item,
+  .step-card-ia,
+  .use-case-item {
     padding: 1.5rem;
+    border-radius: 0.75rem;
+  }
+  .feature-item .feature-icon,
+  .use-case-item .use-case-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .step-card-ia .step-number {
+    width: 70px;
+    height: 70px;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .step-card-ia h3 {
+    font-size: 1.5rem;
+  }
+  .tips-list li {
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+    font-size: 0.95rem;
+  }
+  .tips-list li::before {
+    font-size: 1.3rem;
+  }
+  .main-tool-section {
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .file-input {
+    padding: 1.5rem;
+    font-size: 1.1rem;
+  }
+  .canvas-container {
+    min-height: 180px;
+  }
+  #placeholderText {
+    font-size: 1.25rem;
   }
   .button-group {
     flex-direction: column;
   }
-  .btn {
-    width: 100%; /* Botones de ancho completo en móvil */
+  .btn,
+  .btn-secondary,
+  #outputFormat,
+  #watchAdButton {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  .faq-question {
+    font-size: 1.1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-answer {
+    padding: 0 1.5rem; /* Padding horizontal siempre, vertical 0 al inicio */
+  }
+  /* El JS establecerá los paddings verticales cuando se abra */
+}
+
+@media (max-width: 480px) {
+  /* Ajustes para móviles muy pequeños */
+  .section-title {
+    font-size: 1.8rem;
+  }
+  .section-description {
+    font-size: 0.95rem;
+  }
+  .main-tool-section {
+    padding: 1.5rem;
+  }
+  .file-input {
+    font-size: 1rem;
   }
 }

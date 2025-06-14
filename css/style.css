@@ -8,7 +8,7 @@
   max-width: 1200px;
   border-radius: 1.25rem; /* Más redondeado */
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
-  border: 1px solid #2d3748;
+  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
   height: 380px; /* Altura ligeramente aumentada */
 }
 
@@ -129,7 +129,7 @@
 }
 .tool-card {
   background-color: #1a202c; /* gris-900 */
-  border: 1px solid #2d3748; /* gris-800 */
+  border: 1px solid #2d3748; /* Borde gris fijo por defecto RESTAURADO */
   border-radius: 1.25rem; /* Más redondeado */
   padding: 2rem; /* Más padding */
   text-align: center;
@@ -143,7 +143,7 @@
 .tool-card:hover {
   transform: translateY(-8px) scale(1.02); /* Efecto hover más dinámico */
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-  border-color: #06b6d4; /* Borde al hacer hover */
+  border-color: #06b6d4; /* Borde cian al hacer hover */
 }
 .tool-card .icon {
   font-size: 3.5rem; /* Icono más grande */
@@ -195,7 +195,7 @@
 }
 .step-card {
   background-color: #1a202c;
-  border: 1px solid #2d3748;
+  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
   border-radius: 1rem;
   padding: 1.5rem;
   text-align: center;
@@ -247,7 +247,7 @@
 }
 .testimonial-card {
   background-color: #2d3748;
-  border: 1px solid #4a5568;
+  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
@@ -278,7 +278,7 @@
 }
 .faq-item {
   background-color: #1a202c;
-  border: 1px solid #2d3748;
+  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
   border-radius: 0.75rem;
   margin-bottom: 1rem;
   overflow: hidden;

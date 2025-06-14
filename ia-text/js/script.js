@@ -57,9 +57,11 @@ const savePreferences = () => {
     contentType:
       document.querySelector('input[name="contentType"]:checked')?.value ||
       "story",
-    tone: DOMElements.toneSelect.value,
-    voiceLanguage: DOMElements.voiceLanguageSelect.value,
-    voiceName: DOMElements.voiceSelect.value,
+    tone: DOMElements.toneSelect ? DOMElements.toneSelect.value : "",
+    voiceLanguage: DOMElements.voiceLanguageSelect
+      ? DOMElements.voiceLanguageSelect.value
+      : "",
+    voiceName: DOMElements.voiceSelect ? DOMElements.voiceSelect.value : "",
   };
   localStorage.setItem("userPreferences", JSON.stringify(preferences));
   localStorage.setItem("generationsToday", generationsToday);
@@ -75,21 +77,16 @@ const loadPreferences = () => {
     );
     if (contentTypeRadio) {
       contentTypeRadio.checked = true;
-      DOMElements.promptInput.placeholder =
-        placeholders[preferences.contentType] || placeholders.story;
+      if (DOMElements.promptInput) {
+        DOMElements.promptInput.placeholder =
+          placeholders[preferences.contentType] || placeholders.story;
+      }
     }
-    if (preferences.tone) {
+    if (preferences.tone && DOMElements.toneSelect) {
       DOMElements.toneSelect.value = preferences.tone;
     }
-    setTimeout(() => {
-      if (preferences.voiceLanguage && DOMElements.voiceLanguageSelect) {
-        DOMElements.voiceLanguageSelect.value = preferences.voiceLanguage;
-        updateSpecificVoices();
-      }
-      if (preferences.voiceName && DOMElements.voiceSelect) {
-        DOMElements.voiceSelect.value = preferences.voiceName;
-      }
-    }, 500);
+    // No cargar las preferencias de voz aquí directamente,
+    // se manejan después de que las voces están disponibles.
   }
 
   const storedGenerationsToday = localStorage.getItem("generationsToday");
@@ -115,12 +112,32 @@ const loadPreferences = () => {
 const loadVoices = () => {
   availableVoices = speechSynthesis.getVoices();
   updateVoiceOptions();
-  loadPreferences();
+
+  // Una vez que las voces están cargadas, aplicar la preferencia de voz guardada.
+  const preferences = JSON.parse(localStorage.getItem("userPreferences"));
+  if (
+    preferences &&
+    DOMElements.voiceLanguageSelect &&
+    DOMElements.voiceSelect
+  ) {
+    if (preferences.voiceLanguage) {
+      DOMElements.voiceLanguageSelect.value = preferences.voiceLanguage;
+      updateSpecificVoices(); // Vuelve a llamar para cargar las voces específicas del idioma
+    }
+    if (preferences.voiceName) {
+      DOMElements.voiceSelect.value = preferences.voiceName;
+    }
+  }
 };
 
 const updateVoiceOptions = () => {
   const languages = new Set();
-  if (!DOMElements.voiceLanguageSelect || !DOMElements.voiceSelect) return;
+  if (!DOMElements.voiceLanguageSelect || !DOMElements.voiceSelect) {
+    console.warn(
+      "Elementos de selección de voz no encontrados. Omitiendo actualización de opciones de voz."
+    );
+    return;
+  }
 
   DOMElements.voiceLanguageSelect.innerHTML = "";
   DOMElements.voiceSelect.innerHTML = "";
@@ -132,11 +149,13 @@ const updateVoiceOptions = () => {
 
   const sortedLanguages = Array.from(languages).sort();
 
+  // Priorizar español
   if (sortedLanguages.includes("es")) {
     const esOption = document.createElement("option");
     esOption.value = "es";
     esOption.textContent = "Español (es)";
     DOMElements.voiceLanguageSelect.appendChild(esOption);
+    // Establecer español como valor predeterminado si está disponible
     DOMElements.voiceLanguageSelect.value = "es";
   } else {
     const defaultOption = document.createElement("option");
@@ -145,8 +164,10 @@ const updateVoiceOptions = () => {
     DOMElements.voiceLanguageSelect.appendChild(defaultOption);
   }
 
+  // Añadir otros idiomas
   sortedLanguages.forEach((lang) => {
     if (lang !== "es") {
+      // Evitar duplicar español
       const option = document.createElement("option");
       option.value = lang;
       option.textContent = lang;
@@ -157,7 +178,12 @@ const updateVoiceOptions = () => {
 };
 
 const updateSpecificVoices = () => {
-  if (!DOMElements.voiceSelect || !DOMElements.voiceLanguageSelect) return;
+  if (!DOMElements.voiceSelect || !DOMElements.voiceLanguageSelect) {
+    console.warn(
+      "Elementos de selección de voz no encontrados. Omitiendo actualización de voces específicas."
+    );
+    return;
+  }
 
   DOMElements.voiceSelect.innerHTML = "";
   const selectedLangCode = DOMElements.voiceLanguageSelect.value;
@@ -189,23 +215,85 @@ const updateSpecificVoices = () => {
   }
 };
 
+// Asegurarse de que las voces se carguen cuando estén disponibles
+// Esto es crucial para que el lector de voz funcione.
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = loadVoices;
 } else {
-  loadVoices();
+  // Fallback si onvoiceschanged no se dispara (raro pero posible)
+  // Intentar cargar después de un breve retraso, si el navegador ya cargó las voces.
+  setTimeout(loadVoices, 100);
 }
 
-// --- Gestión de Estado de Carga ---
-const setLoadingState = (isLoading) => {
-  DOMElements.generateButton.disabled = isLoading;
-  if (isLoading) {
-    DOMElements.spinner.classList.remove("hidden");
-    DOMElements.buttonText.textContent = "Generando...";
-  } else {
-    DOMElements.spinner.classList.add("hidden");
-    DOMElements.buttonText.textContent = "Generar Contenido";
+// --- Gestión de Estado de Carga (ahora usando el nuevo modal de carga) ---
+const showLoadingOverlay = (
+  message = "Generando contenido, por favor espera...",
+  isError = false
+) => {
+  // Asegurarse de que los elementos existan antes de manipularlos
+  if (
+    !DOMElements.loadingOverlayModal ||
+    !DOMElements.loadingMessageTextModal ||
+    !DOMElements.loadingErrorTextModal ||
+    !DOMElements.pocoyoGifModal ||
+    !DOMElements.loadingSpinnerModal ||
+    !DOMElements.loadingModalCloseButton
+  ) {
+    console.error(
+      "Loading overlay modal elements not found in DOMElements. Falling back to alert."
+    );
+    // Fallback simple si no se encuentran los elementos del modal
+    alert(message);
+    return;
   }
-  checkGenerationLimit();
+
+  DOMElements.loadingMessageTextModal.textContent = message;
+  DOMElements.loadingErrorTextModal.classList.add("hidden"); // Ocultar errores previos
+
+  if (isError) {
+    DOMElements.loadingErrorTextModal.textContent = message;
+    DOMElements.loadingErrorTextModal.classList.remove("hidden");
+    DOMElements.loadingMessageTextModal.textContent = "¡Ha ocurrido un error!"; // Mensaje principal para error
+    DOMElements.pocoyoGifModal.classList.add("hidden");
+    DOMElements.loadingSpinnerModal.classList.add("hidden"); // Ocultar spinner si es un error
+    DOMElements.loadingModalCloseButton.classList.remove("hidden"); // Mostrar botón de cerrar en error
+  } else {
+    DOMElements.loadingModalCloseButton.classList.add("hidden"); // Ocultar botón si no hay error
+    // Decidir si mostrar Pocoyo o spinner
+    if (DOMElements.pocoyoGifModal) {
+      DOMElements.pocoyoGifModal.classList.remove("hidden");
+      DOMElements.loadingSpinnerModal.classList.add("hidden");
+      // Asegurarse de que el onError del GIF lo cambie a spinner si falla
+      DOMElements.pocoyoGifModal.onerror = () => {
+        DOMElements.pocoyoGifModal.classList.add("hidden");
+        DOMElements.loadingSpinnerModal.classList.remove("hidden");
+        console.warn("Pocoyo GIF failed to load, switching to spinner.");
+      };
+    } else if (DOMElements.loadingSpinnerModal) {
+      // Si no hay Pocoyo, usar spinner
+      DOMElements.loadingSpinnerModal.classList.remove("hidden");
+    }
+  }
+  DOMElements.loadingOverlayModal.classList.add("show");
+};
+
+const hideLoadingOverlay = () => {
+  if (!DOMElements.loadingOverlayModal) return; // Exit if modal not found
+  DOMElements.loadingOverlayModal.classList.remove("show");
+  // Restablecer mensajes y visibilidad de elementos internos
+  if (DOMElements.loadingMessageTextModal)
+    DOMElements.loadingMessageTextModal.textContent = "";
+  if (DOMElements.loadingErrorTextModal) {
+    DOMElements.loadingErrorTextModal.textContent = "";
+    DOMElements.loadingErrorTextModal.classList.add("hidden");
+  }
+  // Resetear estados visuales del spinner/pocoyo para la próxima vez
+  if (DOMElements.pocoyoGifModal)
+    DOMElements.pocoyoGifModal.classList.remove("hidden");
+  if (DOMElements.loadingSpinnerModal)
+    DOMElements.loadingSpinnerModal.classList.add("hidden");
+  if (DOMElements.loadingModalCloseButton)
+    DOMElements.loadingModalCloseButton.classList.add("hidden");
 };
 
 // --- Lógica del Límite de Generaciones ---
@@ -223,20 +311,26 @@ const checkGenerationLimit = () => {
   const totalAllowed =
     MAX_GENERATIONS_FREE + adsWatchedToday * AD_BONUS_GENERATIONS;
   if (generationsToday >= totalAllowed) {
-    DOMElements.generateButton.disabled = true;
-    DOMElements.generateButton.classList.add(
-      "opacity-50",
-      "cursor-not-allowed"
-    );
-    if (adsWatchedToday < MAX_ADS_PER_DAY) {
-      DOMElements.watchAdButton.classList.remove("hidden");
-      DOMElements.watchAdButton.disabled = false;
-      DOMElements.watchAdButton.classList.remove(
+    if (DOMElements.generateButton) {
+      DOMElements.generateButton.disabled = true;
+      DOMElements.generateButton.classList.add(
         "opacity-50",
         "cursor-not-allowed"
       );
+    }
+    if (adsWatchedToday < MAX_ADS_PER_DAY) {
+      if (DOMElements.watchAdButton) {
+        DOMElements.watchAdButton.classList.remove("hidden");
+        DOMElements.watchAdButton.disabled = false;
+        DOMElements.watchAdButton.classList.remove(
+          "opacity-50",
+          "cursor-not-allowed"
+        );
+      }
     } else {
-      DOMElements.watchAdButton.classList.add("hidden");
+      if (DOMElements.watchAdButton) {
+        DOMElements.watchAdButton.classList.add("hidden");
+      }
       showCustomMessage(
         "Has alcanzado el límite de generaciones gratuitas y de anuncios por hoy. Vuelve mañana para más o considera una suscripción premium.",
         "info",
@@ -244,21 +338,32 @@ const checkGenerationLimit = () => {
       );
     }
   } else {
-    DOMElements.generateButton.disabled = false;
-    DOMElements.generateButton.classList.remove(
-      "opacity-50",
-      "cursor-not-allowed"
-    );
-    DOMElements.watchAdButton.classList.add("hidden");
+    if (DOMElements.generateButton) {
+      DOMElements.generateButton.disabled = false;
+      DOMElements.generateButton.classList.remove(
+        "opacity-50",
+        "cursor-not-allowed"
+      );
+    }
+    if (DOMElements.watchAdButton) {
+      DOMElements.watchAdButton.classList.add("hidden");
+    }
   }
 };
 
 const simulateAdViewing = () => {
-  if (!DOMElements.adModal || !DOMElements.adTimerDisplay) return;
+  if (!DOMElements.adModal || !DOMElements.adTimerDisplay) {
+    showCustomMessage(
+      "Error: Elementos del modal de anuncio no encontrados.",
+      "error"
+    );
+    return;
+  }
 
   DOMElements.adModal.classList.add("show");
   let timer = AD_VIEW_DURATION_SECONDS;
   DOMElements.adTimerDisplay.textContent = `Tiempo restante: ${timer} segundos`;
+
   const adInterval = setInterval(() => {
     timer--;
     DOMElements.adTimerDisplay.textContent = `Tiempo restante: ${timer} segundos`;
@@ -283,6 +388,12 @@ const simulateAdViewing = () => {
 const formatGeneratedText = (rawText) => {
   let formattedText = rawText;
 
+  // Encabezados (h2, h3, etc.) - Asegurarse de que no haya # sobrantes si ya se procesaron
+  formattedText = formattedText.replace(/^### (.*$)/gm, "<h3>$1</h3>");
+  formattedText = formattedText.replace(/^## (.*$)/gm, "<h2>$1</h2>");
+  formattedText = formattedText.replace(/^# (.*$)/gm, "<h2>$1</h2>"); // Tratar # como h2
+
+  // Negritas y cursivas
   formattedText = formattedText.replace(
     /\*\*(.*?)\*\*/g,
     "<strong>$1</strong>"
@@ -291,56 +402,48 @@ const formatGeneratedText = (rawText) => {
   formattedText = formattedText.replace(/__(.*?)__/g, "<strong>$1</strong>");
   formattedText = formattedText.replace(/_(.*?)_/g, "<em>$1</em>");
 
-  formattedText = formattedText.replace(/^### (.*$)/gm, "<h3>$1</h3>");
-  formattedText = formattedText.replace(/^## (.*$)/gm, "<h2>$1</h2>");
-  formattedText = formattedText.replace(/^# (.*$)/gm, "<h2>$1</h2>");
-
-  formattedText = formattedText.replace(/^(- .*(\n- .*)*)/gm, (match) => {
-    let listHtml = "<ul>";
-    match.split("\n").forEach((line) => {
-      if (line.startsWith("- ")) {
-        listHtml += "<li>" + line.substring(2).trim() + "</li>";
-      }
-    });
-    listHtml += "</ul>";
-    return listHtml;
-  });
-
+  // Listas (antes de los párrafos para evitar que <li> se conviertan en <p> dentro)
+  // Listas desordenadas
+  formattedText = formattedText.replace(/^[*-] (.*)/gm, "<li>$1</li>");
   formattedText = formattedText.replace(
-    /^(\d+\. .*(\n\d+\. .*)*)/gm,
-    (match) => {
-      let listHtml = "<ol>";
-      match.split("\n").forEach((line) => {
-        if (line.match(/^\d+\. /)) {
-          listHtml +=
-            "<li>" + line.substring(line.indexOf(".") + 1).trim() + "</li>";
-        }
-      });
-      listHtml += "</ol>";
-      return listHtml;
-    }
+    /(<li>.*<\/li>(\n<li>.*<\/li>)*)/g,
+    "<ul>\n$1\n</ul>"
   );
 
+  // Listas ordenadas
+  formattedText = formattedText.replace(/^(\d+)\. (.*)/gm, "<li>$2</li>");
+  formattedText = formattedText.replace(
+    /(<li>.*<\/li>(\n<li>.*<\/li>)*)/g,
+    "<ol>\n$1\n</ol>"
+  );
+
+  // Párrafos (solo si la línea no es ya un bloque HTML)
   formattedText = formattedText
     .split("\n")
     .map((line) => {
+      // Si la línea ya empieza con una etiqueta de bloque (h, ul, ol, li, p, table, div, pre, blockquote, etc.)
+      // o está vacía, la devolvemos tal cual.
       if (
         line.trim() === "" ||
-        line.startsWith("<h") ||
-        line.startsWith("<ul") ||
-        line.startsWith("<ol")
+        /^<(h[1-6]|ul|ol|li|p|table|div|pre|blockquote|hr|img|form|button)/.test(
+          line.trim()
+        )
       ) {
         return line;
       }
-      return "<p>" + line.trim() + "</p>";
+      return `<p>${line.trim()}</p>`;
     })
     .join("");
 
+  // Eliminar párrafos vacíos
   formattedText = formattedText.replace(/<p>\s*<\/p>/g, "");
 
-  formattedText = formattedText.replace(/#/g, "");
-  formattedText = formattedText.replace(/\*/g, "");
-  formattedText = formattedText.replace(/_/g, "");
+  // Eliminar cualquier marcador Markdown que pueda haber quedado
+  formattedText = formattedText.replace(/[#*_~`]/g, "");
+
+  // Convertir saltos de línea dobles a párrafos si no están ya en una estructura
+  formattedText = formattedText.replace(/\n\n/g, "</p><p>");
+  formattedText = formattedText.replace(/\n/g, "<br>"); // Reemplazar saltos de línea simples por <br>
 
   return formattedText;
 };
@@ -356,10 +459,14 @@ const handleGenerateContent = async (event) => {
     return;
   }
 
-  setLoadingState(true);
-  DOMElements.generatedTextDiv.innerHTML = "";
-  DOMElements.contentModal.classList.remove("show");
-  stopAudio();
+  showLoadingOverlay("Generando tu contenido, por favor espera...");
+  if (DOMElements.generatedTextDiv) {
+    DOMElements.generatedTextDiv.innerHTML = "";
+  }
+  if (DOMElements.contentModal) {
+    DOMElements.contentModal.classList.remove("show"); // Asegurarse de que el modal de contenido esté oculto
+  }
+  stopAudio(); // Detener cualquier audio en reproducción
 
   const prompt = DOMElements.promptInput.value.trim();
   const selectedContentType = document.querySelector(
@@ -368,12 +475,12 @@ const handleGenerateContent = async (event) => {
   const selectedTone = DOMElements.toneSelect.value;
 
   if (!prompt) {
+    hideLoadingOverlay(); // Ocultar modal de carga si hay un error
     showCustomMessage(
       "Por favor, introduce una descripción para generar el contenido.",
       "error",
       3000
     );
-    setLoadingState(false);
     return;
   }
 
@@ -421,7 +528,7 @@ const handleGenerateContent = async (event) => {
     }
 
     const chatHistory = [{ role: "user", parts: [{ text: aiPrompt }] }];
-    const payload = { prompt: prompt, chatHistory: chatHistory };
+    const payload = { prompt: aiPrompt, chatHistory: chatHistory };
 
     const apiUrl = "/api/gemini";
 
@@ -433,24 +540,14 @@ const handleGenerateContent = async (event) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      showCustomMessage(
+      throw new Error(
         `Error de la API del proxy: ${response.status} ${
           response.statusText
         }. Respuesta: ${errorText.substring(
           0,
           Math.min(errorText.length, 100)
-        )}...`,
-        "error",
-        5000
+        )}...`
       );
-      console.error(
-        "API proxy response not OK:",
-        response.status,
-        response.statusText,
-        errorText
-      );
-      setLoadingState(false);
-      return;
     }
 
     let result;
@@ -458,15 +555,12 @@ const handleGenerateContent = async (event) => {
       result = await response.json();
     } catch (jsonError) {
       const rawResponseText = await response.text();
-      showCustomMessage(
-        "Error al procesar la respuesta de la IA (JSON inválido del proxy). Por favor, inténtalo de nuevo.",
-        "error",
-        5000
+      throw new Error(
+        `Error al procesar la respuesta de la IA (JSON inválido del proxy). Respuesta: ${rawResponseText.substring(
+          0,
+          Math.min(rawResponseText.length, 100)
+        )}...`
       );
-      console.error("JSON parsing error:", jsonError);
-      console.error("Raw API proxy response:", rawResponseText);
-      setLoadingState(false);
-      return;
     }
 
     if (
@@ -477,8 +571,12 @@ const handleGenerateContent = async (event) => {
       result.candidates[0].content.parts.length > 0
     ) {
       const rawText = result.candidates[0].content.parts[0].text;
-      DOMElements.generatedTextDiv.innerHTML = formatGeneratedText(rawText);
-      DOMElements.contentModal.classList.add("show");
+      if (DOMElements.generatedTextDiv) {
+        DOMElements.generatedTextDiv.innerHTML = formatGeneratedText(rawText);
+      }
+      if (DOMElements.contentModal) {
+        DOMElements.contentModal.classList.add("show"); // Mostrar el modal de contenido
+      }
       playAudio();
       saveGeneratedContentToHistory(
         prompt,
@@ -490,29 +588,43 @@ const handleGenerateContent = async (event) => {
       savePreferences();
       updateGenerationCounterDisplay();
       checkGenerationLimit();
-    } else {
       showCustomMessage(
-        "No se pudo generar el contenido. La IA no proporcionó una respuesta válida a través del proxy. Por favor, inténtalo de nuevo con una descripción diferente.",
-        "error",
-        5000
+        "¡Contenido generado y guardado en historial!",
+        "success",
+        3000
       );
-      console.error("Unexpected API proxy response structure:", result);
+    } else {
+      throw new Error(
+        "No se pudo generar el contenido. La IA no proporcionó una respuesta válida a través del proxy. Por favor, inténtalo de nuevo con una descripción diferente."
+      );
     }
   } catch (err) {
-    showCustomMessage(
-      "Error al conectar con la API del proxy. Por favor, comprueba tu conexión a internet.",
-      "error",
-      5000
-    );
-    console.error("API proxy call error:", err);
+    showLoadingOverlay(`Error al generar: ${err.message}`, true);
+    console.error("Error en la llamada a la API o procesamiento:", err);
   } finally {
-    setLoadingState(false);
+    hideLoadingOverlay();
   }
 };
 
 // --- Funciones de Reproducción de Audio ---
 const playAudio = () => {
-  if (!DOMElements.generatedTextDiv) return;
+  if (
+    !DOMElements.generatedTextDiv ||
+    !DOMElements.togglePlayPauseButton ||
+    !DOMElements.playIcon ||
+    !DOMElements.pauseIcon ||
+    !DOMElements.voiceSelect ||
+    !DOMElements.voiceLanguageSelect
+  ) {
+    console.warn("Elementos DOM para reproducción de audio no encontrados.");
+    showCustomMessage(
+      "Error: Elementos de audio no disponibles.",
+      "error",
+      3000
+    );
+    return;
+  }
+
   const textToSpeak = DOMElements.generatedTextDiv.textContent;
   if (!textToSpeak) {
     showCustomMessage("No hay contenido para leer.", "info", 3000);
@@ -526,33 +638,41 @@ const playAudio = () => {
     );
     return;
   }
-  stopAudio();
+
+  stopAudio(); // Detener cualquier reproducción anterior
 
   utterance = new SpeechSynthesisUtterance(textToSpeak);
   const selectedVoiceName = DOMElements.voiceSelect.value;
   const selectedLangCode = DOMElements.voiceLanguageSelect.value;
 
   const chosenVoice = availableVoices.find(
-    (voice) => voice.name === selectedVoiceName
+    (voice) =>
+      voice.name === selectedVoiceName &&
+      voice.lang.startsWith(selectedLangCode)
   );
+
   if (chosenVoice) {
     utterance.voice = chosenVoice;
     utterance.lang = chosenVoice.lang;
   } else if (selectedLangCode) {
+    // Fallback: Si no se encuentra la voz específica, intenta con cualquier voz del idioma
     const defaultVoiceForLang = availableVoices.find((voice) =>
       voice.lang.startsWith(selectedLangCode)
     );
     if (defaultVoiceForLang) {
       utterance.voice = defaultVoiceForLang;
       utterance.lang = defaultVoiceForLang.lang;
-    } else {
-      utterance.lang = selectedLangCode;
       console.warn(
-        `No se encontró una voz predeterminada para el idioma "${selectedLangCode}".`
+        `Voz "${selectedVoiceName}" no encontrada. Usando voz predeterminada para "${selectedLangCode}".`
+      );
+    } else {
+      utterance.lang = selectedLangCode; // Si no hay voces para el idioma, solo establece el idioma
+      console.warn(
+        `No se encontró una voz para el idioma "${selectedLangCode}". La reproducción puede no funcionar.`
       );
     }
   } else {
-    utterance.lang = "es-ES";
+    utterance.lang = "es-ES"; // Predeterminado si no hay selección de idioma
     console.warn(
       "No se seleccionó un idioma o voz, usando el predeterminado es-ES."
     );
@@ -560,14 +680,14 @@ const playAudio = () => {
 
   utterance.onend = () => {
     isPlayingAudio = false;
-    if (DOMElements.playIcon) DOMElements.playIcon.classList.remove("hidden");
-    if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.add("hidden");
-    if (DOMElements.togglePlayPauseButton)
-      DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
+    DOMElements.playIcon.classList.remove("hidden");
+    DOMElements.pauseIcon.classList.add("hidden");
+    DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
   };
   utterance.onerror = (event) => {
     console.error("Error en la reproducción de audio:", event.error);
     if (event.error !== "interrupted") {
+      // 'interrupted' es normal cuando se cancela
       showCustomMessage(
         "Error al reproducir el audio. Intenta con otra voz o idioma.",
         "error",
@@ -575,21 +695,32 @@ const playAudio = () => {
       );
     }
     isPlayingAudio = false;
-    if (DOMElements.playIcon) DOMElements.playIcon.classList.remove("hidden");
-    if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.add("hidden");
-    if (DOMElements.togglePlayPauseButton)
-      DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
+    DOMElements.playIcon.classList.remove("hidden");
+    DOMElements.pauseIcon.classList.add("hidden");
+    DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
   };
 
   utterance.onstart = () => {
-    if (DOMElements.togglePlayPauseButton)
-      DOMElements.togglePlayPauseButton.classList.add("animate-pulse");
+    DOMElements.togglePlayPauseButton.classList.add("animate-pulse");
   };
 
-  speechSynthesis.speak(utterance);
-  isPlayingAudio = true;
-  if (DOMElements.playIcon) DOMElements.playIcon.classList.add("hidden");
-  if (DOMElements.pauseIcon) DOMElements.pauseIcon.classList.remove("hidden");
+  try {
+    speechSynthesis.speak(utterance);
+    isPlayingAudio = true;
+    DOMElements.playIcon.classList.add("hidden");
+    DOMElements.pauseIcon.classList.remove("hidden");
+  } catch (e) {
+    console.error("Error al intentar iniciar la reproducción de audio:", e);
+    showCustomMessage(
+      "No se pudo iniciar la reproducción de audio. Posiblemente por políticas del navegador.",
+      "error",
+      5000
+    );
+    isPlayingAudio = false;
+    DOMElements.playIcon.classList.remove("hidden");
+    DOMElements.pauseIcon.classList.add("hidden");
+    DOMElements.togglePlayPauseButton.classList.remove("animate-pulse");
+  }
 };
 
 const stopAudio = () => {
@@ -609,33 +740,19 @@ const copyTextToClipboard = () => {
     return;
   const textToCopy = DOMElements.generatedTextDiv.textContent;
   if (!textToCopy) {
-    DOMElements.copyConfirmationMessage.textContent =
-      "No hay contenido para copiar.";
-    DOMElements.copyConfirmationMessage.classList.add("show");
-    setTimeout(
-      () => DOMElements.copyConfirmationMessage.classList.remove("show"),
-      2000
-    );
+    showCustomMessage("No hay contenido para copiar.", "info", 2000);
     return;
   }
   navigator.clipboard
     .writeText(textToCopy)
     .then(() => {
-      DOMElements.copyConfirmationMessage.textContent =
-        "¡Copiado al portapapeles!";
-      DOMElements.copyConfirmationMessage.classList.add("show");
-      setTimeout(
-        () => DOMElements.copyConfirmationMessage.classList.remove("show"),
-        2000
-      );
+      showCustomMessage("¡Copiado al portapapeles!", "success", 2000);
     })
     .catch((err) => {
       console.error("Error al intentar copiar al portapapeles:", err);
-      DOMElements.copyConfirmationMessage.textContent =
-        "Error al copiar. Tu navegador podría no soportar esta función o hay restricciones de seguridad.";
-      DOMElements.copyConfirmationMessage.classList.add("show");
-      setTimeout(
-        () => DOMElements.copyConfirmationMessage.classList.remove("show"),
+      showCustomMessage(
+        "Error al copiar. Tu navegador podría no soportar esta función o hay restricciones de seguridad.",
+        "error",
         3000
       );
     });
@@ -654,11 +771,10 @@ const downloadPdf = () => {
   }
   if (typeof window.jspdf === "undefined") {
     showCustomMessage(
-      "La librería de PDF no está cargada. Intenta recargar la página.",
+      "La librería de PDF (jspdf) no está cargada. Intenta recargar la página.",
       "error",
       5000
     );
-    console.error("jsPDF library not loaded.");
     return;
   }
   const { jsPDF } = window.jspdf;
@@ -798,24 +914,24 @@ const clearContentHistory = () => {
   showCustomMessage("Historial de contenido limpiado.", "success", 2000);
 };
 
-// --- Lógica de Consentimiento de Cookies (ELIMINADAS - AHORA EN GLOBAL.JS) ---
-// showCookieConsent ya no está aquí
-// acceptCookies ya no está aquí
-
-// --- Lógica del Modal de Suscripción (ELIMINADAS - AHORA EN GLOBAL.JS) ---
-// showSubscriptionModal ya no está aquí
-// handleSubscription ya no está aquí
-// dismissSubscription ya no está aquí
-
-// --- Listeners de Eventos ---
+// --- Listeners de Eventos y Inicialización ---
 document.addEventListener("DOMContentLoaded", () => {
-  // Fusiona los elementos específicos de este módulo en el objeto DOMElements global existente.
+  // Asegúrate de que DOMElements ya está declarado globalmente en global.js
+  if (typeof DOMElements === "undefined") {
+    console.error(
+      "DOMElements no está declarado. Asegúrate de que global.js se cargue primero y declare 'let DOMElements = {};'"
+    );
+    window.DOMElements = {}; // Declara globalmente para evitar un error fatal en este script
+  }
+
+  // Asignar elementos del DOM a DOMElements
+  // Es crucial que estos IDs existan en el HTML
   Object.assign(DOMElements, {
     contentForm: document.getElementById("contentForm"),
     promptInput: document.getElementById("prompt"),
     generateButton: document.getElementById("generateButton"),
     buttonText: document.getElementById("buttonText"),
-    spinner: document.getElementById("spinner"),
+    spinner: document.getElementById("spinner"), // Spinner dentro del botón
     generatedTextDiv: document.getElementById("generatedText"),
     togglePlayPauseButton: document.getElementById("togglePlayPauseButton"),
     playIcon: document.getElementById("playIcon"),
@@ -827,80 +943,146 @@ document.addEventListener("DOMContentLoaded", () => {
     copyTextButton: document.getElementById("copyTextButton"),
     toneSelect: document.getElementById("toneSelect"),
 
-    contentModal: document.getElementById("contentModal"),
+    contentModal: document.getElementById("contentModal"), // Modal de contenido generado
     modalCloseButton: document.getElementById("modalCloseButton"),
-    contentHistoryContainer: document.getElementById("contentHistoryContainer"),
-    clearHistoryButton: document.getElementById("clearHistoryButton"),
+    contentHistoryContainer: document.getElementById("contentHistoryContainer"), // Contenedor del historial
+    clearHistoryButton: document.getElementById("clearHistoryButton"), // Botón de limpiar historial
     generationCounterDisplay: document.getElementById(
       "generationCounterDisplay"
-    ),
-    watchAdButton: document.getElementById("watchAdButton"),
+    ), // Contador de generaciones
+    watchAdButton: document.getElementById("watchAdButton"), // Botón de ver anuncio
+
+    // Elementos del loadingOverlayModal
+    loadingOverlayModal: document.getElementById("loadingOverlayModal"),
+    pocoyoGifModal: document.getElementById("pocoyoGifModal"),
+    loadingSpinnerModal: document.getElementById("loadingSpinnerModal"),
+    loadingMessageTextModal: document.getElementById("loadingMessageTextModal"),
+    loadingErrorTextModal: document.getElementById("loadingErrorTextModal"),
+    loadingModalCloseButton: document.getElementById("loadingModalCloseButton"), // Botón de cerrar del modal de carga
+
+    // adModal específico de ia-text (el que simula el anuncio)
     adModal: document.getElementById("adModal"),
     adTimerDisplay: document.getElementById("adTimer"),
-  });
 
-  // Crea y añade copyConfirmationMessage al body dentro de initApp, si no existe
-  if (!document.getElementById("copyConfirmationMessage")) {
-    const copyConfirmationMessage = document.createElement("div");
-    copyConfirmationMessage.id = "copyConfirmationMessage";
-    copyConfirmationMessage.textContent = "¡Copiado al portapapeles!";
-    document.body.appendChild(copyConfirmationMessage);
-    DOMElements.copyConfirmationMessage = copyConfirmationMessage;
-  } else {
-    DOMElements.copyConfirmationMessage = document.getElementById(
-      "copyConfirmationMessage"
-    );
-  }
+    // copyConfirmationMessage se crea dinámicamente si no existe, o se obtiene
+    copyConfirmationMessage:
+      document.getElementById("copyConfirmationMessage") ||
+      (() => {
+        const msg = document.createElement("div");
+        msg.id = "copyConfirmationMessage";
+        msg.className = "copy-confirmation-message"; // Añadir una clase para estilos si se crea dinámicamente
+        msg.textContent = "¡Copiado al portapapeles!";
+        document.body.appendChild(msg);
+        return msg;
+      })(),
+  });
 
   // --- LISTENERS DE EVENTOS ESPECÍFICOS DEL MÓDULO ---
-  DOMElements.contentTypeOptions.addEventListener("change", (event) => {
-    if (event.target.name === "contentType") {
-      const selectedType = event.target.value;
-      DOMElements.promptInput.placeholder =
-        placeholders[selectedType] || placeholders.story;
+  if (DOMElements.contentTypeOptions) {
+    DOMElements.contentTypeOptions.addEventListener("change", (event) => {
+      if (event.target.name === "contentType") {
+        const selectedType = event.target.value;
+        if (DOMElements.promptInput) {
+          DOMElements.promptInput.placeholder =
+            placeholders[selectedType] || placeholders.story;
+        }
+        savePreferences();
+      }
+    });
+  }
+
+  if (DOMElements.toneSelect) {
+    DOMElements.toneSelect.addEventListener("change", savePreferences);
+  }
+  if (DOMElements.voiceLanguageSelect) {
+    DOMElements.voiceLanguageSelect.addEventListener("change", () => {
+      updateSpecificVoices();
       savePreferences();
-    }
-  });
+    });
+  }
+  if (DOMElements.voiceSelect) {
+    DOMElements.voiceSelect.addEventListener("change", savePreferences);
+  }
 
-  DOMElements.toneSelect.addEventListener("change", savePreferences);
-  DOMElements.voiceLanguageSelect.addEventListener("change", () => {
-    updateSpecificVoices();
-    savePreferences();
-  });
-  DOMElements.voiceSelect.addEventListener("change", savePreferences);
+  if (DOMElements.contentForm) {
+    DOMElements.contentForm.addEventListener("submit", handleGenerateContent);
+  }
+  if (DOMElements.togglePlayPauseButton) {
+    DOMElements.togglePlayPauseButton.addEventListener("click", () => {
+      if (isPlayingAudio) {
+        stopAudio();
+      } else {
+        playAudio();
+      }
+    });
+  }
+  if (DOMElements.copyTextButton) {
+    DOMElements.copyTextButton.addEventListener("click", copyTextToClipboard);
+  }
+  if (DOMElements.downloadPdfButton) {
+    DOMElements.downloadPdfButton.addEventListener("click", downloadPdf);
+  }
 
-  DOMElements.contentForm.addEventListener("submit", handleGenerateContent);
-  DOMElements.togglePlayPauseButton.addEventListener("click", () => {
-    if (isPlayingAudio) {
+  if (DOMElements.modalCloseButton) {
+    DOMElements.modalCloseButton.addEventListener("click", () => {
+      if (DOMElements.contentModal)
+        DOMElements.contentModal.classList.remove("show");
       stopAudio();
-    } else {
-      playAudio();
-    }
-  });
-  DOMElements.copyTextButton.addEventListener("click", copyTextToClipboard);
-  DOMElements.downloadPdfButton.addEventListener("click", downloadPdf);
+    });
+  }
+  if (DOMElements.contentModal) {
+    DOMElements.contentModal.addEventListener("click", (event) => {
+      if (event.target === DOMElements.contentModal) {
+        DOMElements.contentModal.classList.remove("show");
+        stopAudio();
+      }
+    });
+  }
 
-  DOMElements.modalCloseButton.addEventListener("click", () => {
-    DOMElements.contentModal.classList.remove("show");
-    stopAudio();
-  });
-  DOMElements.contentModal.addEventListener("click", (event) => {
-    if (event.target === DOMElements.contentModal) {
-      DOMElements.contentModal.classList.remove("show");
-      stopAudio();
-    }
-  });
+  if (DOMElements.clearHistoryButton) {
+    DOMElements.clearHistoryButton.addEventListener(
+      "click",
+      clearContentHistory
+    );
+  }
+  if (DOMElements.watchAdButton) {
+    DOMElements.watchAdButton.addEventListener("click", simulateAdViewing);
+  }
 
-  DOMElements.clearHistoryButton.addEventListener("click", clearContentHistory);
-  DOMElements.watchAdButton.addEventListener("click", simulateAdViewing);
+  if (DOMElements.loadingModalCloseButton) {
+    DOMElements.loadingModalCloseButton.addEventListener(
+      "click",
+      hideLoadingOverlay
+    );
+  }
+  if (DOMElements.subscriptionModal && DOMElements.noThanksButton) {
+    DOMElements.noThanksButton.addEventListener("click", () => {
+      DOMElements.subscriptionModal.classList.remove("show");
+    });
+  }
+  if (DOMElements.subscriptionModal) {
+    DOMElements.subscriptionModal.addEventListener("click", (event) => {
+      if (event.target === DOMElements.subscriptionModal) {
+        DOMElements.subscriptionModal.classList.remove("show");
+      }
+    });
+  }
+
+  if (DOMElements.messageModalCloseButton && DOMElements.messageModal) {
+    DOMElements.messageModalCloseButton.addEventListener("click", () => {
+      DOMElements.messageModal.classList.remove("show");
+    });
+    DOMElements.messageModal.addEventListener("click", (event) => {
+      if (event.target === DOMElements.messageModal) {
+        DOMElements.messageModal.classList.remove("show");
+      }
+    });
+  }
 
   // --- Inicialización Específica del Módulo ---
   loadPreferences();
   renderContentHistory();
 
-  if (speechSynthesis.onvoiceschanged === undefined) {
-    speechSynthesis.onvoiceschanged = loadVoices;
-  } else {
-    loadVoices();
-  }
+  // La carga de voces se gestiona por speechSynthesis.onvoiceschanged
+  // o un pequeño retraso si el evento no se dispara.
 });

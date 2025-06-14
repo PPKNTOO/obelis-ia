@@ -1,162 +1,293 @@
-/* Estilo para la fuente Inter */
-body {
-  font-family: "Inter", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(
-    to right,
-    #1a202c,
-    #2d3748
-  ); /* from index.html */
-  color: #e2e8f0; /* gris-200 from index.html */
-  padding-top: 64px; /* Espacio para la barra de navegación fija from index.html */
-}
-/* Personalización de colores de Tailwind según lo solicitado */
-.bg-gradient-dark {
-  background-image: linear-gradient(
-    to right,
-    #1a202c,
-    /* gris oscuro */ #2d3748 /* azul grisáceo */
-  );
-}
-/* Las siguientes clases sobrescriben los valores predeterminados de Tailwind con los colores específicos que solicitaste */
-.text-cyan-500 {
-  color: #06b6d4; /* Tailwind cyan-500 */
-}
-.bg-cyan-600 {
-  background-color: #0891b2; /* Tailwind cyan-600 */
-}
-.hover\:bg-cyan-700:hover {
-  background-color: #0e7490; /* Tailwind cyan-700 */
-}
-.focus\:ring-cyan-300:focus {
-  --tw-ring-color: #67e8f9; /* Tailwind cyan-300 */
+/* ia-text/css/style.css */
+
+/* --- Estilos para las secciones de contenido generales (intro, how-to, tips, use-cases, faq) --- */
+/* Estas secciones comparten estilos comunes a través del sitio, definidos aquí para el módulo ia-text */
+.ia-text-section {
+  width: 100%;
+  padding: 3rem 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  text-align: center;
 }
 
-/* Estilos adicionales para la apariencia del botón de radio */
-input[type="radio"]:checked {
-  background-color: currentColor;
-  border-color: currentColor;
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
 }
-/* Estilos para el lightbox/modal */
-.modal-overlay {
-  position: fixed; /* Asegura que el modal ocupe toda la ventana del navegador */
-  top: 0;
-  left: 0;
-  width: 100vw; /* Ocupa el 100% del ancho del viewport */
-  height: 100vh; /* Ocupa el 100% de la altura del viewport */
-  background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente oscuro */
-  /* backdrop-filter: blur(5px); -- Eliminado para simplificar y alinear con la sugerencia previa */
+
+.section-description {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
+}
+
+/* Estilos para la sección de introducción (feature-grid) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.feature-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+.feature-item .feature-icon {
+  font-size: 2.5rem;
+  color: #06b6d4;
+  margin-bottom: 0.75rem;
+}
+.feature-item p {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+.feature-item p strong {
+  color: white;
+}
+
+/* Estilos para la sección "Cómo Generar" (how-to-steps-grid) */
+.how-to-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .how-to-steps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step-card-ia {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step-card-ia:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.step-card-ia .step-number {
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.1);
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Asegura que esté por encima de todo */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  overflow-y: auto; /* Permite desplazamiento si el contenido es muy largo */
+  margin: 0 auto 1.25rem auto;
+  border: 2px solid #06b6d4;
 }
-.modal-overlay.show {
-  opacity: 1;
-  visibility: visible;
-}
-.modal-content {
-  position: relative;
-  background-color: #1f2937; /* Color de fondo actualizado a gris-800 */
-  padding: 2rem;
-  border-radius: 1rem; /* rounded-2xl */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra ajustada */
-  width: 95%; /* Ajusta el ancho para que sea casi completo */
-  height: 90vh; /* Ajusta la altura para que sea casi completa (90% de la altura del viewport) */
-  overflow-y: auto; /* Permite desplazamiento interno si el contenido es muy largo */
-  border: 1px solid #0e7490; /* border-cyan-700 */
-  color: #e2e8f0; /* text-gray-200 */
-  transform: translateY(20px); /* Animación de entrada */
-  transition: transform 0.3s ease-out; /* Animación de entrada */
-}
-
-.modal-overlay.show .modal-content {
-  transform: translateY(0); /* Animación de entrada */
-}
-
-.modal-close-button {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(45, 55, 72, 0.7); /* gray-700 con opacidad */
-  border: none;
+.step-card-ia h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
   color: white;
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 0.25rem 0.75rem;
-  line-height: 1;
-  border-radius: 9999px; /* rounded-full */
-  opacity: 0.7;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
-    0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  z-index: 1010; /* Asegura que esté sobre el contenido del modal */
 }
-.modal-close-button:hover {
-  opacity: 1;
-  background-color: rgba(74, 85, 104, 0.8); /* gray-600 con opacidad */
+.step-card-ia p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  line-height: 1.6;
 }
-/* Estilos para el historial */
-.history-item {
-  cursor: pointer;
-  @apply bg-gray-800 hover:bg-gray-700 text-gray-200 p-3 rounded-lg shadow-md transition duration-200 border border-gray-700 mb-2 flex items-center justify-between;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; /* Mantiene el texto en una sola línea */
+
+/* Estilos para la sección de consejos (tips-list) */
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem auto 0 auto;
+  max-width: 700px;
+  text-align: left;
 }
-.history-item-text {
-  flex-grow: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-right: 0.5rem;
-}
-.history-item-actions {
-  flex-shrink: 0;
+.tips-list li {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.75rem;
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+.tips-list li:hover {
+  background-color: #374151;
+}
+.tips-list li::before {
+  content: "\f058"; /* Icono de check */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #34d399; /* Verde de éxito */
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.tips-list li strong {
+  color: #06b6d4;
+}
+.tips-list li p {
+  color: #e2e8f0;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
-/* Estilo para el mensaje de copiado */
-#copyConfirmationMessage {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #0e7490; /* cyan-700 */
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
+/* Estilos para la sección de Casos de Uso (use-cases-grid) */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.use-case-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 1000;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
-#copyConfirmationMessage.show {
-  opacity: 1;
-  visibility: visible;
+.use-case-item:hover {
+  transform: translateY(-5px);
+  background-color: #374151;
+}
+.use-case-item .use-case-icon {
+  font-size: 2.8rem;
+  color: #34d399;
+  margin-bottom: 0.75rem;
+}
+.use-case-item h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+.use-case-item p {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.5;
 }
 
-/* Estilos para el texto generado dentro del modal */
+/* --- Estilos para el layout principal del Generador (adoptados de ia-img) --- */
+.ia-generator-layout-container {
+  width: 100%;
+  display: grid; /* Usamos grid para manejar las columnas */
+  /* Adaptado para 2 columnas: Main y Aside Derecho */
+  grid-template-columns: 1fr minmax(250px, 350px);
+  grid-template-rows: auto; /* Las filas se autoajustan */
+  gap: 1.5rem; /* Espaciado entre celdas de la grid */
+  padding: 1.5rem;
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  min-height: 70vh; /* Altura mínima para el contenedor del generador */
+  margin-top: 2.5rem; /* Margen para separarse de la sección anterior */
+  margin-bottom: 2.5rem; /* Margen para separarse de la sección siguiente */
+}
+
+/* Asignar áreas de grid a los elementos */
+.ia-generator-main-content {
+  grid-column: 1; /* El contenido principal ocupa la primera columna */
+  grid-row: 1;
+  display: flex; /* Asegura flexbox interno para el contenido principal */
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem; /* Asegurar padding interno */
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow-y: auto; /* Scroll para el contenido principal si es muy largo */
+  max-height: calc(
+    100vh - 150px
+  ); /* Controla la altura máxima para scroll en desktop */
+}
+
+.ia-generator-aside {
+  grid-column: 2; /* El aside derecho ocupa la segunda columna */
+  grid-row: 1;
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-grow: 0;
+  max-height: calc(
+    100vh - 150px
+  ); /* Altura controlada para scroll en desktop */
+  min-height: 200px; /* Altura mínima visible para el aside */
+}
+
+.history-content-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: #0891b2 #1a202c;
+}
+.history-content-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.history-content-scrollable::-webkit-scrollbar-track {
+  background: #1a202c;
+  border-radius: 10px;
+}
+.history-content-scrollable::-webkit-scrollbar-thumb {
+  background-color: #0891b2;
+  border-radius: 10px;
+  border: 2px solid #1a202c;
+}
+
+/* Estilos para el modal de contenido generado (específico de ia-text, pero hereda de main.css) */
+#contentModal.modal-overlay .modal-content {
+  max-width: 800px; /* Ancho máximo para el contenido de texto */
+  /* Los demás estilos se heredan de .modal-content en main.css */
+}
 #generatedText h2 {
-  font-size: 1.75rem; /* text-2xl */
-  font-weight: bold; /* font-bold */
+  font-size: 1.75rem;
+  font-weight: bold;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  color: #06b6d4; /* text-cyan-500 */
+  color: #06b6d4;
 }
 #generatedText h3 {
-  font-size: 1.5rem; /* text-xl */
-  font-weight: bold; /* font-bold */
+  font-size: 1.5rem;
+  font-weight: bold;
   margin-top: 1.25rem;
   margin-bottom: 0.75rem;
-  color: #06b6d4; /* text-cyan-500 */
+  color: #06b6d4;
 }
 #generatedText strong {
   font-weight: bold;
@@ -165,219 +296,121 @@ input[type="radio"]:checked {
   font-style: italic;
 }
 #generatedText p {
-  margin-bottom: 0.75rem; /* space between paragraphs */
-  text-align: justify; /* Justify text */
-  color: #e2e8f0; /* text-gray-200 (el blanco que usabas antes) */
-  font-size: 1rem; /* text-base (no tan grande) */
+  margin-bottom: 0.75rem;
+  text-align: justify;
+  color: #e2e8f0;
+  font-size: 1rem;
 }
 #generatedText ul,
 #generatedText ol {
   margin-left: 1.5rem;
   margin-bottom: 0.75rem;
-  list-style-position: outside; /* Ensure bullets/numbers are visible */
-  padding-left: 1.25rem; /* Add padding for list items */
+  list-style-position: outside;
+  padding-left: 1.25rem;
 }
 #generatedText ul li,
 #generatedText ol li {
-  color: #e2e8f0; /* text-gray-200 (el blanco que usabas antes) */
-  font-size: 1rem; /* text-base (no tan grande) */
-  margin-bottom: 0.25rem; /* space between list items */
+  color: #e2e8f0;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
 }
 #generatedText ul li {
-  list-style-type: disc; /* bullet points */
+  list-style-type: disc;
 }
 #generatedText ol li {
-  list-style-type: decimal; /* numbered list */
+  list-style-type: decimal;
 }
-/* Estilos para el modal de anuncio */
-.ad-modal-overlay {
+
+/* Estilos para el mensaje de copiado (específico de este módulo) */
+#copyConfirmationMessage {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.95
-  ); /* Fondo muy oscuro para simular bloqueo */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000; /* Más alto que otros modales */
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0e7490;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000; /* Asegura que esté encima del contenido */
 }
-.ad-modal-overlay.show {
+#copyConfirmationMessage.show {
   opacity: 1;
   visibility: visible;
+}
+
+/* Estilos para el modal de anuncio (específico de este módulo, para simular el anuncio) */
+.ad-modal-overlay {
+  z-index: 2000; /* Alto z-index para este modal específico */
 }
 .ad-modal-content {
-  background-color: #1a202c; /* gray-900 */
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  color: white;
-  max-width: 500px;
-  width: 90%;
-  border: 1px solid #06b6d4; /* cyan-500 */
+  background-color: #1a202c; /* Override si se desea un color diferente al global */
+  border: 1px solid #06b6d4; /* Borde específico para el anuncio */
+  max-width: 500px; /* Ancho específico para el anuncio */
 }
-/* Estilos para los placeholders de anuncios */
-.ad-banner {
-  background-color: #1f2937; /* gray-800 */
-  border: 1px dashed #4b5563; /* gray-600 */
-  color: #d1d5db; /* gray-300 */
-  padding: 1rem;
-  text-align: center;
-  border-radius: 0.5rem;
-  font-style: italic;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  width: 100%; /* Asegurar que ocupan el ancho completo */
-  max-width: 960px; /* Consistente con el contenedor principal */
-  margin-left: auto; /* Center the ad banner */
-  margin-right: auto; /* Center the ad banner */
+/* Spinner dentro del adModal */
+.ad-modal-content .animate-spin {
+  border-color: rgba(0, 0, 0, 0.1);
+  border-bottom-color: #06b6d4;
 }
-.ad-banner-top {
-  min-height: 100px;
-  display: flex;
-  flex-direction: column; /* Stack content vertically */
-  align-items: center;
-  justify-content: center;
-}
-.ad-banner-bottom {
-  min-height: 60px;
-  display: flex; /* For bottom banner, ensure content is centered if any */
-  align-items: center;
-  justify-content: center;
-}
-/* Estilos para el modal de suscripción */
-.subscription-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1010; /* Superior a todo */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.subscription-modal.show {
-  opacity: 1;
-  visibility: visible;
-}
-.subscription-modal-content {
-  background-color: #1a202c; /* gris oscuro */
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  color: white;
-  position: relative;
-}
-.subscription-modal-content input {
-  background-color: #2d3748; /* gris azulado */
-  border: 1px solid #4a5568; /* gris más claro */
-  color: white;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-.subscription-modal-content input::placeholder {
-  color: #a0aec0; /* gris claro */
-}
-.subscription-modal-content button {
-  transition: background-color 0.2s ease;
-}
-/* Estilos para el mensaje de cookies */
-.cookie-consent {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(26, 32, 44, 0.9); /* gris oscuro con opacidad */
-  color: white;
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  z-index: 1005; /* Entre el contenido y el modal de suscripción */
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(100%);
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-}
-.cookie-consent.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-@media (min-width: 768px) {
-  /* md */
-  .cookie-consent {
-    flex-direction: row;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    width: auto;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
+
+/* --- Media Queries para responsividad del generador (adoptados de ia-img) --- */
+@media (max-width: 1024px) {
+  /* Tablet y móvil */
+  .ia-generator-layout-container {
+    grid-template-columns: 1fr; /* Una sola columna para todos los elementos */
+    grid-template-rows: auto; /* Las filas se autoajustan */
+    padding: 1rem;
+    gap: 1rem;
+    min-height: auto;
   }
-  .cookie-consent.show {
-    transform: translateX(-50%) translateY(0);
+  .ia-generator-aside,
+  .ia-generator-main-content {
+    /* ia-img-gallery-section no se aplica aquí */
+    grid-column: 1; /* Todos ocupan la única columna */
+    grid-row: auto; /* Se apilan automáticamente */
+    width: 100%; /* Ocupan todo el ancho disponible */
+    max-height: none; /* No hay max-height fijo, el contenedor padre (layout-container) manejará el scroll si es necesario */
+    overflow-y: visible; /* El scroll lo manejará el ia-generator-layout-container si se desborda */
+  }
+
+  .ia-generator-aside {
+    min-height: 150px; /* Altura mínima para asides apilados */
+    max-height: 40vh; /* Altura máxima para asides apilados en móvil, con scroll */
+  }
+  .ia-generator-main-content {
+    min-height: 400px; /* Altura mínima para el contenido principal */
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .section-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .step-card-ia h3 {
+    font-size: 1.3rem;
+  }
+  .step-card-ia p {
+    font-size: 0.9rem;
+  }
+  .feature-item p {
+    font-size: 0.85rem;
+  }
+  .use-case-item h3 {
+    font-size: 1.25rem;
+  }
+  .use-case-item p {
+    font-size: 0.85rem;
   }
 }
-/* Estilo para la nueva clase del contenido de la barra de navegación */
-.navbar-inner-content {
-  max-width: 1200px; /* Un poco más ancho que 4xl (900px) para el contenido principal */
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%; /* Asegura que el contenido ocupe la altura de la nav */
-}
-/* Estilos para el modal de mensajes genérico */
-#messageModal {
-  background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semitransparente */
-  backdrop-filter: blur(5px); /* Efecto de desenfoque */
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-#messageModal.show {
-  opacity: 1;
-  visibility: visible;
-}
-#messageModalContent {
-  background-color: #1a202c; /* gris oscuro */
-  border: 1px solid #2d3748; /* gris-800 */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
-}
-#messageModalIcon.success::before {
-  content: "✔️";
-  color: #10b981; /* Tailwind green-500 */
-}
-#messageModalIcon.error::before {
-  content: "❌";
-  color: #ef4444; /* Tailwind red-500 */
-}
-#messageModalIcon.info::before {
-  content: "💡";
-  color: #60a5fa; /* Tailwind blue-400 */
+@media (max-width: 768px) {
+  .ia-generator-aside {
+    max-height: 30vh; /* Ajuste para pantallas más pequeñas */
+  }
 }

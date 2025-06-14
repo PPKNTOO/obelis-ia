@@ -18,14 +18,57 @@ function getElement(selector, isQuerySelectorAll = false) {
 // --- FUNCIONES DE UTILIDAD GENERAL ---
 
 /**
- * Descarga una imagen dada su URL.
+ * Descarga una imagen dada su URL o Data URL de forma robusta.
+ * Convierte la imagen a un Blob para asegurar la descarga directa.
+ * @param {string} imageUrl - La URL o Data URL de la imagen.
+ * @param {string} filename - El nombre del archivo para la descarga (con extensión).
+ * @returns {Promise<void>}
  */
-function downloadImage(imageUrl, filename = "imagen.png") {
-  const link = document.createElement("a");
-  link.href = imageUrl;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+async function downloadImage(imageUrl, filename = "imagen.png") {
+  try {
+    // Si la URL es una data URL, la convertimos a Blob directamente
+    if (imageUrl.startsWith("data:")) {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename; // Establece el nombre de archivo
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Libera el objeto URL
+      console.log(`Descarga iniciada para: ${filename}`);
+    } else {
+      // Para URLs externas, intentamos un fetch para crear un Blob
+      const response = await fetch(imageUrl, {
+        mode: "cors", // Asegúrate de que CORS esté habilitado si es una URL externa
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename; // Establece el nombre de archivo
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Libera el objeto URL
+      console.log(`Descarga iniciada para: ${filename}`);
+    }
+  } catch (error) {
+    console.error("Error al descargar la imagen:", error);
+    // showCustomMessage ya está definido, se usa globalmente.
+    showCustomMessage(
+      `Error al descargar la imagen: ${error.message}.`,
+      "error",
+      5000
+    );
+  }
 }
 
 /**
@@ -236,25 +279,100 @@ function updateActiveClass() {
   });
 }
 
+// Función separada para el listener de FAQ para poder removerlo
+// Esta función ahora es global para ser reutilizada en todos los módulos
+function toggleFaqAnswer(event) {
+  const question = event.currentTarget;
+  const answer = question.nextElementSibling;
+  const arrow = question.querySelector(".faq-arrow");
+
+  // Asegurar que las propiedades de transición estén en su lugar
+  answer.style.transition =
+    "max-height 0.4s ease-out, padding-top 0.4s ease-out, padding-bottom 0.4s ease-out";
+
+  const currentMaxHeight = getComputedStyle(answer).maxHeight;
+  const isOpen = currentMaxHeight !== "0px";
+
+  // Close all other open FAQs (assuming they are in the same faq-container)
+  const faqContainer = question.closest(".faq-container");
+  if (faqContainer) {
+    faqContainer.querySelectorAll(".faq-answer").forEach((otherAnswer) => {
+      if (
+        otherAnswer !== answer &&
+        getComputedStyle(otherAnswer).maxHeight !== "0px"
+      ) {
+        otherAnswer.style.maxHeight = "0px";
+        otherAnswer.style.paddingTop = "0px";
+        otherAnswer.style.paddingBottom = "0px";
+        const otherArrow =
+          otherAnswer.previousElementSibling.querySelector(".faq-arrow");
+        if (otherArrow) otherArrow.classList.remove("rotated");
+      }
+    });
+  }
+
+  // Toggle the current FAQ
+  if (isOpen) {
+    answer.style.maxHeight = "0px";
+    answer.style.paddingTop = "0px";
+    answer.style.paddingBottom = "0px";
+    arrow.classList.remove("rotated");
+  } else {
+    // Temporarily set max-height to 'auto' to get the true scrollHeight
+    // Apply desired paddings BEFORE measuring scrollHeight so it's included
+    answer.style.maxHeight = "auto";
+    answer.style.paddingTop = "1.5rem"; // Target padding top
+    answer.style.paddingBottom = "2rem"; // Target padding bottom
+
+    // Force reflow to get correct scrollHeight immediately
+    void answer.offsetWidth;
+
+    const scrollHeight = answer.scrollHeight;
+
+    // Set max-height to the calculated scrollHeight
+    answer.style.maxHeight = scrollHeight + "px";
+
+    arrow.classList.add("rotated");
+  }
+}
+
 // --- initGlobalApp: la función principal de inicialización para scripts generales ---
 function initGlobalApp() {
+  // Inicialización robusta de DOMElements
+  // Aquí recogemos los elementos que deberían existir en TODAS las páginas que usan global.js
   DOMElements.messageModal = getElement("#messageModal");
   DOMElements.messageModalCloseButton = getElement("#messageModalCloseButton");
   DOMElements.messageModalText = getElement("#messageModalText");
   DOMElements.messageModalIcon = getElement("#messageModalIcon");
+
   DOMElements.cookieConsent = getElement("#cookieConsent");
   DOMElements.acceptCookiesButton = getElement("#acceptCookiesButton");
+
   DOMElements.subscriptionModal = getElement("#subscriptionModal");
   DOMElements.emailInput = getElement("#emailInput");
   DOMElements.subscribeButton = getElement("#subscribeButton");
   DOMElements.noThanksButton = getElement("#noThanksButton");
-  DOMElements.localStorageUsage = getElement("#localStorageUsage");
+
+  DOMElements.localStorageUsage = getElement("#localStorageUsage"); // Para ia-img
 
   DOMElements.menuToggle = getElement("#menuToggle");
   DOMElements.navLinksContainer = getElement(
     ".navbar-inner-content .flex-wrap"
   );
 
+  // Elementos del modal de carga global (loadingOverlayModal)
+  DOMElements.loadingOverlayModal = getElement("#loadingOverlayModal");
+  DOMElements.pocoyoGifModal = getElement("#pocoyoGifModal"); // Puede ser null si solo hay spinner
+  DOMElements.loadingSpinnerModal = getElement("#loadingSpinnerModal"); // Puede ser null si solo hay gif
+  DOMElements.loadingMessageTextModal = getElement("#loadingMessageTextModal");
+  DOMElements.loadingErrorTextModal = getElement("#loadingErrorTextModal");
+  DOMElements.loadingModalCloseButton = getElement("#loadingModalCloseButton");
+
+  // Elementos del adModal global (si existe en la página principal y no en los módulos)
+  DOMElements.adModal = getElement("#adModal");
+  DOMElements.adTimerDisplay = getElement("#adTimer");
+
+  // Inicializaciones condicionales
   if (DOMElements.localStorageUsage) updateLocalStorageUsage();
   if (DOMElements.cookieConsent) showCookieConsent();
 
@@ -279,6 +397,12 @@ function initGlobalApp() {
       if (event.target === DOMElements.messageModal) {
         hideCustomMessage();
       }
+    });
+  }
+  if (DOMElements.loadingModalCloseButton) {
+    // Listener para cerrar el modal de carga/error
+    DOMElements.loadingModalCloseButton.addEventListener("click", () => {
+      DOMElements.loadingOverlayModal.classList.remove("show");
     });
   }
 
@@ -344,19 +468,59 @@ function initGlobalApp() {
 }
 
 // Función separada para el listener de FAQ para poder removerlo
+// Esta función ahora es global para ser reutilizada en todos los módulos
 function toggleFaqAnswer(event) {
   const question = event.currentTarget;
   const answer = question.nextElementSibling;
   const arrow = question.querySelector(".faq-arrow");
 
-  // Alternar la altura máxima para expandir/colapsar
-  if (answer.style.maxHeight && answer.style.maxHeight !== "0px") {
-    answer.style.maxHeight = "0px";
-  } else {
-    answer.style.maxHeight = answer.scrollHeight + "px";
+  // Forzar un reflow antes de verificar el estado para obtener el valor más actual de maxHeight
+  void answer.offsetWidth;
+
+  const currentMaxHeight = getComputedStyle(answer).maxHeight;
+  const isOpen = currentMaxHeight !== "0px";
+
+  // Close all other open FAQs (assuming they are in the same faq-container)
+  const faqContainer = question.closest(".faq-container");
+  if (faqContainer) {
+    faqContainer.querySelectorAll(".faq-answer").forEach((otherAnswer) => {
+      if (
+        otherAnswer !== answer &&
+        getComputedStyle(otherAnswer).maxHeight !== "0px"
+      ) {
+        otherAnswer.style.maxHeight = "0px";
+        otherAnswer.style.paddingTop = "0px";
+        otherAnswer.style.paddingBottom = "0px";
+        const otherArrow =
+          otherAnswer.previousElementSibling.querySelector(".faq-arrow");
+        if (otherArrow) otherArrow.classList.remove("rotated");
+      }
+    });
   }
-  // Alternar la clase para rotar la flecha
-  arrow.classList.toggle("rotated");
+
+  // Toggle the current FAQ
+  if (isOpen) {
+    answer.style.maxHeight = "0px";
+    answer.style.paddingTop = "0px";
+    answer.style.paddingBottom = "0px";
+    arrow.classList.remove("rotated");
+  } else {
+    // Temporarily set max-height to 'auto' to get the true scrollHeight
+    // Apply desired paddings BEFORE measuring scrollHeight so it's included
+    answer.style.maxHeight = "auto";
+    answer.style.paddingTop = "1.5rem"; // Target padding top
+    answer.style.paddingBottom = "2rem"; // Target padding bottom
+
+    // Force reflow again after setting paddings to include them in scrollHeight
+    void answer.offsetWidth;
+
+    const scrollHeight = answer.scrollHeight;
+
+    // Set max-height to the calculated scrollHeight
+    answer.style.maxHeight = scrollHeight + "px";
+
+    arrow.classList.add("rotated");
+  }
 }
 
 // Llama a initGlobalApp cuando el DOM esté completamente cargado
