@@ -5,15 +5,19 @@ body {
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to right, #1a202c, #2d3748);
+  background: linear-gradient(
+    135deg,
+    #1f2937,
+    #111827
+  ); /* Degradado más suave */
   color: #e2e8f0; /* gris-200 */
   padding-top: 64px; /* Espacio para la barra de navegación fija */
-  margin: 0; /* Asegurar que no haya márgenes extra */
-  min-height: 100vh; /* Asegurar que ocupe toda la altura */
+  margin: 0;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Alinear arriba el contenido principal */
+  justify-content: flex-start;
 }
 
 /* Custom Tailwind Colors */
@@ -36,28 +40,27 @@ body {
 /* --- Global Ad Banner Styles --- */
 .ad-banner {
   background-color: #1f2937; /* gray-800 */
-  border: 1px dashed #4b5563; /* gray-600 */
+  border: 1px solid #374151; /* gray-700, borde más suave */
   color: #d1d5db; /* gray-300 */
-  padding: 1rem;
+  padding: 1.25rem; /* Un poco más de padding */
   text-align: center;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem; /* Bordes más redondeados */
   font-style: italic;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
   width: 100%;
-  max-width: 960px; /* Consistente con el contenedor principal */
+  max-width: 960px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra sutil */
 }
 .ad-banner-top {
-  min-height: 100px;
+  min-height: 120px; /* Un poco más de altura */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
 }
 .ad-banner-bottom {
-  min-height: 60px;
-  margin-top: 1.5rem;
+  min-height: 80px; /* Un poco más de altura */
 }
 
 /* --- Modals Styles (Subscription, Cookie Consent, Generic Message) --- */
@@ -68,14 +71,14 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px); /* Blur más pronunciado */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 .modal-overlay.show {
   opacity: 1;
@@ -83,11 +86,11 @@ body {
 }
 .modal-content {
   position: relative;
-  background-color: #1a202c;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  background-color: #1e293b; /* Tono de fondo más moderno */
+  padding: 2rem;
+  border-radius: 1rem; /* Más redondeado */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    /* Sombra más grande */ 0 10px 15px -3px rgba(0, 0, 0, 0.4);
   text-align: center;
   color: white;
   max-width: 90%;
@@ -95,28 +98,33 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
+  transform: translateY(-20px); /* Efecto de entrada */
+  transition: transform 0.4s ease;
+}
+.modal-overlay.show .modal-content {
+  transform: translateY(0);
 }
 .modal-close-button {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1rem;
+  right: 1rem;
   background: rgba(45, 55, 72, 0.7);
   border: none;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem; /* Tamaño más grande */
   cursor: pointer;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   line-height: 1;
   border-radius: 9999px;
-  opacity: 0.7;
+  opacity: 0.8;
   transition: opacity 0.2s ease, background-color 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 .modal-close-button:hover {
   opacity: 1;
-  background-color: rgba(74, 85, 104, 0.8);
+  background-color: rgba(74, 85, 104, 0.9);
 }
 
 /* Subscription Modal Specifics */
@@ -127,45 +135,54 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1010;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 .subscription-modal.show {
   opacity: 1;
   visibility: visible;
 }
 .subscription-modal-content {
-  background-color: #1a202c;
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  background-color: #1e293b;
+  padding: 2.5rem; /* Más padding */
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 10px 15px -3px rgba(0, 0, 0, 0.4);
   text-align: center;
-  max-width: 400px;
+  max-width: 450px; /* Un poco más ancho */
   width: 90%;
   color: white;
   position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.4s ease;
+}
+.subscription-modal.show .subscription-modal-content {
+  transform: translateY(0);
 }
 .subscription-modal-content input {
   background-color: #2d3748;
   border: 1px solid #4a5568;
   color: white;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.9rem; /* Más padding en el input */
+  border-radius: 0.6rem;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
 }
 .subscription-modal-content input::placeholder {
   color: #a0aec0;
 }
 .subscription-modal-content button {
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.subscription-modal-content button:hover {
+  transform: translateY(-2px);
 }
 
 /* Cookie Consent Specifics */
@@ -174,9 +191,9 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(26, 32, 44, 0.9);
+  background-color: rgba(26, 32, 44, 0.95); /* Fondo más oscuro y sólido */
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 2rem; /* Más padding */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -186,7 +203,8 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(100%);
-  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3); /* Sombra superior */
 }
 .cookie-consent.show {
   opacity: 1;
@@ -212,7 +230,7 @@ body {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,36 +248,46 @@ body {
   border: 1px solid #2d3748;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
     0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  padding: 2rem;
-  border-radius: 0.75rem;
-  max-width: 400px;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  max-width: 450px;
   width: 11/12;
   text-align: center;
   position: relative;
   color: white;
+  transform: translateY(-20px);
+  transition: transform 0.4s ease;
+}
+#messageModal.show #messageModalContent {
+  transform: translateY(0);
 }
 #messageModalCloseButton {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 1rem;
+  right: 1rem;
   color: #a0aec0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50%;
+  background-color: rgba(74, 85, 104, 0.3);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 #messageModalCloseButton:hover {
   color: white;
+  background-color: rgba(74, 85, 104, 0.6);
 }
 #messageModalText {
-  font-size: 1.125rem;
+  font-size: 1.25rem; /* Texto un poco más grande */
   font-weight: 600;
 }
 #messageModalIcon {
-  margin-top: 1rem;
-  font-size: 2.5rem;
+  margin-top: 1.25rem;
+  font-size: 3rem; /* Icono más grande */
 }
 #messageModalIcon.success {
-  color: #10b981;
+  color: #34d399; /* Verde más vibrante */
 }
 #messageModalIcon.error {
   color: #ef4444;
@@ -274,12 +302,12 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #1a202c; /* Asegurar color consistente */
+  background-color: #1a202c;
   color: white;
-  padding: 0.5rem 1rem; /* Ajustar padding si es necesario */
-  height: 64px; /* Altura consistente */
+  padding: 0.5rem 1rem;
+  height: 64px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  z-index: 1000; /* Asegura que esté por encima de todo el contenido */
+  z-index: 1000;
 }
 .navbar-inner-content {
   max-width: 1200px;
@@ -291,7 +319,7 @@ body {
   height: 100%;
 }
 .nav-item {
-  position: relative; /* CRÍTICO para que los submenús se posicionen correctamente */
+  position: relative;
   padding: 0.5rem 0.75rem;
   transition: all 0.2s ease-in-out;
   border-radius: 0.375rem;
@@ -326,27 +354,26 @@ body {
 /* Submenú */
 .submenu {
   position: absolute;
-  top: 100%; /* Posiciona justo debajo del padre */
+  top: 100%;
   left: 0;
   background-color: #1a202c;
   border: 1px solid #4a5568;
   border-radius: 0.5rem;
   min-width: 180px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  z-index: 1001; /* Mantiene los submenús por encima de la navbar y el contenido */
+  z-index: 1001;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
   padding: 0.5rem 0;
-  pointer-events: none; /* Inicialmente ignorar eventos de ratón para no bloquear clicks */
+  pointer-events: none;
 }
 .nav-item.group:hover .submenu {
-  /* Se muestra al hacer hover sobre el padre */
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  pointer-events: auto; /* Habilitar eventos de ratón cuando se muestra */
+  pointer-events: auto;
 }
 .submenu-item {
   display: block;
@@ -377,10 +404,10 @@ body {
 /* Navbar Responsive (Hamburguesa) */
 @media (max-width: 900px) {
   .navbar-inner-content .flex-wrap {
-    display: none; /* Oculto por defecto en móvil */
+    display: none;
     flex-direction: column;
     position: absolute;
-    top: 64px; /* Debajo de la navbar fija */
+    top: 64px;
     left: 0;
     width: 100%;
     background-color: #1a202c;
@@ -436,17 +463,17 @@ body {
     align-items: center;
   }
   .nav-item .submenu {
-    position: static; /* En móvil, el submenú se convierte en parte del flujo normal */
+    position: static;
     width: 100%;
     border: none;
     box-shadow: none;
     border-radius: 0;
     transform: translateY(0);
     opacity: 1;
-    visibility: visible; /* Siempre visible cuando el menú móvil está activo */
+    visibility: visible;
     padding: 0;
     background-color: #1a202c;
-    pointer-events: auto; /* Habilitar eventos en móvil */
+    pointer-events: auto;
   }
   .submenu-item {
     padding-left: 2.5rem;
@@ -459,22 +486,18 @@ body {
   }
 }
 
-/* --- Editor Specific Styles --- */
+/* --- Editor Specific Styles (manteniendo los existentes) --- */
 .editor-main-layout {
   display: flex;
-  flex-direction: column; /* Default to column for small screens */
+  flex-direction: column;
   width: 100%;
   max-width: 1200px;
-  /* margin-top: calc(
-    64px + 1rem
-  ); Empuja el layout debajo de la navbar fija + 1rem */
   gap: 1rem;
   padding: 0 1rem;
   flex-grow: 1;
 }
 
 @media (min-width: 1024px) {
-  /* On large screens (lg breakpoint) */
   .editor-main-layout {
     flex-direction: row;
     align-items: flex-start;
@@ -492,14 +515,14 @@ body {
   gap: 0.5rem;
   width: 100%;
   max-width: 1200px;
-  margin-top: 1rem; /* Margen para separarlo del navbar, si no está cubierto por padding-top del body */
+  margin-top: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  position: relative; /* Para posicionar correctamente los dropdowns */
-  z-index: 900; /* Asegura que la barra de menú esté por encima del layout principal */
+  position: relative;
+  z-index: 900;
 }
 
 .menu-item {
-  position: relative; /* Necesario para el posicionamiento absoluto del dropdown */
+  position: relative;
 }
 
 .menu-item-button {
@@ -520,29 +543,28 @@ body {
 }
 
 .menu-dropdown {
-  /* Esto es para los desplegables de la barra de menú del editor */
   position: absolute;
-  top: 100%; /* Se posiciona justo debajo del botón padre */
+  top: 100%;
   left: 0;
   background-color: #1a202c;
   border: 1px solid #4a5568;
   border-radius: 0.5rem;
   min-width: 180px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  z-index: 901; /* Un poco más alto que la barra de menú para estar por encima */
+  z-index: 901;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
   padding: 0.5rem 0;
-  pointer-events: none; /* Inicialmente ignore mouse events para no bloquear clicks al resto de la página */
+  pointer-events: none;
 }
 
 .menu-dropdown.show {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  pointer-events: auto; /* Habilitar eventos de ratón cuando se muestra */
+  pointer-events: auto;
 }
 
 .menu-dropdown-item {
@@ -595,7 +617,6 @@ body {
 }
 
 @media (min-width: 1024px) {
-  /* lg */
   .editor-sidebar,
   .editor-right-sidebar {
     max-width: 280px;
@@ -630,4 +651,132 @@ body {
   height: 400px;
   max-width: 100%;
   margin-top: 1rem;
+}
+
+/* --- About Section Specific Styles --- */
+.about-section-content {
+  background-color: #1f2937; /* Darker background than body, lighter than cards */
+  border: 1px solid #374151;
+  border-radius: 1.25rem; /* More rounded corners */
+  padding: 3rem 2rem; /* More vertical padding */
+  max-width: 1000px; /* Limit width for readability */
+  margin: 0 auto; /* Center it */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+  position: relative; /* For potential background effects */
+  overflow: hidden; /* To contain any pseudo-elements or background patterns */
+  /* Patrón SVG sutil, codificado en Base64 */
+  background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="scale(0.8) rotate(45)"><path d="M5 0 L0 10 L10 10 Z" fill="%232d3748" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="%231f2937"/><rect width="100" height="100" fill="url(%23p)"/></svg>');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Capa de degradado sobre el fondo para legibilidad */
+.about-section-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(31, 41, 55, 0.8),
+    rgba(31, 41, 55, 0.1)
+  );
+  z-index: 0; /* Asegura que esté detrás del contenido */
+}
+
+/* Asegura que el contenido esté por encima de la capa de degradado */
+.about-section-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+.about-logo {
+  width: 120px; /* Tamaño del logo */
+  height: auto;
+  opacity: 0.9; /* Ligeramente desvanecido */
+  transition: transform 0.3s ease-in-out;
+}
+
+.about-logo:hover {
+  transform: scale(1.05); /* Pequeño efecto de escala al pasar el ratón */
+}
+
+/* Sombra de texto para mejorar la legibilidad sobre el fondo */
+.about-section-content h2,
+.about-section-content p {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .about-section-content {
+    padding: 2.5rem 1.5rem; /* Ajustar padding para móvil */
+  }
+  .about-logo {
+    width: 100px; /* Logo más pequeño en móvil */
+  }
+}
+
+/* --- Estilos de la Sección de Preguntas Frecuentes (FAQ) - GLOBALES --- */
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+.faq-item {
+  background-color: #1a202c; /* gris-900 */
+  border: 1px solid #2d3748; /* gris-800 */
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  overflow: hidden; /* Importante para el efecto de colapso */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background-color: #2d3748; /* gris-800 */
+  transition: background-color 0.3s ease;
+}
+.faq-question:hover {
+  background-color: #374151; /* gris-700 */
+}
+.faq-arrow {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+.faq-arrow.rotated {
+  transform: rotate(180deg);
+}
+.faq-answer {
+  max-height: 0; /* Por defecto colapsado */
+  overflow: hidden;
+  padding: 0 1.5rem; /* El padding se aplica cuando se expande */
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Transición suave */
+  background-color: #1a202c; /* gris-900 */
+  color: #cbd5e1; /* gris-300 */
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+/* Asegura que el padding se aplique solo cuando está expandido */
+.faq-answer[style*="max-height:"][style*="px"] {
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+}
+.faq-answer ul {
+  /* Estilos para listas dentro de las respuestas de FAQ */
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.75rem;
+  color: #a0aec0; /* gris-400 */
+}
+.faq-answer ul li {
+  margin-bottom: 0.5rem;
 }

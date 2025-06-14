@@ -1,3 +1,8 @@
+/* Esto debe ir al inicio de tu CSS para aplicar el smooth scroll globalmente */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Estilos para el cuadro de sugerencia de prompt */
 .prompt-suggestion-box {
   background-color: #2d3748;
@@ -102,10 +107,6 @@
 }
 
 /* Estilos para el lightbox */
-/* Estas clases .modal-overlay, .modal-content, .modal-close-button, .lightbox-img, 
-       .lightbox-nav-button, .lightbox-thumbnails-container, .lightbox-thumbnail-item
-       son GENERALES si las estás usando en otros modales. Si es así, muévelas a main.css.
-       Por ahora, las dejo aquí asumiendo que solo se usan en ia-img */
 .lightbox-img {
   max-width: 100%;
   max-height: 65vh;
@@ -177,4 +178,550 @@
 .lightbox-thumbnail-item:hover:not(.active) {
   transform: scale(1.02);
   border-color: #4a5568;
+}
+
+/* --- Secciones de Contenido para IA-IMG (Globales en la página) --- */
+.ia-img-section {
+  width: 100%; /* Ahora ocupará el ancho completo del main */
+  padding: 3rem 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
+}
+
+/* Estilos para la sección de introducción (feature-grid) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.feature-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+.feature-item .feature-icon {
+  font-size: 2.5rem;
+  color: #06b6d4;
+  margin-bottom: 0.75rem;
+}
+.feature-item p {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+.feature-item p strong {
+  color: white;
+}
+
+/* Estilos para la sección "Cómo Generar" (step-card-ia) */
+.how-to-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .how-to-steps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step-card-ia {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step-card-ia:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.step-card-ia .step-number {
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.1);
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem auto;
+  border: 2px solid #06b6d4;
+}
+.step-card-ia h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+.step-card-ia p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* Estilos para la sección de consejos (tips-list) */
+.tips-list {
+  list-style: none; /* Quita viñetas por defecto */
+  padding: 0;
+  margin: 2rem auto 0 auto;
+  max-width: 700px;
+  text-align: left;
+}
+.tips-list li {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+.tips-list li:hover {
+  background-color: #374151;
+}
+.tips-list li::before {
+  content: "\f058"; /* Icono de check */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #34d399; /* Verde de éxito */
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.tips-list li strong {
+  color: #06b6d4; /* cyan-500 */
+}
+.tips-list li p {
+  color: #e2e8f0;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0; /* Reiniciar margin para p dentro de li */
+}
+
+/* Estilos para la sección de Casos de Uso (use-cases-grid) */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.use-case-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.use-case-item:hover {
+  transform: translateY(-5px);
+  background-color: #374151;
+}
+.use-case-item .use-case-icon {
+  font-size: 2.8rem;
+  color: #34d399; /* Otro color para variar, un verde */
+  margin-bottom: 0.75rem;
+}
+.use-case-item h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+.use-case-item p {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* Estilos para la sección de Preguntas Frecuentes (FAQ) */
+/* NOTA: Los estilos base de FAQ se han movido a main.css para ser globales. */
+
+/* Estilos específicos para listas dentro de las respuestas de FAQ */
+.faq-section .faq-container .faq-answer ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.75rem;
+  color: #a0aec0;
+}
+.faq-section .faq-container .faq-answer ul li {
+  margin-bottom: 0.5rem;
+}
+
+/* --- Estilos del Editor de Imagenes (CORREGIDO Y MEJORADO) --- */
+#imageEditorModal .modal-content.editor-layout-container {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: 95vh; /* Se fuerza la altura para el layout flexbox */
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+#imageEditorModal .modal-content.editor-layout-container h3 {
+  text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2d3748;
+  margin-bottom: 1rem;
+}
+
+.editor-main-layout-flex {
+  display: flex;
+  flex-grow: 1;
+  gap: 1.5rem;
+  overflow: hidden; /* Importante para que el scroll se maneje en los sidebars */
+}
+
+.editor-layout-container .editor-sidebar {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto; /* ¡AHORA SÍ FUNCIONARÁ EL SCROLL INTERNO! */
+  flex-shrink: 0;
+  width: 280px; /* Ancho fijo para sidebars en desktop */
+  max-height: 100%; /* Ocupa el 100% de la altura disponible de su flex-parent */
+}
+
+.editor-layout-container .editor-canvas-area {
+  background-color: #1a202c;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-grow: 1;
+  min-width: 400px; /* Ancho mínimo para el canvas */
+  min-height: 400px;
+  max-height: 100%; /* Ocupa el 100% de la altura disponible */
+}
+
+.editor-actions {
+  justify-content: center;
+  padding-top: 1rem;
+  border-top: 1px solid #2d3748;
+  margin-top: 1rem;
+}
+
+#imageEditorModal .editor-sidebar button {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+#imageEditorModal .editor-sidebar button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* --- ESTILOS PARA EL GENERADOR IA CON ASIDES Y GALERÍA INTEGRADA --- */
+.ia-generator-layout-container {
+  width: 100%;
+  display: grid; /* Usamos grid para manejar las filas y columnas */
+  grid-template-columns: minmax(200px, 280px) 1fr minmax(200px, 280px); /* Columnas: aside izq, contenido principal, aside der */
+  grid-template-rows: auto auto; /* Filas: 1ra para asides/main, 2da para galería */
+  gap: 1.5rem; /* Espaciado entre celdas de la grid */
+  padding: 1.5rem;
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  min-height: 70vh; /* Altura mínima para el contenedor del generador */
+}
+
+/* Asignar áreas de grid a los elementos */
+.ia-generator-aside.ia-generator-left-aside {
+  grid-column: 1;
+  grid-row: 1;
+}
+.ia-generator-main-content {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex; /* Asegura flexbox interno para el contenido principal */
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem; /* Asegurar padding interno */
+  overflow-y: auto; /* Scroll para el contenido principal si es muy largo */
+  max-height: calc(100vh - 150px); /* Controla la altura máxima para scroll */
+}
+.ia-generator-aside.ia-generator-right-aside {
+  grid-column: 3;
+  grid-row: 1;
+}
+/* La galería abarca todas las columnas en la segunda fila */
+.ia-img-gallery-section.ia-generator-full-width-section {
+  grid-column: 1 / -1; /* Ocupa de la primera a la última columna */
+  grid-row: 2; /* Segunda fila */
+  margin-top: 0; /* Ya no necesita margen superior externo, el gap de grid lo maneja */
+  padding: 1.5rem; /* Mantener padding interno */
+  width: auto; /* Permitir que ocupe el ancho de la grid-column */
+  background-color: #1a202c; /* Mismo fondo que el contenedor padre */
+  border: none; /* Ya tiene borde el padre, o ajusta si quieres un borde interno */
+  box-shadow: none; /* Eliminar sombra si el padre ya la tiene */
+  border-radius: 0; /* Quitar border-radius si ya está en el padre */
+  padding-top: 2rem; /* Espacio superior dentro del contenedor padre */
+  border-top: 1px solid #2d3748; /* Separador visual de la galería */
+}
+
+.ia-generator-aside {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-grow: 0;
+  max-height: calc(100vh - 150px); /* Altura controlada para scroll */
+  min-height: 200px; /* Altura mínima visible */
+}
+
+/* Ajustes para los elementos dentro del ia-generator-main-content */
+.ia-generator-main-content .w-full {
+  width: 100%;
+}
+
+.options-group {
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.options-group:last-child {
+  margin-bottom: 0;
+}
+.recent-generations-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* 2 columnas para imágenes recientes */
+  gap: 0.5rem;
+  max-height: 250px; /* Altura para el scroll en la galería reciente */
+  overflow-y: auto;
+  background-color: #1f2937;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #374151;
+}
+.recent-generations-grid img {
+  width: 100%;
+  height: 80px; /* Altura fija para miniaturas */
+  object-fit: cover;
+  border-radius: 0.3rem;
+  border: 1px solid #4a5568;
+  transition: transform 0.2s ease;
+}
+.recent-generations-grid img:hover {
+  transform: scale(1.05);
+}
+
+/* --- NUEVA SECCIÓN DE GALERÍA PRINCIPAL (AHORA DENTRO DEL LAYOUT DEL GENERADOR) --- */
+/* Estilos aplicados a .ia-img-gallery-section.ia-generator-full-width-section arriba */
+#galleryContainer {
+  max-height: 400px; /* Aumenta la altura máxima para la galería principal */
+  padding: 1rem; /* Más padding para los elementos internos */
+}
+#galleryContainer.grid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(120px, 1fr)
+  ); /* Más columnas para pantallas grandes */
+}
+
+/* --- ESTILOS DEL MODAL DE CARGA Y MENSAJES (NUEVO) --- */
+.loading-overlay-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85); /* Fondo oscuro semitransparente */
+  backdrop-filter: blur(5px); /* Desenfoque del fondo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Asegura que esté por encima de todo */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.loading-overlay-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+.loading-modal-content {
+  background-color: #1a202c; /* Fondo oscuro del modal */
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: white;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#pocoyoGifModal,
+#loadingSpinnerModal {
+  margin-bottom: 1rem;
+}
+#loadingMessageTextModal {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+#loadingErrorTextModal {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* --- Estilos para los botones "Comenzar" de las secciones --- */
+.btn-primary {
+  background-color: #06b6d4; /* Color cian principal */
+  color: white;
+  padding: 0.75rem 2rem; /* Más padding */
+  border-radius: 0.5rem; /* Bordes redondeados */
+  font-weight: 600; /* Negrita */
+  text-decoration: none; /* Quitar subrayado del enlace */
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra sutil */
+}
+
+.btn-primary:hover {
+  background-color: #0e7490; /* Tono más oscuro al hover */
+  transform: translateY(-2px); /* Efecto de "levantar" */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+}
+
+.btn-primary:active {
+  transform: translateY(0); /* Vuelve a la posición original al hacer click */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra más pequeña */
+}
+
+/* Media Queries para responsividad del generador */
+@media (max-width: 1024px) {
+  /* Tablet y móvil */
+  .ia-generator-layout-container {
+    grid-template-columns: 1fr; /* Una sola columna para todos los elementos */
+    grid-template-rows: auto; /* Las filas se autoajustan */
+    padding: 1rem;
+    gap: 1rem;
+    min-height: auto;
+  }
+  .ia-generator-aside,
+  .ia-generator-main-content,
+  .ia-img-gallery-section.ia-generator-full-width-section {
+    grid-column: 1; /* Todos ocupan la única columna */
+    grid-row: auto; /* Se apilan automáticamente */
+    width: 100%; /* Ocupan todo el ancho disponible */
+    max-height: none; /* No hay max-height fijo, el contenedor padre (layout-container) manejará el scroll si es necesario */
+    overflow-y: visible; /* El scroll lo manejará el ia-generator-layout-container si se desborda */
+  }
+
+  .ia-generator-aside {
+    min-height: 150px; /* Altura mínima para asides apilados */
+    max-height: 40vh; /* Altura máxima para asides apilados en móvil, con scroll */
+  }
+  .ia-generator-main-content {
+    min-height: 400px; /* Altura mínima para el contenido principal */
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .section-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .step-card-ia h3 {
+    font-size: 1.3rem;
+  }
+  .step-card-ia p {
+    font-size: 0.9rem;
+  }
+  .feature-item p {
+    font-size: 0.85rem;
+  }
+  .use-case-item h3 {
+    font-size: 1.25rem;
+  }
+  .use-case-item p {
+    font-size: 0.85rem;
+  }
+}
+@media (max-width: 768px) {
+  .ia-generator-aside {
+    max-height: 30vh; /* Ajuste para pantallas más pequeñas */
+  }
+  .recent-generations-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en móviles */
+    max-height: 150px;
+  }
+  .ia-img-gallery-section {
+    padding: 1.5rem 0.5rem; /* Reducir padding en móviles */
+  }
+  #galleryContainer.grid {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(100px, 1fr)
+    ); /* Ajustar columnas para pantallas pequeñas */
+  }
 }

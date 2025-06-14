@@ -70,7 +70,6 @@ function hideCustomMessage() {
   DOMElements.messageModal.classList.remove("show");
   if (DOMElements.messageModalText)
     DOMElements.messageModalText.textContent = "";
-  // ¡CORREGIDO AQUÍ! Era DOMEElements, ahora es DOMElements.
   if (DOMElements.messageModalIcon)
     DOMElements.messageModalIcon.className = "mt-4 text-4xl";
 }
@@ -161,14 +160,10 @@ function dismissSubscription() {
   }
 }
 
-// --- BARRA DE NAVEGACIÓN (ACTIVE CLASS) - VERSIÓN FINAL CORREGIDA ---
+// --- BARRA DE NAVEGACIÓN (ACTIVE CLASS) ---
 function updateActiveClass() {
-  console.log("--- updateActiveClass: Ejecutando ---");
   const navbarContent = document.querySelector(".navbar-inner-content");
   if (!navbarContent) {
-    console.log(
-      "updateActiveClass: .navbar-inner-content no encontrado. Saliendo."
-    );
     return;
   }
 
@@ -187,9 +182,6 @@ function updateActiveClass() {
     .forEach((span) => {
       span.classList.remove("active-link");
     });
-  console.log(
-    "updateActiveClass: Clases 'active-link' reseteadas en todos los elementos relevantes."
-  );
 
   const currentPath = window.location.pathname;
 
@@ -205,32 +197,17 @@ function updateActiveClass() {
   };
 
   const normalizedCurrentPath = normalizePath(currentPath);
-  console.log(
-    "updateActiveClass: Ruta actual normalizada (normalizedCurrentPath):",
-    normalizedCurrentPath
-  );
 
   // Itera sobre todos los enlaces (<a>) y elementos de submenú (.submenu-item)
   navbarContent.querySelectorAll("a, .submenu-item").forEach((item) => {
     const href = item.getAttribute("href");
 
-    // --- ¡¡NUEVA COMPROBACIÓN CLAVE!! ---
-    // Ignora los enlaces que solo son '#'
     if (href === "#" || !href) {
-      // También manejar si href es null o vacío
-      console.log(
-        `  - Ignorando ítem con Href='#': "${item.textContent.trim()}"`
-      );
       return; // Pasa al siguiente elemento del bucle
     }
-    // --- FIN NUEVA COMPROBACIÓN CLAVE ---
 
-    // Resto de la lógica permanece igual
     const itemPath = normalizePath(
       new URL(href, window.location.origin + window.location.pathname).pathname
-    );
-    console.log(
-      `  - Comprobando: "${item.textContent.trim()}" | Href original: "${href}" | Ruta normalizada del ítem (itemPath): "${itemPath}"`
     );
 
     let isActive = false;
@@ -242,7 +219,6 @@ function updateActiveClass() {
     }
 
     if (isActive) {
-      console.log(`  -> ¡ACTIVADO!: "${item.textContent.trim()}"`);
       item.classList.add("active-link");
       item.setAttribute("aria-current", "page");
 
@@ -252,16 +228,12 @@ function updateActiveClass() {
         if (parentNavItem) {
           const parentSpan = parentNavItem.querySelector("span.cursor-pointer");
           if (parentSpan) {
-            console.log(
-              `  -> Activando padre para "${item.textContent.trim()}": "${parentNavItem.textContent.trim()}"`
-            );
             parentSpan.classList.add("active-link");
           }
         }
       }
     }
   });
-  console.log("--- updateActiveClass: Finalizado ---");
 }
 
 // --- initGlobalApp: la función principal de inicialización para scripts generales ---
@@ -357,7 +329,34 @@ function initGlobalApp() {
     });
   }
 
+  // **NUEVO/REVISADO: Funcionalidad FAQ GLOBAL**
+  const faqQuestions = document.querySelectorAll(".faq-question");
+  if (faqQuestions.length > 0) {
+    faqQuestions.forEach((question) => {
+      // Eliminar listeners antiguos si existieran para evitar duplicados
+      question.removeEventListener("click", toggleFaqAnswer);
+      // Añadir el nuevo listener
+      question.addEventListener("click", toggleFaqAnswer);
+    });
+  }
+
   updateActiveClass();
+}
+
+// Función separada para el listener de FAQ para poder removerlo
+function toggleFaqAnswer(event) {
+  const question = event.currentTarget;
+  const answer = question.nextElementSibling;
+  const arrow = question.querySelector(".faq-arrow");
+
+  // Alternar la altura máxima para expandir/colapsar
+  if (answer.style.maxHeight && answer.style.maxHeight !== "0px") {
+    answer.style.maxHeight = "0px";
+  } else {
+    answer.style.maxHeight = answer.scrollHeight + "px";
+  }
+  // Alternar la clase para rotar la flecha
+  arrow.classList.toggle("rotated");
 }
 
 // Llama a initGlobalApp cuando el DOM esté completamente cargado

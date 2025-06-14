@@ -5,7 +5,7 @@ const CONFIG = {
   API_BASE_URL: "https://image.pollinations.ai/prompt/",
   MAX_RETRIES: 2,
   RETRY_DELAY_MS: 1500,
-  TIMEOUT_MS: 10000,
+  TIMEOUT_MS: 30000, // Aumentado el timeout para generación de imágenes (30 segundos)
   MAX_GALLERY_IMAGES: 12,
   PROMPT_SUGGESTION_DELAY_SECONDS: 10,
   OBELISAI_LOGO_URL: "../img/marca_de_agua.webp",
@@ -20,8 +20,11 @@ const CONFIG = {
     "https://placehold.co/600x400/EDE7F6/5E35B1?alt=Retrato+surrealista+simulado",
   ],
   MIN_IMPROVED_PROMPT_LENGTH: 150,
-  GALLERY_MAX_WIDTH: 600,
+  GALLERY_MAX_WIDTH: 600, // Ancho máximo para optimización de galería
   GALLERY_JPEG_QUALITY: 0.85,
+  // Dimensiones predeterminadas para generación de imágenes
+  DEFAULT_IMAGE_WIDTH: 768,
+  DEFAULT_IMAGE_HEIGHT: 768,
 };
 
 // --- Variables de Estado Globales (específicas de este módulo) ---
@@ -29,6 +32,7 @@ let freeGenerationsLeft = CONFIG.MAX_FREE_GENERATIONS;
 let selectedGalleryImages = new Set();
 let currentLightboxIndex = 0;
 let fallbackImageIndex = 0;
+let lastGeneratedImageUrl = null; // Para el botón de descarga rápida
 
 let editorCtx;
 let originalEditorImage = new Image();
@@ -42,10 +46,7 @@ let editorTextData = {
 };
 let editingImageUrl = null;
 
-// ¡¡IMPORTANTE!! ELIMINA LA LÍNEA 'let DOMElements;' DE AQUÍ.
-// DOMElements ahora es una variable global declarada y manejada en global.js.
-
-// --- FUNCIONES (específicas de este módulo - todas las funciones globales se han eliminado) ---
+// --- FUNCIONES (específicas de este módulo) ---
 
 /**
  * Procesa una imagen: recorta la parte inferior (para eliminar marcas de agua de terceros)
@@ -236,7 +237,7 @@ function renderGallery() {
     imgElement.alt = `Imagen de galería ${index + 1}`;
     imgElement.classList.add(
       "w-full",
-      "h-32",
+      "h-32", // Altura fija para la galería principal
       "object-cover",
       "cursor-pointer",
       "transition-transform",
@@ -292,8 +293,9 @@ function renderGallery() {
     );
 
     const downloadBtn = document.createElement("button");
+    // CORRECCIÓN DE LA RUTA DEL SVG: Se ha eliminado el 'S' erróneo.
     downloadBtn.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 S01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
+      '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
     downloadBtn.title = "Descargar esta imagen";
     downloadBtn.classList.add(
       "text-white",
@@ -365,15 +367,52 @@ function renderGallery() {
   });
 }
 
-function toggleImageSelection(imageUrl, checkbox, itemWrapper) {
-  if (checkbox.checked) {
-    selectedGalleryImages.add(imageUrl);
-    itemWrapper.classList.add("selected");
-  } else {
-    selectedGalleryImages.delete(imageUrl);
-    itemWrapper.classList.remove("selected");
+function renderRecentGenerations() {
+  const images = loadGalleryImages();
+  DOMElements.recentGenerationsGallery.innerHTML = ""; // Clear previous content
+
+  if (images.length === 0) {
+    DOMElements.recentGenerationsGallery.innerHTML =
+      '<p class="text-gray-500 text-sm text-center col-span-2">Genera algunas imágenes para ver tu historial aquí.</p>';
+    DOMElements.downloadLastGeneratedButton.disabled = true;
+    DOMElements.downloadLastGeneratedButton.classList.add(
+      "opacity-50",
+      "cursor-not-allowed"
+    );
+    return;
   }
-  updateDownloadSelectedButtonState();
+
+  const numToShow = Math.min(images.length, 4); // Show up to 4 recent images
+  for (let i = 0; i < numToShow; i++) {
+    const imageUrl = images[i];
+    const imgElement = document.createElement("img");
+    imgElement.src = imageUrl;
+    imgElement.alt = `Historial ${i + 1}`;
+    imgElement.classList.add(
+      "w-full",
+      "h-20",
+      "object-cover",
+      "rounded-md",
+      "cursor-pointer",
+      "border",
+      "border-gray-700",
+      "hover:border-cyan-500",
+      "transition-colors"
+    );
+    imgElement.addEventListener("click", () => openLightbox(imageUrl));
+    imgElement.onerror = () => {
+      imgElement.src = "https://placehold.co/80x80/374151/D1D5DB?text=Error";
+    };
+    DOMElements.recentGenerationsGallery.appendChild(imgElement);
+  }
+
+  // Enable download last generated button
+  lastGeneratedImageUrl = images[0]; // The most recent image
+  DOMElements.downloadLastGeneratedButton.disabled = false;
+  DOMElements.downloadLastGeneratedButton.classList.remove(
+    "opacity-50",
+    "cursor-not-allowed"
+  );
 }
 
 function updateDownloadSelectedButtonState() {
@@ -434,7 +473,7 @@ function deleteImageFromGallery(imageUrlToDelete) {
   if (images.length < initialLength) {
     localStorage.setItem("generatedImages", JSON.stringify(images));
     renderGallery();
-    updateLocalStorageUsage(); // Llama a la función global
+    renderRecentGenerations(); // Update recent generations after deletion
     showCustomMessage("Imagen eliminada de la galería.", "success", 2000);
   } else {
     showCustomMessage("No se encontró la imagen para eliminar.", "error", 2000);
@@ -458,7 +497,7 @@ function deleteSelectedImagesFromGallery() {
   if (images.length < initialLength) {
     localStorage.setItem("generatedImages", JSON.stringify(images));
     renderGallery();
-    updateLocalStorageUsage(); // Llama a la función global
+    renderRecentGenerations(); // Update recent generations after deletion
     showCustomMessage(
       `Se eliminaron ${initialLength - images.length} imágenes seleccionadas.`,
       "success",
@@ -574,14 +613,50 @@ function showPrevImage() {
   updateLightboxContent();
 }
 
-function handlePocoyoError() {
-  if (DOMElements.pocoyoGif) {
-    DOMElements.pocoyoGif.classList.add("hidden");
+// --- Modal de Carga y Mensajes de Generación (NUEVO) ---
+function showLoadingOverlay(
+  message = "Generando tu imagen, por favor espera...",
+  isError = false
+) {
+  if (!DOMElements.loadingOverlayModal) {
+    console.error("Loading overlay modal elements not found.");
+    return;
   }
-  if (DOMElements.loadingSpinner) {
-    DOMElements.loadingSpinner.classList.remove("hidden");
+  DOMElements.loadingMessageTextModal.textContent = message;
+  DOMElements.loadingErrorTextModal.classList.add("hidden"); // Ocultar errores previos
+
+  if (isError) {
+    DOMElements.loadingErrorTextModal.textContent = message;
+    DOMElements.loadingErrorTextModal.classList.remove("hidden");
+    DOMElements.loadingMessageTextModal.textContent = "¡Ha ocurrido un error!"; // Mensaje principal para error
+    DOMElements.pocoyoGifModal.classList.add("hidden");
+    DOMElements.loadingSpinnerModal.classList.add("hidden");
+    DOMElements.loadingModalCloseButton.classList.remove("hidden"); // Mostrar botón de cerrar en error
+  } else {
+    DOMElements.loadingModalCloseButton.classList.add("hidden"); // Ocultar botón si no hay error
+    // Decidir si mostrar Pocoyo o spinner
+    if (
+      DOMElements.pocoyoGifModal &&
+      !DOMElements.pocoyoGifModal.classList.contains("hidden")
+    ) {
+      // Pocoyo ya está visible o se intenta mostrar
+    } else if (DOMElements.loadingSpinnerModal) {
+      DOMElements.pocoyoGifModal.classList.add("hidden"); // Asegurarse de que Pocoyo esté oculto si el spinner debe verse
+      DOMElements.loadingSpinnerModal.classList.remove("hidden");
+    }
   }
-  console.warn("Pocoyo GIF failed to load, displaying spinner instead.");
+  DOMElements.loadingOverlayModal.classList.add("show");
+}
+
+function hideLoadingOverlay() {
+  if (!DOMElements.loadingOverlayModal) return;
+  DOMElements.loadingOverlayModal.classList.remove("show");
+  DOMElements.loadingMessageTextModal.textContent = "";
+  DOMElements.loadingErrorTextModal.textContent = "";
+  DOMElements.loadingErrorTextModal.classList.add("hidden");
+  DOMElements.pocoyoGifModal.classList.remove("hidden"); // Resetear para la próxima vez
+  DOMElements.loadingSpinnerModal.classList.add("hidden"); // Ocultar spinner al finalizar
+  DOMElements.loadingModalCloseButton.classList.add("hidden"); // Asegurarse de que esté oculto
 }
 
 function updateGenerationCounterUI() {
@@ -593,16 +668,13 @@ function updateGenerationCounterUI() {
   DOMElements.watchAdButton.classList.toggle("hidden", !isDisabled);
 
   if (isDisabled) {
-    showCustomMessage(
-      "Has agotado tus generaciones gratuitas. Mira un anuncio para obtener más.",
-      "info",
-      5000
-    );
+    // Si no hay generaciones, mostrar un mensaje de ayuda en la UI principal, no en el modal flotante
+    DOMElements.generationCounter.textContent += " (Ver anuncio para más)";
   }
 }
 
 function watchAdForGenerations() {
-  showCustomMessage("Simulando anuncio... por favor espera.", "info", 3000);
+  showCustomMessage("Simulando anuncio... por favor espera.", "info", 3000); // Usar modal global para esta notificación
   DOMElements.watchAdButton.disabled = true;
 
   setTimeout(() => {
@@ -623,7 +695,7 @@ function showPromptSuggestionBox() {
 }
 
 async function generatePromptSuggestion() {
-  DOMElements.promptSuggestionLoading.classList.remove("hidden");
+  showLoadingOverlay("Generando una sugerencia de prompt...", false);
   DOMElements.generatePromptSuggestionButton.disabled = true;
 
   try {
@@ -632,13 +704,12 @@ async function generatePromptSuggestion() {
 
     let chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }]; // Prepara el historial para la API
 
-    // Llama a tu serverless function en Vercel, no a la API de Google directamente
     const response = await fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        prompt: promptForLLM, // Puedes enviar el prompt original también si tu función proxy lo necesita
-        chatHistory: chatHistory, // Envía el historial de chat que será usado por la serverless function
+        prompt: promptForLLM,
+        chatHistory: chatHistory,
       }),
     });
 
@@ -662,6 +733,7 @@ async function generatePromptSuggestion() {
       const generatedText = result.candidates[0].content.parts[0].text;
       DOMElements.promptInput.value = generatedText;
       DOMElements.promptSuggestionBox.classList.remove("show");
+      showCustomMessage("Sugerencia de prompt generada.", "success");
     } else {
       throw new Error(
         "Respuesta inesperada de la IA para el prompt a través del proxy."
@@ -669,12 +741,9 @@ async function generatePromptSuggestion() {
     }
   } catch (error) {
     console.error("Error al generar prompt sugerido (frontend):", error);
-    showCustomMessage(
-      `No se pudo generar un prompt. ${error.message}`,
-      "error"
-    );
+    showLoadingOverlay(`No se pudo generar un prompt: ${error.message}`, true); // Mostrar error en modal de carga
   } finally {
-    DOMElements.promptSuggestionLoading.classList.add("hidden");
+    hideLoadingOverlay();
     DOMElements.generatePromptSuggestionButton.disabled = false;
   }
 }
@@ -689,11 +758,7 @@ async function improvePrompt() {
     return;
   }
 
-  DOMElements.loadingIndicator.classList.remove("hidden");
-  DOMElements.pocoyoGif.classList.add("hidden");
-  DOMElements.loadingSpinner.classList.remove("hidden");
-  DOMElements.loadingMessageText.textContent =
-    "Mejorando el prompt... Por favor, espera.";
+  showLoadingOverlay("Mejorando el prompt... Por favor, espera.", false);
 
   DOMElements.improvePromptButton.disabled = true;
   DOMElements.generateButton.disabled = true;
@@ -705,7 +770,6 @@ async function improvePrompt() {
 
     let chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }]; // Prepara el historial
 
-    // Llama a tu serverless function en Vercel
     const response = await fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -750,18 +814,12 @@ async function improvePrompt() {
     }
   } catch (error) {
     console.error("Error al mejorar prompt (frontend):", error);
-    showCustomMessage(
-      `No se pudo mejorar el prompt. ${error.message}`,
-      "error"
-    );
+    showLoadingOverlay(`No se pudo mejorar el prompt: ${error.message}`, true);
   } finally {
-    DOMElements.loadingIndicator.classList.add("hidden");
-    DOMElements.pocoyoGif.classList.add("hidden");
-    DOMElements.loadingSpinner.classList.add("hidden");
+    hideLoadingOverlay();
     DOMElements.improvePromptButton.disabled = false;
     DOMElements.generateButton.disabled = false;
     DOMElements.promptInput.disabled = false;
-    DOMElements.loadingMessageText.textContent = "";
   }
 }
 
@@ -783,21 +841,46 @@ async function generateImage() {
     return;
   }
 
-  DOMElements.loadingIndicator.classList.remove("hidden");
-  DOMElements.pocoyoGif.classList.remove("hidden");
-  DOMElements.loadingSpinner.classList.add("hidden");
+  showLoadingOverlay(
+    `Generando tu imagen de "${prompt}"... Esto puede tardar unos 2-3 minutos, por favor espera.`,
+    false
+  );
   DOMElements.generatedImage.classList.add("hidden");
   DOMElements.imagePlaceholderText.classList.add("hidden");
   DOMElements.downloadMainImageButton.classList.add("hidden");
   DOMElements.promptSuggestionBox.classList.remove("show");
 
-  if (DOMElements.pocoyoGif) {
-    DOMElements.pocoyoGif.onerror = handlePocoyoError;
+  const selectedStyle = DOMElements.styleSelect.value;
+  const selectedAspectRatio = DOMElements.aspectRatioSelect.value;
+
+  let finalPrompt = prompt;
+  if (selectedStyle !== "none") {
+    finalPrompt += `, ${selectedStyle} style`;
   }
 
-  DOMElements.loadingMessageText.textContent = `Generando tu imagen de "${prompt}"... Esto puede tardar unos 2-3 minutos, por favor espera.`;
+  let width = CONFIG.DEFAULT_IMAGE_WIDTH;
+  let height = CONFIG.DEFAULT_IMAGE_HEIGHT;
 
-  const encodedPrompt = encodeURIComponent(prompt);
+  switch (selectedAspectRatio) {
+    case "1:1":
+      width = 768;
+      height = 768;
+      break; // Cuadrado
+    case "16:9":
+      width = 1024;
+      height = 576;
+      break; // Horizontal
+    case "9:16":
+      width = 576;
+      height = 1024;
+      break; // Vertical
+    case "4:3":
+      width = 800;
+      height = 600;
+      break; // Estándar
+  }
+
+  const encodedPrompt = encodeURIComponent(finalPrompt);
   let originalImageUrl = "";
   let processedImageUrl = "";
   let success = false;
@@ -810,7 +893,7 @@ async function generateImage() {
     try {
       const currentPollinationUrl = `${
         CONFIG.API_BASE_URL
-      }${encodedPrompt}?_=${new Date().getTime()}&attempt=${attemptCount}`;
+      }${encodedPrompt}?width=${width}&height=${height}&_=${new Date().getTime()}&attempt=${attemptCount}`;
 
       const loadImagePromise = new Promise((resolve, reject) => {
         const img = new Image();
@@ -829,14 +912,15 @@ async function generateImage() {
       );
 
       originalImageUrl = await Promise.race([loadImagePromise, timeoutPromise]);
-      // Procesa la imagen con tu marca de agua ANTES de la galería
       processedImageUrl = await processImageWithLogo(originalImageUrl);
 
       const optimizedImageUrlForGallery = await processImageForGallery(
         processedImageUrl
-      ); // Optimiza la imagen ya con tu marca de agua
+      );
 
-      saveImageToGallery(optimizedImageUrlForGallery); // Guarda la imagen optimizada en localStorage
+      saveImageToGallery(optimizedImageUrlForGallery);
+      lastGeneratedImageUrl = processedImageUrl; // Guarda la URL de la imagen procesada
+      localStorage.setItem("lastGeneratedImageUrlDisplayed", processedImageUrl); // Guarda para mostrar al cargar la página
 
       success = true;
 
@@ -846,11 +930,10 @@ async function generateImage() {
     } catch (error) {
       console.warn(`Intento ${attemptCount + 1} fallido: ${error.message}`);
       if (attemptCount === CONFIG.MAX_RETRIES) {
-        showCustomMessage(
+        showLoadingOverlay(
           `Todos los intentos para generar la imagen con IA fallaron: ${error.message}.`,
-          "error"
+          true
         );
-        handlePocoyoError();
       } else {
         await new Promise((resolve) =>
           setTimeout(resolve, CONFIG.RETRY_DELAY_MS)
@@ -860,22 +943,14 @@ async function generateImage() {
   }
 
   if (success && processedImageUrl) {
-    DOMElements.generatedImage.src = processedImageUrl; // Muestra la imagen FINAL PROCESADA (con tu marca de agua)
+    DOMElements.generatedImage.src = processedImageUrl;
     DOMElements.generatedImage.alt = `Imagen generada: ${prompt}`;
     DOMElements.generatedImage.classList.remove("hidden");
     DOMElements.imagePlaceholderText.classList.add("hidden");
-    DOMElements.downloadMainImageButton.classList.remove("hidden"); // Botón de descarga principal debería descargar la procesada
+    DOMElements.downloadMainImageButton.classList.remove("hidden");
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    renderGallery(); // La galería ya se actualiza con la versión optimizada
-
-    DOMElements.generatedImage.src =
-      "https://placehold.co/600x400/374151/D1D5DB?text=Tu+imagen+aparecerá+aquí";
-    DOMElements.generatedImage.alt = "Placeholder para imagen generada por IA";
-    DOMElements.generatedImage.classList.add("hidden");
-    DOMElements.imagePlaceholderText.classList.remove("hidden");
-    DOMElements.downloadMainImageButton.classList.add("hidden");
+    renderGallery(); // Actualizar galería principal
+    renderRecentGenerations(); // Actualizar galería reciente en aside
 
     showCustomMessage(
       "¡Imagen generada y guardada en tu galería!",
@@ -887,25 +962,47 @@ async function generateImage() {
     fallbackImageIndex =
       (fallbackImageIndex + 1) % CONFIG.FALLBACK_IMAGES.length;
     DOMElements.generatedImage.src = fallbackUrl;
+    DOMElements.generatedImage.alt = "Imagen de ejemplo";
     DOMElements.downloadMainImageButton.classList.add("hidden");
     showCustomMessage(
       "No se pudo generar la imagen con IA. Se mostró una imagen de ejemplo.",
       "info"
     );
+    renderGallery(); // Asegurarse de que la galería se renderice incluso con fallo
+    renderRecentGenerations(); // Asegurarse de que el historial reciente se renderice
   }
 
-  DOMElements.loadingIndicator.classList.add("hidden");
-  DOMElements.pocoyoGif.classList.add("hidden");
-  DOMElements.loadingSpinner.classList.add("hidden");
+  hideLoadingOverlay();
 }
 
 function openImageEditor(imageUrl) {
   editingImageUrl = imageUrl;
   originalEditorImage.src = imageUrl;
   originalEditorImage.onload = () => {
-    editorCanvas.width = originalEditorImage.naturalWidth;
-    editorCanvas.height = originalEditorImage.naturalHeight;
-    editorCtx = editorCanvas.getContext("2d");
+    // Asegurarse de que el canvas se ajuste a la imagen si es necesario
+    const aspectRatio =
+      originalEditorImage.naturalWidth / originalEditorImage.naturalHeight;
+    const maxCanvasHeight = window.innerHeight * 0.7; // Por ejemplo, 70% de la altura de la ventana
+    const maxCanvasWidth = window.innerWidth * 0.7; // Por ejemplo, 70% de la anchura de la ventana
+
+    let newWidth = originalEditorImage.naturalWidth;
+    let newHeight = originalEditorImage.naturalHeight;
+
+    if (newWidth > maxCanvasWidth) {
+      newWidth = maxCanvasWidth;
+      newHeight = newWidth / aspectRatio;
+    }
+    if (newHeight > maxCanvasHeight) {
+      newHeight = maxCanvasHeight;
+      newWidth = newHeight * aspectRatio;
+    }
+
+    DOMElements.editorCanvas.width = newWidth;
+    DOMElements.editorCanvas.height = newHeight;
+    DOMElements.editorCanvas.style.width = `${newWidth}px`;
+    DOMElements.editorCanvas.style.height = `${newHeight}px`;
+
+    editorCtx = DOMElements.editorCanvas.getContext("2d");
     redrawEditorCanvas();
     DOMElements.imageEditorModal.classList.add("show");
   };
@@ -932,7 +1029,12 @@ function closeImageEditor() {
 function redrawEditorCanvas() {
   if (!editorCtx || !originalEditorImage.complete) return;
 
-  editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+  editorCtx.clearRect(
+    0,
+    0,
+    DOMElements.editorCanvas.width,
+    DOMElements.editorCanvas.height
+  );
 
   let drawX = 0,
     drawY = 0,
@@ -945,6 +1047,7 @@ function redrawEditorCanvas() {
     parseInt(DOMElements.cropHeightInput.value) ||
     originalEditorImage.naturalHeight;
 
+  // Si hay valores de recorte, ajusta las dimensiones de origen
   if (
     cropW < originalEditorImage.naturalWidth ||
     cropH < originalEditorImage.naturalHeight
@@ -955,16 +1058,17 @@ function redrawEditorCanvas() {
     drawH = cropH;
   }
 
+  // Dibuja la porción recortada de la imagen original en el canvas con las nuevas dimensiones del canvas
   editorCtx.drawImage(
     originalEditorImage,
-    drawX,
-    drawY,
-    drawW,
-    drawH,
-    0,
-    0,
-    editorCanvas.width,
-    editorCanvas.height
+    drawX, // sourceX
+    drawY, // sourceY
+    drawW, // sourceWidth
+    drawH, // sourceHeight
+    0, // destX
+    0, // destY
+    DOMElements.editorCanvas.width, // destWidth (ajustado a la nueva anchura del canvas)
+    DOMElements.editorCanvas.height // destHeight (ajustado a la nueva altura del canvas)
   );
 
   applyFilterToCanvas(editorCurrentFilter);
@@ -984,30 +1088,31 @@ function redrawEditorCanvas() {
         textY = margin;
         break;
       case "topRight":
+        // Asegúrate de que el cálculo del ancho del texto se haga después de establecer la fuente
         textX =
-          editorCanvas.width -
+          DOMElements.editorCanvas.width -
           editorCtx.measureText(editorTextData.content).width -
           margin;
         textY = margin;
         break;
       case "bottomLeft":
         textX = margin;
-        textY = editorCanvas.height - editorTextData.size - margin;
+        textY = DOMElements.editorCanvas.height - editorTextData.size - margin;
         break;
       case "center":
         textX =
-          (editorCanvas.width -
+          (DOMElements.editorCanvas.width -
             editorCtx.measureText(editorTextData.content).width) /
           2;
-        textY = (editorCanvas.height - editorTextData.size) / 2;
+        textY = (DOMElements.editorCanvas.height - editorTextData.size) / 2;
         break;
       case "bottomRight":
       default:
         textX =
-          editorCanvas.width -
+          DOMElements.editorCanvas.width -
           editorCtx.measureText(editorTextData.content).width -
           margin;
-        textY = editorCanvas.height - editorTextData.size - margin;
+        textY = DOMElements.editorCanvas.height - editorTextData.size - margin;
         break;
     }
     editorCtx.fillText(editorTextData.content, textX, textY);
@@ -1021,13 +1126,57 @@ function applyFilterToCanvas(filter) {
   } else {
     editorCtx.filter = "none";
   }
+  // Redibuja la imagen de base con el filtro aplicado
   editorCtx.drawImage(
     originalEditorImage,
     0,
     0,
-    editorCanvas.width,
-    editorCanvas.height
+    DOMElements.editorCanvas.width,
+    DOMElements.editorCanvas.height
   );
+  // Vuelve a dibujar el texto encima si existe
+  if (editorTextData.content) {
+    editorCtx.font = `${editorTextData.size}px Arial`;
+    editorCtx.fillStyle = editorTextData.color;
+    editorCtx.textAlign = "left";
+    editorCtx.textBaseline = "top";
+    let textX, textY;
+    const margin = 20;
+    // Recalcular posiciones de texto para asegurar que se muestre correctamente sobre el filtro
+    switch (editorTextData.position) {
+      case "topLeft":
+        textX = margin;
+        textY = margin;
+        break;
+      case "topRight":
+        textX =
+          DOMElements.editorCanvas.width -
+          editorCtx.measureText(editorTextData.content).width -
+          margin;
+        textY = margin;
+        break;
+      case "bottomLeft":
+        textX = margin;
+        textY = DOMElements.editorCanvas.height - editorTextData.size - margin;
+        break;
+      case "center":
+        textX =
+          (DOMElements.editorCanvas.width -
+            editorCtx.measureText(editorTextData.content).width) /
+          2;
+        textY = (DOMElements.editorCanvas.height - editorTextData.size) / 2;
+        break;
+      case "bottomRight":
+      default:
+        textX =
+          DOMElements.editorCanvas.width -
+          editorCtx.measureText(editorTextData.content).width -
+          margin;
+        textY = DOMElements.editorCanvas.height - editorTextData.size - margin;
+        break;
+    }
+    editorCtx.fillText(editorTextData.content, textX, textY);
+  }
 }
 
 function addTextToCanvas() {
@@ -1050,46 +1199,43 @@ function applyCrop() {
   const tempCanvas = document.createElement("canvas");
   const tempCtx = tempCanvas.getContext("2d");
 
+  // Establece las dimensiones temporales del canvas al tamaño del recorte deseado
   tempCanvas.width = width;
   tempCanvas.height = height;
 
+  // Calcula las coordenadas de origen para un recorte centrado
   const sourceX = (originalEditorImage.naturalWidth - width) / 2;
   const sourceY = (originalEditorImage.naturalHeight - height) / 2;
 
-  const finalSourceX = Math.max(0, sourceX);
-  const finalSourceY = Math.max(0, sourceY);
-  const finalSourceWidth = Math.min(
-    width,
-    originalEditorImage.naturalWidth - finalSourceX
-  );
-  const finalSourceHeight = Math.min(
-    height,
-    originalEditorImage.naturalHeight - finalSourceY
-  );
-
+  // Dibuja la porción recortada de la imagen original en el canvas temporal
   tempCtx.drawImage(
     originalEditorImage,
-    finalSourceX,
-    finalSourceY,
-    finalSourceWidth,
-    finalSourceHeight,
-    0,
-    0,
-    width,
-    height
+    sourceX, // sourceX: Coordenada X inicial del recorte en la imagen original
+    sourceY, // sourceY: Coordenada Y inicial del recorte en la imagen original
+    width, // sourceWidth: Ancho del recorte en la imagen original
+    height, // sourceHeight: Alto del recorte en la imagen original
+    0, // destX: Coordenada X inicial en el canvas temporal
+    0, // destY: Coordenada Y inicial en el canvas temporal
+    width, // destWidth: Ancho de la imagen dibujada en el canvas temporal
+    height // destHeight: Alto de la imagen dibujada en el canvas temporal
   );
 
+  // Convierte el canvas temporal a una URL de datos y actualiza la imagen original del editor
   originalEditorImage.src = tempCanvas.toDataURL("image/png");
   originalEditorImage.onload = () => {
-    editorCanvas.width = originalEditorImage.naturalWidth;
-    editorCanvas.height = originalEditorImage.naturalHeight;
+    // Ajusta las dimensiones del canvas principal del editor para que coincidan con la nueva imagen recortada
+    DOMElements.editorCanvas.width = originalEditorImage.naturalWidth;
+    DOMElements.editorCanvas.height = originalEditorImage.naturalHeight;
+    // Vuelve a dibujar el canvas con la imagen recortada y el filtro/texto aplicados
     redrawEditorCanvas();
     showCustomMessage("Imagen recortada con éxito.", "success", 2000);
   };
 }
 
 function saveEditedImage() {
-  const editedImageUrl = editorCanvas.toDataURL("image/png");
+  // Asegurarse de que el canvas esté dibujado con los últimos cambios
+  redrawEditorCanvas();
+  const editedImageUrl = DOMElements.editorCanvas.toDataURL("image/png");
 
   let images = loadGalleryImages();
   const indexToUpdate = images.findIndex((url) => url === editingImageUrl);
@@ -1098,6 +1244,7 @@ function saveEditedImage() {
     images[indexToUpdate] = editedImageUrl;
     localStorage.setItem("generatedImages", JSON.stringify(images));
     renderGallery();
+    renderRecentGenerations(); // Update recent generations after edit
     showCustomMessage(
       "Imagen editada y guardada en la galería.",
       "success",
@@ -1162,12 +1309,12 @@ function initApp() {
   Object.assign(DOMElements, {
     promptInput: document.getElementById("promptInput"),
     generateButton: document.getElementById("generateButton"),
-    loadingIndicator: document.getElementById("loadingIndicator"),
-    pocoyoGif: document.getElementById("pocoyoGif"),
-    loadingSpinner: document.getElementById("loadingSpinner"),
-    // Elimina elementos globales que ahora se inicializan en global.js
-    // localStorageUsage: document.getElementById("localStorageUsage"),
-    loadingMessageText: document.getElementById("loadingMessageText"),
+    loadingOverlayModal: document.getElementById("loadingOverlayModal"), // Nuevo modal de carga
+    pocoyoGifModal: document.getElementById("pocoyoGifModal"),
+    loadingSpinnerModal: document.getElementById("loadingSpinnerModal"),
+    loadingMessageTextModal: document.getElementById("loadingMessageTextModal"),
+    loadingErrorTextModal: document.getElementById("loadingErrorTextModal"),
+    loadingModalCloseButton: document.getElementById("loadingModalCloseButton"),
     generatedImage: document.getElementById("generatedImage"),
     imagePlaceholderText: document.getElementById("imagePlaceholderText"),
     downloadMainImageButton: document.getElementById("downloadMainImageButton"),
@@ -1176,7 +1323,7 @@ function initApp() {
     downloadSelectedButton: document.getElementById("downloadSelectedButton"),
     clearSelectionButton: document.getElementById("clearSelectionButton"),
     deleteSelectedButton: document.getElementById("deleteSelectedButton"),
-    downloadMessage: document.getElementById("downloadMessage"),
+    downloadMessage: document.getElementById("downloadMessage"), // Este puede no ser necesario si se usa el nuevo modal
     lightbox: document.getElementById("lightbox"),
     lightboxImage: document.getElementById("lightboxImage"),
     lightboxCloseButton: document.getElementById("lightboxCloseButton"),
@@ -1190,17 +1337,6 @@ function initApp() {
     promptSuggestionLoading: document.getElementById("promptSuggestionLoading"),
     toneSelect: document.getElementById("toneSelect"),
     improvePromptButton: document.getElementById("improvePromptButton"),
-    // Elimina elementos globales que ahora se inicializan en global.js
-    // cookieConsent: document.getElementById("cookieConsent"),
-    // acceptCookiesButton: document.getElementById("acceptCookiesButton"),
-    // subscriptionModal: document.getElementById("subscriptionModal"),
-    // emailInput: document.getElementById("emailInput"),
-    // subscribeButton: document.getElementById("subscribeButton"),
-    // noThanksButton: document.getElementById("noThanksButton"),
-    // messageModal: document.getElementById("messageModal"),
-    // messageModalCloseButton: document.getElementById("messageModalCloseButton"),
-    // messageModalText: document.getElementById("messageModalText"),
-    // messageModalIcon: document.getElementById("messageModalIcon"),
     generationCounter: document.getElementById("generationCounter"),
     watchAdButton: document.getElementById("watchAdButton"),
     imageEditorModal: document.getElementById("imageEditorModal"),
@@ -1217,14 +1353,15 @@ function initApp() {
     cropHeightInput: document.getElementById("cropHeightInput"),
     saveEditedImageButton: document.getElementById("saveEditedImageButton"),
     cancelEditButton: document.getElementById("cancelEditButton"),
-    // Elimina elementos globales que ahora se inicializan en global.js
-    // menuToggle: document.getElementById("menuToggle"),
-    // navLinksContainer: document.querySelector(".navbar-inner-content .flex-wrap"),
+    styleSelect: document.getElementById("styleSelect"), // Nuevo select de estilo
+    aspectRatioSelect: document.getElementById("aspectRatioSelect"), // Nuevo select de aspecto
+    recentGenerationsGallery: document.getElementById(
+      "recentGenerationsGallery"
+    ), // Galería reciente
+    downloadLastGeneratedButton: document.getElementById(
+      "downloadLastGeneratedButton"
+    ), // Botón de descarga última imagen
   });
-
-  // Se eliminan las llamadas a funciones globales que ahora están en global.js
-  // updateLocalStorageUsage();
-  // showCookieConsent();
 
   // Cargar estado inicial y actualizar UI (específico de este módulo)
   const storedGenerations = localStorage.getItem("freeGenerationsLeft");
@@ -1236,29 +1373,23 @@ function initApp() {
   }
   updateGenerationCounterUI();
 
-  const lastImageUrl = localStorage.getItem("lastGeneratedImageUrl");
-  if (lastImageUrl) {
-    DOMElements.generatedImage.src = lastImageUrl;
+  const lastImageUrlFromStorage = localStorage.getItem(
+    "lastGeneratedImageUrlDisplayed"
+  ); // Recuperar la última imagen mostrada
+  if (lastImageUrlFromStorage) {
+    DOMElements.generatedImage.src = lastImageUrlFromStorage;
     DOMElements.generatedImage.alt = `Última imagen generada`;
     DOMElements.generatedImage.classList.remove("hidden");
     DOMElements.imagePlaceholderText.classList.add("hidden");
     DOMElements.downloadMainImageButton.classList.remove("hidden");
-
-    setTimeout(() => {
-      DOMElements.generatedImage.src =
-        "https://placehold.co/600x400/374151/D1D5DB?text=Tu+imagen+aparecerá+aquí";
-      DOMElements.generatedImage.alt =
-        "Placeholder para imagen generada por IA";
-      DOMElements.generatedImage.classList.add("hidden");
-      DOMElements.imagePlaceholderText.classList.remove("hidden");
-      DOMElements.downloadMainImageButton.classList.add("hidden");
-    }, 2000);
+    // No ocultar inmediatamente para que el usuario vea la última imagen al cargar
   } else {
     DOMElements.generatedImage.classList.add("hidden");
     DOMElements.imagePlaceholderText.classList.remove("hidden");
+    DOMElements.downloadMainImageButton.classList.add("hidden");
   }
   renderGallery();
-  // showCookieConsent(); // MOVÍ ESTO A GLOBAL.JS
+  renderRecentGenerations(); // Inicializar galería reciente
 
   setTimeout(
     showPromptSuggestionBox,
@@ -1295,11 +1426,6 @@ function initApp() {
   DOMElements.lightboxPrevButton.addEventListener("click", showPrevImage);
   DOMElements.lightboxNextButton.addEventListener("click", showNextImage);
 
-  // Event listeners de cookies y suscripción movidos a global.js
-  // DOMElements.acceptCookiesButton.addEventListener("click", acceptCookies);
-  // DOMElements.subscribeButton.addEventListener("click", handleSubscription);
-  // DOMElements.noThanksButton.addEventListener("click", dismissSubscription);
-
   DOMElements.generatePromptSuggestionButton.addEventListener(
     "click",
     generatePromptSuggestion
@@ -1312,13 +1438,21 @@ function initApp() {
 
   DOMElements.watchAdButton.addEventListener("click", watchAdForGenerations);
 
-  // Event listeners del modal de mensajes movidos a global.js
-  // DOMElements.messageModalCloseButton.addEventListener("click", hideCustomMessage);
-  // DOMElements.messageModal.addEventListener("click", (event) => {
-  //   if (event.target === DOMElements.messageModal) {
-  //     hideCustomMessage();
-  //   }
-  // });
+  // Nuevo listener para descargar la última imagen generada
+  DOMElements.downloadLastGeneratedButton.addEventListener("click", () => {
+    if (
+      lastGeneratedImageUrl &&
+      !lastGeneratedImageUrl.includes("placehold.co")
+    ) {
+      downloadImage(lastGeneratedImageUrl, "ultima-imagen-ia.png");
+      showCustomMessage("Última imagen descargada.", "success");
+    } else {
+      showCustomMessage(
+        "No hay una última imagen generada para descargar.",
+        "info"
+      );
+    }
+  });
 
   // Editor de imagen
   if (DOMElements.editorCanvas) {
@@ -1349,42 +1483,11 @@ function initApp() {
   DOMElements.cropWidthInput.addEventListener("input", redrawEditorCanvas);
   DOMElements.cropHeightInput.addEventListener("input", redrawEditorCanvas);
 
-  // Navegación responsive (movido a global.js)
-  // DOMElements.menuToggle.addEventListener("click", () => {
-  //   DOMElements.navLinksContainer.classList.toggle("active");
-  //   DOMElements.menuToggle.querySelector("i").classList.toggle("fa-bars");
-  //   DOMElements.menuToggle.querySelector("i").classList.toggle("fa-times");
-  // });
-  // document.addEventListener("click", (event) => {
-  //   const isClickInsideNav = DOMElements.navLinksContainer.contains(event.target);
-  //   const isClickOnToggle = DOMElements.menuToggle && DOMElements.menuToggle.contains(event.target);
-  //   if (
-  //     !isClickInsideNav &&
-  //     !isClickOnToggle &&
-  //     DOMElements.navLinksContainer.classList.contains("active")
-  //   ) {
-  //     DOMElements.navLinksContainer.classList.remove("active");
-  //     if (DOMElements.menuToggle) {
-  //       DOMElements.menuToggle.querySelector("i").classList.remove("fa-times");
-  //       DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
-  //     }
-  //   }
-  // });
-  // DOMElements.navLinksContainer.querySelectorAll("a").forEach((link) => {
-  //   link.addEventListener("click", () => {
-  //     if (window.innerWidth <= 768) {
-  //       DOMElements.navLinksContainer.classList.remove("active");
-  //       if (DOMElements.menuToggle) {
-  //         DOMElements.menuToggle
-  //           .querySelector("i")
-  //           .classList.remove("fa-times");
-  //         DOMElements.menuToggle.querySelector("i").classList.add("fa-bars");
-  //       }
-  //     }
-  //   });
-  // });
-
-  // updateActiveClass(); // MOVÍ ESTO A GLOBAL.JS
+  // Listener para cerrar el nuevo modal de carga/error manualmente
+  DOMElements.loadingModalCloseButton.addEventListener(
+    "click",
+    hideLoadingOverlay
+  );
 }
 
 // Llama a initApp cuando el DOM esté completamente cargado

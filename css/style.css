@@ -1,144 +1,351 @@
-/* Estilos específicos para el carrusel para que se vea bien en el tema oscuro */
+/* Estilos específicos para el carrusel, tarjetas de herramientas y nuevas secciones */
+
+/* --- Hero Carousel Styles --- */
 .hero-carousel {
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 1200px; /* Consistente con el main container */
-  border-radius: 1rem; /* rounded-xl */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  border: 1px solid #2d3748; /* gris-700 */
-  height: 350px; /* Altura fija para el carrusel */
+  max-width: 1200px;
+  border-radius: 1.25rem; /* Más redondeado */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+  border: 1px solid #2d3748;
+  height: 380px; /* Altura ligeramente aumentada */
 }
 
 .carousel-slides {
   display: flex;
   height: 100%;
-  transition: transform 0.8s ease-in-out; /* Transición suave para el slide */
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Curva de transición más suave */
 }
 
 .carousel-slide {
-  flex: 0 0 100%; /* Cada slide ocupa el 100% del ancho del contenedor */
-  width: 100%; /* Asegura que cada slide tome el 100% */
+  flex: 0 0 100%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 2rem;
-  background-color: #1e293b; /* un tono de gris más oscuro que el fondo del body */
+  padding: 2.5rem;
+  background-color: #1e293b;
+  background-image: linear-gradient(
+    145deg,
+    #1e293b 0%,
+    #1a202c 100%
+  ); /* Degradado sutil */
 }
 .carousel-slide h5 {
-  font-size: 2.25rem; /* text-4xl */
-  font-weight: 800; /* font-extrabold */
+  font-size: 2.5rem; /* text-4xl */
+  font-weight: 800;
   color: white;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 .carousel-slide p {
-  font-size: 1.125rem; /* text-lg */
-  color: #cbd5e1; /* gris-300 */
-  max-width: 800px;
-  margin: 0 auto 1.5rem auto;
+  font-size: 1.15rem; /* text-lg */
+  color: #cbd5e1;
+  max-width: 700px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
 }
 .carousel-slide .slide-image {
   max-width: 100%;
-  height: 150px; /* Altura fija para la imagen dentro del slide */
-  object-fit: contain; /* Asegura que la imagen se ajuste sin recortarse */
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
+  height: 180px; /* Altura ligeramente aumentada */
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
 }
 
 .carousel-nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(45, 55, 72, 0.7); /* gray-700 con opacidad */
+  background-color: rgba(
+    45,
+    55,
+    72,
+    0.8
+  ); /* gray-700 con opacidad ligeramente mayor */
   color: white;
   border: none;
-  padding: 0.75rem 0.5rem;
+  padding: 1rem 0.7rem; /* Más padding */
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1.8rem; /* Tamaño más grande */
   z-index: 10;
-  opacity: 0.8;
-  transition: opacity 0.3s ease, background-color 0.3s ease;
-  border-radius: 0.5rem; /* ligeramente redondeado */
+  opacity: 0.9;
+  transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 0.75rem; /* Más redondeado */
 }
 .carousel-nav-btn:hover {
   opacity: 1;
-  background-color: rgba(74, 85, 104, 0.9); /* gray-600 con más opacidad */
+  background-color: rgba(74, 85, 104, 0.95);
+  transform: translateY(-50%) scale(1.05); /* Pequeña escala al hacer hover */
 }
 .carousel-nav-btn.prev {
-  left: 0.5rem;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.carousel-nav-btn.next {
-  right: 0.5rem;
+  left: 0.75rem;
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
+.carousel-nav-btn.next {
+  right: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
 .carousel-indicators-container {
   position: absolute;
-  bottom: 3rem; /* Ajustado para mover la paginación más abajo */
+  bottom: 2rem; /* Ajustado para estar más centrado con el pie */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem; /* Más espacio entre indicadores */
   z-index: 10;
 }
 .carousel-indicator {
-  width: 12px;
-  height: 12px;
-  background-color: rgba(6, 182, 212, 0.4); /* cyan-500 con opacidad */
+  width: 14px; /* Un poco más grande */
+  height: 14px;
+  background-color: rgba(6, 182, 212, 0.5); /* cyan-500 con opacidad */
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .carousel-indicator.active {
   background-color: #06b6d4; /* cyan-500 sólido */
-  transform: scale(1.2);
+  transform: scale(1.3); /* Escala más pronunciada */
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5); /* Anillo sutil */
 }
 
-/* Tarjetas de herramientas */
+/* --- Tool Cards Styles --- */
+.tool-grid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  ); /* Mejor responsividad */
+  gap: 2rem; /* Más espacio */
+}
 .tool-card {
   background-color: #1a202c; /* gris-900 */
   border: 1px solid #2d3748; /* gris-800 */
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: 1.25rem; /* Más redondeado */
+  padding: 2rem; /* Más padding */
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más grande */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Para espaciar bien contenido y botón */
+  min-height: 280px; /* Asegurar altura mínima para consistencia */
 }
 .tool-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transform: translateY(-8px) scale(1.02); /* Efecto hover más dinámico */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  border-color: #06b6d4; /* Borde al hacer hover */
 }
 .tool-card .icon {
-  font-size: 3rem;
-  color: #06b6d4; /* cyan-500 */
-  margin-bottom: 1rem;
+  font-size: 3.5rem; /* Icono más grande */
+  color: #06b6d4;
+  margin-bottom: 1.25rem;
 }
 .tool-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.6rem; /* Tamaño de título ligeramente mayor */
   font-weight: 700;
   color: white;
   margin-bottom: 0.75rem;
 }
 .tool-card p {
-  font-size: 1rem;
-  color: #cbd5e1; /* gris-300 */
-  margin-bottom: 1.25rem;
+  font-size: 1.05rem; /* Tamaño de párrafo ligeramente mayor */
+  color: #cbd5e1;
+  margin-bottom: 1.5rem; /* Más espacio antes del botón */
+  line-height: 1.6;
+  flex-grow: 1; /* Para que el párrafo ocupe el espacio disponible */
 }
 .tool-card .btn-card {
   display: inline-block;
-  background-color: #0891b2; /* bg-cyan-600 */
+  background-color: #0891b2;
   color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 0.9rem 1.8rem; /* Más padding */
+  border-radius: 0.6rem; /* Más redondeado */
   font-weight: 600;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .tool-card .btn-card:hover {
-  background-color: #0e7490; /* hover:bg-cyan-700 */
-  transform: translateY(-2px);
+  background-color: #0e7490;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- How It Works Section Styles --- */
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .how-it-works-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step-card {
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.step-icon {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.1);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+  border: 2px solid #06b6d4;
+}
+.step-card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+.step-card p {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* --- Testimonials Section Styles --- */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.testimonial-card {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.testimonial-card .quote {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+.testimonial-card .author {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #06b6d4;
+  margin-top: auto; /* Empuja el autor hacia abajo */
+}
+
+/* --- FAQ Section Styles --- */
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+.faq-item {
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background-color: #2d3748;
+  transition: background-color 0.3s ease;
+}
+.faq-question:hover {
+  background-color: #374151;
+}
+.faq-arrow {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+.faq-arrow.rotated {
+  transform: rotate(180deg);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1.5rem;
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+  background-color: #1a202c;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.faq-answer[style*="max-height:"][style*="px"] {
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+}
+
+/* Media queries para ajustes finos */
+@media (max-width: 640px) {
+  .carousel-slide h5 {
+    font-size: 2rem;
+  }
+  .carousel-slide p {
+    font-size: 1rem;
+  }
+  .tool-card h3 {
+    font-size: 1.4rem;
+  }
+  .tool-card p {
+    font-size: 0.9rem;
+  }
+  .step-card h3 {
+    font-size: 1.25rem;
+  }
+  .step-card p {
+    font-size: 0.9rem;
+  }
+  .faq-question {
+    font-size: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .faq-answer {
+    padding: 0 1.25rem;
+  }
 }

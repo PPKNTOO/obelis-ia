@@ -22,7 +22,6 @@
     <link rel="icon" href="img/favicon.ico" type="image/ico" />
     <link rel="apple-touch-icon" href="img/logo.webp" />
 
-    <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://obelis-ia.vercel.app" />
     <meta
@@ -39,7 +38,6 @@
     />
     <meta property="og:image" content="img/logo.webp" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://obelis-ia.vercel.app" />
     <meta
@@ -52,7 +50,6 @@
     />
     <meta property="twitter:image" content="img/logo.webp" />
 
-    <!-- Schema.org Markup -->
     <script type="application/ld+json">
       {
         "@context": "http://schema.org",
@@ -76,15 +73,11 @@
       }
     </script>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome CDN for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <!-- ADSENSE -->
-
     <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
     <script
       async
@@ -92,22 +85,16 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- ADS-AMP -->
     <script
       async
       custom-element="amp-auto-ads"
       src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
     ></script>
-    <!-- FIN ADS-AMP -->
-
-    <!-- FIN ADSENSE -->
   </head>
   <body class="min-h-screen flex flex-col items-center pb-8">
-    <!-- AMP Auto Ads -->
     <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
     </amp-auto-ads>
 
-    <!-- Barra de Navegación -->
     <nav
       class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
     >
@@ -177,11 +164,9 @@
     </nav>
 
     <main class="flex flex-col items-center w-full max-w-7xl px-4 mt-8">
-      <!-- Sección de Héroe/Banner Principal - Carrusel Personalizado -->
       <section class="w-full mb-8">
         <div id="heroCarousel" class="hero-carousel">
           <div id="carouselSlides" class="carousel-slides">
-            <!-- Slide 1: Contenido original del banner -->
             <div class="carousel-slide">
               <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
                 Crea, Edita y Transforma con
@@ -202,7 +187,6 @@
               </a>
             </div>
 
-            <!-- Slide 2: Destacando IA de Imagen -->
             <div class="carousel-slide">
               <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
                 Da Vida a Tus Ideas con
@@ -222,7 +206,6 @@
               </a>
             </div>
 
-            <!-- Slide 3: Destacando Edición de Imagen -->
             <div class="carousel-slide">
               <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
                 Perfecciona tus Fotos con Nuestro
@@ -243,11 +226,9 @@
             </div>
           </div>
 
-          <!-- Controles de Navegación -->
           <button id="prevSlide" class="carousel-nav-btn prev">&#10094;</button>
           <button id="nextSlide" class="carousel-nav-btn next">&#10095;</button>
 
-          <!-- Indicadores de Posición -->
           <div
             id="carouselIndicators"
             class="carousel-indicators-container"
@@ -255,14 +236,12 @@
         </div>
       </section>
 
-      <!-- Placeholder para Banner de Anuncio Superior -->
       <div class="ad-banner ad-banner-top">
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
           crossorigin="anonymous"
         ></script>
-        <!-- BlockADS_Horizontal -->
         <ins
           class="adsbygoogle"
           style="display: block"
@@ -276,7 +255,70 @@
         </script>
       </div>
 
-      <!-- Sección de Herramientas Destacadas -->
+      <section class="w-full py-12 text-white text-center">
+        <div class="about-section-content">
+          <img
+            src="img/logo.webp"
+            alt="Logo de ObelisIA"
+            class="about-logo mx-auto mb-6"
+          />
+          <h2 class="text-3xl md:text-4xl font-extrabold mb-6">
+            ¿Qué es <span class="text-cyan-500">ObelisIA</span>?
+          </h2>
+          <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+            ObelisIA es tu centro creativo online gratuito, donde la
+            inteligencia artificial y la edición de imágenes se unen para
+            potenciar tus proyectos. Hemos diseñado una suite de herramientas
+            intuitivas y potentes para ayudarte a generar contenido, transformar
+            tus ideas visuales y optimizar tus flujos de trabajo digital.
+            Ofrecemos soluciones innovadoras que te permiten alcanzar tus metas
+            creativas sin barreras.
+          </p>
+          <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+            Nuestra misión es democratizar el acceso a la tecnología IA y a las
+            herramientas de edición de alta calidad, haciéndolas disponibles
+            para creadores, estudiantes, profesionales y entusiastas de todos
+            los niveles. Con ObelisIA, las posibilidades son ilimitadas, y tu
+            creatividad no tendrá fronteras.
+          </p>
+        </div>
+      </section>
+
+      <section class="w-full py-12 text-white text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Cómo <span class="text-cyan-500">Funciona</span>
+        </h2>
+        <div class="how-it-works-grid">
+          <div class="step-card">
+            <div class="step-icon">1</div>
+            <h3>Elige tu Herramienta</h3>
+            <p>
+              Navega por nuestra selección de herramientas de IA y edición.
+              Encontrarás generadores de texto e imagen, un potente editor de
+              fotos y un versátil conversor de formatos.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">2</div>
+            <h3>Crea y Edita</h3>
+            <p>
+              Utiliza la interfaz intuitiva para introducir tus indicaciones,
+              subir tus imágenes o seleccionar las opciones de edición. Nuestra
+              tecnología avanzada hará el trabajo por ti.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">3</div>
+            <h3>Descarga y Comparte</h3>
+            <p>
+              Obtén resultados de alta calidad en segundos. Descarga tus
+              creaciones directamente a tu dispositivo o compártelas en tus
+              plataformas favoritas.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="w-full py-12">
         <h2
           class="text-3xl md:text-4xl font-extrabold text-center text-white mb-10"
@@ -286,84 +328,165 @@
         <div
           class="tool-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          <!-- Tarjeta 1: Generador de Imágenes IA -->
           <div class="tool-card">
             <div class="icon">
               <i class="fas fa-magic"></i>
             </div>
             <h3>Generador de Imágenes IA</h3>
             <p>
-              Transforma tus descripciones en impresionantes obras de arte
-              digital con nuestra potente IA.
+              Transforma tus descripciones de texto en impresionantes obras de
+              arte digital, ilustraciones y conceptos visuales únicos en
+              cuestión de segundos. Ideal para artistas, diseñadores o
+              cualquiera que busque inspiración visual.
             </p>
             <a href="ia-img/index.html" class="btn-card">Generar Imágenes</a>
           </div>
 
-          <!-- Tarjeta 2: Generador de Texto IA -->
           <div class="tool-card">
             <div class="icon">
               <i class="fas fa-pen-fancy"></i>
             </div>
             <h3>Generador de Texto IA</h3>
             <p>
-              Crea historias, poemas, guiones, artículos y más con nuestra IA de
-              contenido creativo.
+              Supera el bloqueo del escritor generando ideas, historias, poemas,
+              guiones, artículos o correos electrónicos. Nuestra IA de contenido
+              creativo te ayuda a redactar textos originales y relevantes al
+              instante.
             </p>
             <a href="ia-text/index.html" class="btn-card">Generar Texto</a>
           </div>
 
-          <!-- Tarjeta 3: Editor de Imágenes Online -->
           <div class="tool-card">
             <div class="icon">
               <i class="fas fa-paint-brush"></i>
             </div>
             <h3>Editor de Imágenes Online</h3>
             <p>
-              Edita tus fotos con facilidad: dibuja, borra, transforma y ajusta
-              colores directamente en tu navegador.
+              Edita tus fotos con facilidad y precisión. Dibuja, borra, recorta,
+              aplica una variedad de filtros artísticos y ajusta colores como
+              brillo y contraste, todo directamente en tu navegador.
             </p>
             <a href="edit-img/index.html" class="btn-card">Editar Imágenes</a>
           </div>
 
-          <!-- Tarjeta 4: Convertidor de Imágenes -->
           <div class="tool-card">
             <div class="icon">
               <i class="fas fa-exchange-alt"></i>
             </div>
             <h3>Convertidor de Imágenes</h3>
             <p>
-              Cambia el formato de tus imágenes a JPEG, PNG, WebP y más, de
-              forma rápida y sencilla.
+              Cambia el formato de tus imágenes a los tipos más populares como
+              JPEG, PNG, WebP y más. Optimiza tus archivos para la web o
+              ajústalos para cualquier uso específico de forma rápida y
+              sencilla, manteniendo la calidad.
             </p>
             <a href="convert-img/index.html" class="btn-card"
               >Convertir Imágenes</a
             >
           </div>
 
-          <!-- Puedes añadir más tarjetas de herramientas aquí si tienes más páginas -->
-          <!-- Ejemplo de otra tarjeta ficticia -->
           <div class="tool-card">
             <div class="icon">
-              <i class="fas fa-cogs"></i>
+              <i class="fas fa-video"></i>
             </div>
             <h3>Generador de Videos IA</h3>
             <p>
-              Genera videos impresionantes a partir de texto con inteligencia
-              artificial de forma gratuita.
+              Transforma texto en videos dinámicos y atractivos con la ayuda de
+              la inteligencia artificial. Ideal para crear contenido para redes
+              sociales, presentaciones o proyectos personales de forma gratuita.
             </p>
             <a href="ia-video/index.html" class="btn-card">Generar Videos</a>
           </div>
         </div>
       </section>
 
-      <!-- Placeholder para Banner de Anuncio Inferior -->
+      <section
+        class="w-full py-12 text-white text-center bg-gray-900 rounded-lg shadow-xl"
+      >
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Historias de <span class="text-cyan-500">Éxito</span>
+        </h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <p class="quote">
+              "ObelisIA ha revolucionado mi flujo de trabajo. La herramienta de
+              generación de imágenes IA es increíblemente potente y fácil de
+              usar. ¡Mis diseños nunca han sido tan originales!"
+            </p>
+            <p class="author">- Ana R., Diseñadora Gráfica</p>
+          </div>
+          <div class="testimonial-card">
+            <p class="quote">
+              "Como estudiante, el generador de texto IA me ayuda a superar el
+              bloqueo creativo y a estructurar mis ensayos rápidamente. ¡Una
+              herramienta indispensable!"
+            </p>
+            <p class="author">- Carlos M., Estudiante de Literatura</p>
+          </div>
+          <div class="testimonial-card">
+            <p class="quote">
+              "El editor de imágenes es sorprendentemente completo para ser
+              gratuito y online. Puedo hacer todos mis ajustes básicos sin
+              problemas. ¡Muy recomendado!"
+            </p>
+            <p class="author">- Sofía P., Creadora de Contenido</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="w-full py-12 text-white text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Preguntas <span class="text-cyan-500">Frecuentes</span>
+        </h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿ObelisIA es realmente gratuito?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Sí, todas las herramientas principales de ObelisIA son
+              completamente gratuitas y de libre acceso. No requerimos
+              suscripciones ni pagos para usar nuestras funcionalidades básicas
+              y avanzadas.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Mis datos o imágenes son seguros?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Priorizamos tu privacidad. Las imágenes subidas para edición o
+              conversión se procesan en tu navegador y no se almacenan en
+              nuestros servidores. Para las herramientas de IA, la comunicación
+              es segura y se maneja con el debido respeto a la privacidad del
+              usuario. Consulta nuestra Política de Privacidad para más
+              detalles.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Necesito conocimientos técnicos para usar las herramientas?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              ¡Absolutamente no! Hemos diseñado ObelisIA para ser lo más
+              intuitivo y fácil de usar posible. La interfaz es amigable y
+              nuestras herramientas están pensadas para que cualquier persona,
+              sin importar su nivel de experiencia, pueda empezar a crear de
+              inmediato.
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div class="ad-banner ad-banner-bottom">
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
           crossorigin="anonymous"
         ></script>
-        <!-- BlockADS_Horizontal -->
         <ins
           class="adsbygoogle"
           style="display: block"
@@ -378,7 +501,6 @@
       </div>
     </main>
 
-    <!-- Footer -->
     <footer
       class="w-full bg-gray-900 text-gray-400 text-center py-6 mt-12 rounded-t-xl shadow-inner border-t border-gray-700"
     >
@@ -392,7 +514,6 @@
       </p>
     </footer>
 
-    <!-- Modal de Suscripción -->
     <div id="subscriptionModal" class="subscription-modal">
       <div class="subscription-modal-content">
         <h3 class="text-2xl font-bold mb-4 text-cyan-500">
@@ -425,7 +546,6 @@
       </div>
     </div>
 
-    <!-- Mensaje de Consentimiento de Cookies -->
     <div id="cookieConsent" class="cookie-consent">
       <p class="text-sm">
         Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
@@ -439,7 +559,6 @@
       </button>
     </div>
 
-    <!-- Generic Message Modal -->
     <div
       id="messageModal"
       class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[2000] opacity-0 invisible transition-all duration-300"
@@ -603,6 +722,21 @@
         nextSlideButton.addEventListener("click", () => {
           nextSlide();
           resetSlideInterval(); // Resetear el intervalo al hacer clic en el botón
+        });
+
+        // Funcionalidad FAQ
+        const faqQuestions = document.querySelectorAll(".faq-question");
+        faqQuestions.forEach((question) => {
+          question.addEventListener("click", () => {
+            const answer = question.nextElementSibling;
+            const arrow = question.querySelector(".faq-arrow");
+
+            answer.style.maxHeight =
+              answer.style.maxHeight === "0px" || !answer.style.maxHeight
+                ? answer.scrollHeight + "px"
+                : "0px";
+            arrow.classList.toggle("rotated");
+          });
         });
       });
     </script>
