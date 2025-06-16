@@ -1,7 +1,7 @@
 // raiz/js/global.js
 
-// Declare DOMElements as a global variable. It will be populated in initGlobalApp.
-let DOMElements = {};
+// Exporta DOMElements para que otros módulos puedan importarlo
+export let DOMElements = {};
 
 // Helper function to safely get elements (returns null if not found)
 function getElement(selector, isQuerySelectorAll = false) {
@@ -115,6 +115,75 @@ function hideCustomMessage() {
     DOMElements.messageModalText.textContent = "";
   if (DOMElements.messageModalIcon)
     DOMElements.messageModalIcon.className = "mt-4 text-4xl";
+}
+
+/**
+ * Muestra un overlay de carga global con un mensaje y un spinner/GIF.
+ * @param {string} message - El mensaje a mostrar.
+ * @param {boolean} isError - Si es un mensaje de error, cambia la apariencia y muestra un botón de cierre.
+ */
+function showLoadingOverlay(
+  message = "Cargando, por favor espera...",
+  isError = false
+) {
+  if (!DOMElements.loadingOverlayModal) {
+    console.error("Loading overlay modal elements not found in DOMElements.");
+    return;
+  }
+
+  if (DOMElements.loadingMessageTextModal)
+    DOMElements.loadingMessageTextModal.textContent = message;
+  if (DOMElements.loadingErrorTextModal)
+    DOMElements.loadingErrorTextModal.classList.add("hidden"); // Ocultar errores previos
+
+  if (isError) {
+    if (DOMElements.loadingErrorTextModal) {
+      DOMElements.loadingErrorTextModal.textContent = message;
+      DOMElements.loadingErrorTextModal.classList.remove("hidden");
+    }
+    if (DOMElements.loadingMessageTextModal)
+      DOMElements.loadingMessageTextModal.textContent =
+        "¡Ha ocurrido un error!"; // Mensaje principal para error
+    if (DOMElements.pocoyoGifModal)
+      DOMElements.pocoyoGifModal.classList.add("hidden");
+    if (DOMElements.loadingSpinnerModal)
+      DOMElements.loadingSpinnerModal.classList.add("hidden");
+    if (DOMElements.loadingModalCloseButton)
+      DOMElements.loadingModalCloseButton.classList.remove("hidden"); // Mostrar botón de cierre en error
+  } else {
+    if (DOMElements.loadingModalCloseButton)
+      DOMElements.loadingModalCloseButton.classList.add("hidden"); // Ocultar botón si no hay error
+    // Decidir si mostrar Pocoyo o spinner
+    if (
+      DOMElements.pocoyoGifModal &&
+      !DOMElements.pocoyoGifModal.classList.contains("hidden")
+    ) {
+      // Pocoyo ya está visible o se intenta mostrar
+    } else if (DOMElements.loadingSpinnerModal) {
+      if (DOMElements.pocoyoGifModal)
+        DOMElements.pocoyoGifModal.classList.add("hidden"); // Asegurarse de que Pocoyo esté oculto si el spinner debe verse
+      DOMElements.loadingSpinnerModal.classList.remove("hidden");
+    }
+  }
+  DOMElements.loadingOverlayModal.classList.add("show");
+}
+
+/** Oculta el overlay de carga global. */
+function hideLoadingOverlay() {
+  if (!DOMElements.loadingOverlayModal) return;
+  DOMElements.loadingOverlayModal.classList.remove("show");
+  if (DOMElements.loadingMessageTextModal)
+    DOMElements.loadingMessageTextModal.textContent = "";
+  if (DOMElements.loadingErrorTextModal)
+    DOMElements.loadingErrorTextModal.textContent = "";
+  if (DOMElements.loadingErrorTextModal)
+    DOMElements.loadingErrorTextModal.classList.add("hidden");
+  if (DOMElements.pocoyoGifModal)
+    DOMElements.pocoyoGifModal.classList.remove("hidden"); // Resetear para la próxima vez
+  if (DOMElements.loadingSpinnerModal)
+    DOMElements.loadingSpinnerModal.classList.add("hidden"); // Ocultar spinner al finalizar
+  if (DOMElements.loadingModalCloseButton)
+    DOMElements.loadingModalCloseButton.classList.add("hidden"); // Asegurarse de que esté oculto
 }
 
 /**
@@ -279,16 +348,14 @@ function updateActiveClass() {
   });
 }
 
-// Función separada para el listener de FAQ para poder removerlo
-// Esta función ahora es global para ser reutilizada en todos los módulos
+// Función para el listener de FAQ para poder reutilizarla en todos los módulos
 function toggleFaqAnswer(event) {
   const question = event.currentTarget;
   const answer = question.nextElementSibling;
   const arrow = question.querySelector(".faq-arrow");
 
-  // Asegurar que las propiedades de transición estén en su lugar
-  answer.style.transition =
-    "max-height 0.4s ease-out, padding-top 0.4s ease-out, padding-bottom 0.4s ease-out";
+  // Forzar un reflow antes de verificar el estado para obtener el valor más actual de maxHeight
+  void answer.offsetWidth;
 
   const currentMaxHeight = getComputedStyle(answer).maxHeight;
   const isOpen = currentMaxHeight !== "0px";
@@ -324,7 +391,7 @@ function toggleFaqAnswer(event) {
     answer.style.paddingTop = "1.5rem"; // Target padding top
     answer.style.paddingBottom = "2rem"; // Target padding bottom
 
-    // Force reflow to get correct scrollHeight immediately
+    // Force reflow again after setting paddings to include them in scrollHeight
     void answer.offsetWidth;
 
     const scrollHeight = answer.scrollHeight;
@@ -467,61 +534,16 @@ function initGlobalApp() {
   updateActiveClass();
 }
 
-// Función separada para el listener de FAQ para poder removerlo
-// Esta función ahora es global para ser reutilizada en todos los módulos
-function toggleFaqAnswer(event) {
-  const question = event.currentTarget;
-  const answer = question.nextElementSibling;
-  const arrow = question.querySelector(".faq-arrow");
-
-  // Forzar un reflow antes de verificar el estado para obtener el valor más actual de maxHeight
-  void answer.offsetWidth;
-
-  const currentMaxHeight = getComputedStyle(answer).maxHeight;
-  const isOpen = currentMaxHeight !== "0px";
-
-  // Close all other open FAQs (assuming they are in the same faq-container)
-  const faqContainer = question.closest(".faq-container");
-  if (faqContainer) {
-    faqContainer.querySelectorAll(".faq-answer").forEach((otherAnswer) => {
-      if (
-        otherAnswer !== answer &&
-        getComputedStyle(otherAnswer).maxHeight !== "0px"
-      ) {
-        otherAnswer.style.maxHeight = "0px";
-        otherAnswer.style.paddingTop = "0px";
-        otherAnswer.style.paddingBottom = "0px";
-        const otherArrow =
-          otherAnswer.previousElementSibling.querySelector(".faq-arrow");
-        if (otherArrow) otherArrow.classList.remove("rotated");
-      }
-    });
-  }
-
-  // Toggle the current FAQ
-  if (isOpen) {
-    answer.style.maxHeight = "0px";
-    answer.style.paddingTop = "0px";
-    answer.style.paddingBottom = "0px";
-    arrow.classList.remove("rotated");
-  } else {
-    // Temporarily set max-height to 'auto' to get the true scrollHeight
-    // Apply desired paddings BEFORE measuring scrollHeight so it's included
-    answer.style.maxHeight = "auto";
-    answer.style.paddingTop = "1.5rem"; // Target padding top
-    answer.style.paddingBottom = "2rem"; // Target padding bottom
-
-    // Force reflow again after setting paddings to include them in scrollHeight
-    void answer.offsetWidth;
-
-    const scrollHeight = answer.scrollHeight;
-
-    // Set max-height to the calculated scrollHeight
-    answer.style.maxHeight = scrollHeight + "px";
-
-    arrow.classList.add("rotated");
-  }
-}
-
 // Llama a initGlobalApp cuando el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", initGlobalApp);
+
+// Exporta las funciones y variables que otros módulos necesitarán
+export {
+  downloadImage,
+  showCustomMessage,
+  hideCustomMessage,
+  showLoadingOverlay,
+  hideLoadingOverlay,
+  updateLocalStorageUsage,
+  toggleFaqAnswer,
+};

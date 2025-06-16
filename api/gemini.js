@@ -1,15 +1,6 @@
 // api/gemini.js
 // Esta función se ejecutará en el servidor de Vercel (Serverless Function)
 
-// En entornos Vercel, `fetch` ya suele estar disponible globalmente,
-// por lo que no es necesario importar node-fetch explícitamente en Vercel.
-// Si tienes problemas de compatibilidad con 'fetch' en tu Node.js local
-// y no usas vercel dev, podrías necesitar un 'npm install node-fetch'
-// y luego 'const fetch = require('node-fetch');' aquí.
-
-// api/gemini.js
-// Esta función se ejecutará en el servidor de Vercel (Serverless Function)
-
 export default async function (req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -24,7 +15,18 @@ export default async function (req, res) {
     return res.status(500).json({ error: "Server API Key not configured." });
   }
 
-  const { prompt, chatHistory } = req.body;
+  // CAMBIO CLAVE AQUÍ: Esperar la propiedad 'contents' directamente del body
+  const { contents } = req.body; // El frontend ya envía { contents: chatHistory }
+
+  // Asegurarse de que 'contents' está presente
+  if (!contents) {
+    console.error(
+      "GenerateContentRequest.contents: contents is not specified in request body."
+    );
+    return res.status(400).json({
+      error: "GenerateContentRequest.contents: contents is not specified",
+    });
+  }
 
   const googleApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -32,7 +34,7 @@ export default async function (req, res) {
     const response = await fetch(googleApiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: chatHistory }),
+      body: JSON.stringify({ contents: contents }), // Pasar 'contents' directamente
     });
 
     const data = await response.json();
