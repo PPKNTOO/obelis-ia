@@ -4,8 +4,7 @@
 /* Estas secciones son compartidas con ia-text/style.css para consistencia visual */
 .ia-text-section {
   width: 100%;
-  padding: 3.5rem 2rem; /* Más padding para espacio */
-  margin-top: 3rem; /* Más margen para separación */
+  padding: 2rem 2rem; /* Más padding para espacio */
   margin-bottom: 3rem; /* Más margen para separación */
   background-color: #1a202c; /* Fondo oscuro */
   border: 1px solid #2d3748; /* Borde sutil */

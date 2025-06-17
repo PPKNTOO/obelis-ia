@@ -4,8 +4,7 @@
 /* Estas secciones comparten estilos comunes a través del sitio, definidos aquí para el módulo ia-text */
 .ia-text-section {
   width: 100%;
-  padding: 3rem 1.5rem;
-  margin-top: 2.5rem;
+  padding: 2rem 1.5rem;
   margin-bottom: 2.5rem;
   background-color: #1a202c;
   border: 1px solid #2d3748;
@@ -91,18 +90,19 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 .step-card-ia .step-number {
-  font-size: 2.8rem;
+  font-size: 3.5rem;
   font-weight: bold;
   color: #06b6d4;
-  background-color: rgba(6, 182, 212, 0.1);
+  background-color: rgba(6, 182, 212, 0.15);
   border-radius: 50%;
-  width: 75px;
-  height: 75px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.25rem auto;
-  border: 2px solid #06b6d4;
+  margin: 0 auto 1.5rem auto;
+  border: 3px solid #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
 }
 .step-card-ia h3 {
   font-size: 1.5rem;

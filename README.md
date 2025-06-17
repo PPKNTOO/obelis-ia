@@ -24,18 +24,26 @@ ObelisIA/
 │       ├── _buttons.css      # Estilos para botones globales (ej. .btn-primary)
 │       └── _forms.css        # Estilos para elementos de formulario (inputs, textareas, selects, checkboxes, radios)
 ├── index.html                # Página principal del sitio web (landing page)
-├── convert-img/              # Módulo: Herramienta de conversión de imágenes
-│   ├── index.html
-│   ├── js/
-│   │   └── script.js         # (Pendiente de modularización si es necesario)
+├── convert-img/              # Módulo: Herramienta de conversión de imágenes (Modularizado)
+│   ├── index.html            # Página del convertidor de imágenes
+│   ├── js/                   # Carpeta para los scripts del convertidor (modularizados)
+│   │   ├── main.js             # Punto de entrada principal del módulo convert-img
+│   │   ├── config.js           # Constantes de configuración
+│   │   ├── state.js            # Variables de estado global del módulo
+│   │   ├── storage.js          # Funciones para guardar/cargar preferencias y estado
+│   │   ├── limitManager.js     # Lógica para el límite de conversiones y anuncios
+│   │   ├── imageProcessing.js  # Funciones para dibujar en canvas y manejar la conversión (toBlob)
+│   │   ├── fileHandler.js      # Lógica para la carga de archivos (arrastrar y soltar, input file)
+│   │   ├── downloadManager.js  # Funciones para la descarga de archivos (manejo de Blob)
+│   │   └── uiUpdater.js        # Funciones para actualizar la interfaz de usuario
 │   └── css/
-│       └── style.css
-├── edit-img/                 # Módulo: Herramienta de edición de imágenes
+│       └── style.css           # Estilos específicos del convertidor de imágenes
+├── edit-img/                 # Módulo: Herramienta de edición de imágenes (Modularizado)
 │   ├── index.html            # Página del editor de imágenes
 │   ├── js/                   # Carpeta para los scripts del editor (modularizados)
 │   │   ├── main.js             # Punto de entrada principal del editor
 │   │   ├── ui.js               # Lógica de la interfaz de usuario (mensajes, modales, etc.)
-│   │   ├── canvas.js           # Funciones de manipulación del elemento Canvas
+│   │   ├── canvas.js           # (Podría estar fusionado o ser parte de imageProcessing en ia-img)
 │   │   ├── history.js          # Lógica para Deshacer/Rehacer
 │   │   ├── tools/              # Lógicas individuales para cada herramienta
 │   │   │   ├── toolManager.js  # Gestor de activación de herramientas
@@ -57,7 +65,7 @@ ObelisIA/
 │   │       └── constants.js    # Constantes y configuraciones específicas del editor
 │   └── css/
 │       └── style.css           # Estilos específicos del editor
-├── ia-img/                   # Módulo: Generador de imágenes IA
+├── ia-img/                   # Módulo: Generador de imágenes IA (Modularizado)
 │   ├── index.html            # La página del generador de imágenes
 │   ├── js/                   # Carpeta para los scripts del generador (modularizados)
 │   │   ├── main.js             # Punto de entrada principal del módulo ia-img
@@ -70,7 +78,7 @@ ObelisIA/
 │   │   └── uiUpdater.js        # Funciones para actualizar la interfaz de usuario
 │   └── css/
 │       └── style.css           # Estilos específicos del generador de imágenes
-└── ia-text/                  # Módulo: Generador de texto IA
+└── ia-text/                  # Módulo: Generador de texto IA (Modularizado)
     ├── index.html
     ├── js/                   # Carpeta para los scripts del generador de texto (modularizados)
     │   ├── main.js             # Punto de entrada principal del módulo ia-text

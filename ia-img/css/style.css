@@ -284,20 +284,23 @@
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
+
 .step-card-ia .step-number {
-  font-size: 2.8rem;
+  font-size: 3.5rem;
   font-weight: bold;
   color: #06b6d4;
-  background-color: rgba(6, 182, 212, 0.1);
+  background-color: rgba(6, 182, 212, 0.15);
   border-radius: 50%;
-  width: 75px;
-  height: 75px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.25rem auto;
-  border: 2px solid #06b6d4;
+  margin: 0 auto 1.5rem auto;
+  border: 3px solid #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
 }
+
 .step-card-ia h3 {
   font-size: 1.5rem;
   font-weight: 700;
@@ -585,18 +588,17 @@
 /* --- NUEVA SECCIÓN DE GALERÍA PRINCIPAL (AHORA DENTRO DEL LAYOUT DEL GENERADOR) --- */
 /* Estilos aplicados a .ia-img-gallery-section.ia-generator-full-width-section arriba */
 #galleryContainer {
-  max-height: 400px; /* Aumenta la altura máxima para la galería principal */
-  padding: 1rem; /* Más padding para los elementos internos */
-  /* Ajuste de columnas y tamaño de imagen aquí */
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(120px, 1fr)
-  ); /* Auto-fit para más flexibilidad, con min-width */
-  gap: 0.75rem; /* Espacio entre las miniaturas */
+  padding: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 #galleryContainer.grid .gallery-item-wrapper {
   /* Modificado: Ancho fijo para las miniaturas de la galería principal */
-  width: 100%; /* Hacemos que se ajuste al 100% de la columna */
+  width: 20%; /* Hacemos que se ajuste al 100% de la columna */
   height: 120px; /* Altura fija */
   flex-shrink: 0; /* Evita que se encojan */
 }
@@ -643,54 +645,158 @@
 
 /* Media Queries para responsividad del generador */
 @media (max-width: 1024px) {
-  /* Tablet y móvil */
   .ia-generator-layout-container {
-    grid-template-columns: 1fr; /* Una sola columna para todos los elementos */
-    grid-template-rows: auto; /* Las filas se autoajustan */
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
     padding: 1rem;
     gap: 1rem;
     min-height: auto;
+    min-width: unset;
+    width: 100%;
+    box-sizing: border-box; /* Crucial para móviles */
   }
   .ia-generator-aside,
   .ia-generator-main-content,
   .ia-img-gallery-section.ia-generator-full-width-section {
-    grid-column: 1; /* Todos ocupan la única columna */
-    grid-row: auto; /* Se apilan automáticamente */
-    width: 100%; /* Ocupan todo el ancho disponible */
-    max-height: none; /* No hay max-height fijo, el contenedor padre (layout-container) manejará el scroll si es necesario */
-    overflow-y: visible; /* El scroll lo manejará el ia-generator-layout-container si se desborda */
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+    max-height: none;
+    overflow-y: visible;
+    padding: 1rem;
+    box-sizing: border-box; /* Fundamental aquí */
+    flex-direction: column; /* Asegurar apilamiento en flexbox */
+    align-items: stretch; /* Estirar elementos hijos para ocupar el ancho */
   }
 
   .ia-generator-aside {
-    min-height: 150px; /* Altura mínima para asides apilados */
-    max-height: 40vh; /* Altura máxima para asides apilados en móvil, con scroll */
-  }
-  .ia-generator-main-content {
-    min-height: 400px; /* Altura mínima para el contenido principal */
+    min-height: 150px;
+    max-height: 40vh;
+    gap: 0.75rem; /* Reducir gap en móviles */
   }
 
-  .section-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  .ia-generator-right-aside {
+    max-height: 100vh; /* Permitir que el aside derecho ocupe toda la altura */
+    overflow-y: auto; /* Permitir scroll si es necesario */
+    display: contents;
   }
-  .section-description {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+
+  .ia-generator-left-aside {
+    max-height: 40vh; /* Ajustar altura del aside izquierdo */
+    overflow-y: auto; /* Permitir scroll si es necesario */
+    display: contents;
   }
-  .step-card-ia h3 {
-    font-size: 1.3rem;
+
+  #imageDisplay {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
   }
-  .step-card-ia p {
-    font-size: 0.9rem;
+
+  #imageDisplay img {
+    /* max-height: 70vh; Ajustar altura de la imagen principal */
+    width: 50vh;
   }
-  .feature-item p {
-    font-size: 0.85rem;
+
+  /* Ajustes para los elementos de formulario y otros dentro del contenido principal */
+  .ia-generator-main-content textarea,
+  .ia-generator-main-content select,
+  .ia-generator-main-content button {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: unset;
+    max-width: none;
   }
-  .use-case-item h3 {
-    font-size: 1.25rem;
+  .ia-generator-main-content
+    .flex-col.sm\:flex-row.items-center.justify-center.gap-3 {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch; /* Estirar elementos para llenar el ancho */
+    width: 100%; /* Asegurar que el contenedor flex ocupa el 100% */
   }
-  .use-case-item p {
-    font-size: 0.85rem;
+  .ia-generator-main-content
+    .flex-col.sm\:flex-row.items-center.justify-center.gap-3
+    > * {
+    flex-basis: 100%; /* Cada elemento ocupa su propia línea si se envuelve */
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: unset; /* Permitir que se reduzcan más allá de 150px si es necesario */
+    box-sizing: border-box;
+    margin: 0.25rem 0; /* Espaciado vertical entre botones */
+  }
+
+  #galleryContainer.grid {
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  #galleryContainer.grid .gallery-item-wrapper {
+    width: 20%;
+    /* height: 80px; */
+  }
+
+  .recent-generations-grid {
+    display: flex;
+    gap: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #374151;
+    box-sizing: border-box;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .recent-generations-grid img {
+    width: 20%;
+    height: 30vh;
+    object-fit: cover;
+    border-radius: 0.3rem;
+    border: 1px solid #4a5568;
+    transition: transform 0.2s ease;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .ia-generator-aside {
+    max-height: 30vh;
+    /* display: none; */
+  }
+  .recent-generations-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-height: 150px;
+  }
+  .recent-generations-grid img {
+    width: 20%;
+    height: 60px;
+  }
+  .ia-img-gallery-section {
+    padding: 1rem 0.5rem;
+  }
+  #galleryContainer.grid {
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  #galleryContainer.grid .gallery-item-wrapper {
+    width: 33%;
+    /* height: 80px; */
   }
 
   /* Editor de imagen en pantallas pequeñas */
@@ -701,46 +807,80 @@
   }
 
   .editor-main-layout-flex {
-    flex-direction: column; /* Apila los sidebars y el canvas */
+    flex-direction: column;
   }
 
   .editor-layout-container .editor-sidebar {
-    width: 100%; /* Los sidebars ocupan todo el ancho */
-    max-height: 35vh; /* Limita la altura de los sidebars para dejar espacio al canvas */
+    width: 100%;
+    max-height: 35vh;
     flex-grow: 1;
   }
 
   .editor-layout-container .editor-canvas-area {
-    min-width: unset; /* Reinicia el min-width */
-    min-height: 300px; /* Ajusta la altura mínima del canvas */
+    min-width: unset;
+    min-height: 300px;
     flex-grow: 1;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .section-description {
+    font-size: 0.95rem;
+  }
+  .feature-item p,
+  .step-card-ia p,
+  .tips-list li p,
+  .use-case-item p {
+    font-size: 0.85rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
+  .ia-generator-layout-container {
+    padding: 0.5rem;
+  }
+  .ia-generator-aside,
+  .ia-generator-main-content,
+  .ia-img-gallery-section.ia-generator-full-width-section {
+    padding: 0.5rem;
+  }
   .ia-generator-aside {
-    max-height: 30vh; /* Ajuste para pantallas más pequeñas */
+    max-height: 25vh;
   }
+
   .recent-generations-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas en móviles */
-    max-height: 150px;
+    display: flex;
+    gap: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #374151;
+    box-sizing: border-box;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
   }
+
   .recent-generations-grid img {
-    width: 100%; /* Ancho fijo para miniaturas en móvil */
-    height: 60px; /* Ajuste de altura para móvil */
+    width: 50%;
+    min-height: 120px;
   }
   .ia-img-gallery-section {
-    padding: 1.5rem 0.5rem; /* Reducir padding en móviles */
+    padding: 1rem 0.5rem;
   }
   #galleryContainer.grid {
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(80px, 1fr)
-    ); /* Ajustar columnas para pantallas pequeñas */
-    gap: 0.5rem; /* Menor gap en móvil */
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
   }
+
   #galleryContainer.grid .gallery-item-wrapper {
-    width: 100%; /* Ancho fijo para móvil */
-    height: 80px; /* Altura fija para móvil */
+    width: 50%;
+    /* height: 80px; */
   }
 }
