@@ -1,0 +1,52 @@
+body::before {
+  content: "";
+  position: fixed; /* ¡CAMBIO CLAVE: de absolute a fixed! */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* ¡Cubre el 100% del viewport! */
+  z-index: -1;
+  background-color: #1a202c;
+  overflow: hidden;
+}
+
+.matrix-rain {
+  position: fixed; /* ¡CAMBIO CLAVE: de absolute a fixed! */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* ¡Cubre el 100% del viewport! */
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.matrix-column {
+  position: absolute;
+  white-space: nowrap;
+  font-family: "monospace", monospace;
+  font-size: 1.2em;
+  color: #0891b2;
+  opacity: 0.5;
+  animation: fall linear infinite;
+  animation-duration: var(--fall-duration);
+  left: var(--column-left);
+  will-change: transform, opacity; /* Ayuda al navegador a optimizar la animación */
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  95% {
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}

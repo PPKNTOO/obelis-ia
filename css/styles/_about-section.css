@@ -37,10 +37,21 @@
   height: auto;
   opacity: 0.9;
   transition: transform 0.3s ease-in-out;
+  border-radius: 100px;
+  border: 3px solid #06b6d4;
 }
 
 .about-logo:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+
+.about-section-content p {
+  color: #e5e7eb; /* Color de texto claro */
+  font-size: 1.125rem; /* Tamaño de fuente */
+  line-height: 1.75rem; /* Altura de línea */
+  margin-top: 1rem;
+  text-align: justify;
 }
 
 .about-section-content h2,
