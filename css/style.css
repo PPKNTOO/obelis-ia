@@ -12,6 +12,17 @@
   height: 380px; /* Altura ligeramente aumentada */
 }
 
+.banner-heroCarousel {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(30, 41, 59, 0.8); Fondo oscuro con opacidad */
+}
+
 .carousel-slides {
   display: flex;
   height: 100%;

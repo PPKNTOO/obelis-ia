@@ -3,10 +3,6 @@
 // Exporta DOMElements para que otros módulos puedan importarlo
 export let DOMElements = {};
 
-// --- Importa la función del efecto Matrix ---
-import { initMatrixEffect } from "./matrix-effect.js"; // <--- Importación añadida
-// --- FIN DEL CAMBIO ---
-
 // Helper function to safely get elements (returns null if not found)
 function getElement(selector, isQuerySelectorAll = false) {
   const element = isQuerySelectorAll
@@ -536,10 +532,6 @@ function initGlobalApp() {
   }
 
   updateActiveClass();
-
-  // --- LLAMADA AL EFECTO MATRIX ---
-  initMatrixEffect(); // <--- Llamada a la función de inicialización del efecto Matrix
-  // --- FIN DE LA LLAMADA ---
 }
 
 // Llama a initGlobalApp cuando el DOM esté completamente cargado

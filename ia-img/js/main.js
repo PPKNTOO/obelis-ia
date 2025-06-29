@@ -32,6 +32,7 @@ import {
   showNextImage,
   showPrevImage,
   openImageEditor, // Importado directamente desde galleryManager
+  toggleSelectAllImages, // CORRECCIÓN: Importar la función toggleSelectAllImages
 } from "./galleryManager.js";
 import {
   generatePromptSuggestion,
