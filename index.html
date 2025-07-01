@@ -7,7 +7,6 @@
 
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/styles/matrix-background.css" />
 
     <meta
       name="description"
@@ -15,7 +14,7 @@
     />
     <meta
       name="keywords"
-      content="IA, inteligencia artificial, generador de imágenes, generador de texto, editor de imágenes, convertidor de imágenes, herramientas gratuitas, ObelisIA, AI, editor de fotos, conversión de formatos, creatividad digital"
+      content="IA, AI, inteligencia artificial, Obelis, Obelisco, obelisco, obelis, obelisai, ObelisAI, ObelisIA, generador de imágenes, generador de texto, editor de imágenes, convertidor de imágenes, herramientas gratuitas, editor de fotos, conversión de formatos, creatividad digital"
     />
     <meta name="author" content="ObelisIA" />
     <meta name="robots" content="index, follow" />
@@ -92,13 +91,11 @@
       src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
     ></script>
   </head>
-  <body class="min-h-screen flex flex-col pb-8">
+  <body class="min-h-screen flex flex-col">
     <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
     </amp-auto-ads>
 
-    <nav
-      class="bg-gray-800 text-white p-4 w-full fixed top-0 left-0 shadow-lg z-10 h-16"
-    >
+    <nav class="nav-bar text-white p-4 w-full fixed top-0 left-0 z-10 h-16">
       <div class="navbar-inner-content">
         <a
           href="index.html"
@@ -189,9 +186,9 @@
       </div>
     </nav>
 
-    <header class="banner-heroCarousel pt-10 pb-10">
+    <header class="banner-heroCarousel">
       <div>
-        <section class="w-full mb-8">
+        <section class="w-full mb-10">
           <div id="heroCarousel" class="hero-carousel">
             <div id="carouselSlides" class="carousel-slides">
               <div class="carousel-slide">
@@ -269,39 +266,22 @@
       </div>
     </header>
 
-    <main
-      class="flex flex-col items-center w-full max-w-7xl px-4 mx-auto flex-grow"
-    >
+    <main class="flex flex-col items-center w-full mx-auto flex-grow paralaje">
       <section class="w-full py-12 text-white text-center">
-        <div class="about-section-content">
-          <img
-            src="img/logo.webp"
-            alt="Logo de ObelisIA"
-            class="about-logo mx-auto mb-6"
-          />
-          <h2 class="text-3xl md:text-4xl font-extrabold mb-6">
-            ¿Qué es <span class="text-cyan-500">ObelisIA</span>?
-          </h2>
-          <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
-            ObelisIA es tu centro creativo online gratuito, donde la
-            inteligencia artificial y la edición de imágenes se unen para
-            potenciar tus proyectos. Hemos diseñado una suite de herramientas
-            intuitivas y potentes para ayudarte a generar contenido, transformar
-            tus ideas visuales y optimizar tus flujos de trabajo digital.
-            Ofrecemos soluciones innovadoras que te permiten alcanzar tus metas
-            creativas sin barreras.
-          </p>
-          <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
-            Nuestra misión es democratizar el acceso a la tecnología IA y a las
-            herramientas de edición de alta calidad, haciéndolas disponibles
-            para creadores, estudiantes, profesionales y entusiastas de todos
-            los niveles. Con ObelisIA, las posibilidades son ilimitadas, y tu
-            creatividad no tendrá fronteras.
-          </p>
-        </div>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Bienvenido a <span class="text-cyan-500">ObelisIA</span>
+        </h2>
+        <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+          Explora nuestras herramientas de inteligencia artificial y edición
+          digital. Desde la generación de imágenes y textos hasta la edición de
+          fotos, ObelisIA te ofrece todo lo que necesitas para potenciar tu
+          creatividad de forma gratuita y accesible. No importa si eres un
+          artista, diseñador o simplemente alguien con una idea, nuestras
+          herramientas están aquí para ayudarte a hacerla realidad.
+        </p>
       </section>
 
-      <section class="w-full py-12 text-white text-center">
+      <section class="w-full py-12 text-white text-center paralaje-svg">
         <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
           Cómo <span class="text-cyan-500">Funciona</span>
         </h2>
@@ -336,7 +316,7 @@
         </div>
       </section>
 
-      <section class="w-full py-12">
+      <section class="w-full py-12 px-10">
         <h2
           class="text-3xl md:text-4xl font-extrabold text-center text-white mb-10"
         >
@@ -503,7 +483,7 @@
       </section>
 
       <section
-        class="w-full py-12 text-white text-center bg-gray-900 rounded-lg shadow-xl"
+        class="w-full py-10 px-10 text-white text-center rounded-lg shadow-xl paralaje-svg"
       >
         <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
           Historias de <span class="text-cyan-500">Éxito</span>
@@ -536,7 +516,7 @@
         </div>
       </section>
 
-      <section class="w-full py-12 text-white text-center">
+      <section class="w-full py-12 px-10 text-white text-center">
         <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
           Preguntas <span class="text-cyan-500">Frecuentes</span>
         </h2>
@@ -583,19 +563,6 @@
         </div>
       </section>
     </main>
-
-    <footer
-      class="w-full bg-gray-900 text-gray-400 text-center py-6 mt-12 rounded-t-xl shadow-inner border-t border-gray-700"
-    >
-      <p class="text-sm">
-        © 2024 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
-        derechos reservados.
-      </p>
-      <p class="text-xs mt-2">
-        <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
-        <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
-      </p>
-    </footer>
 
     <div id="subscriptionModal" class="modal-overlay subscription-modal">
       <div class="modal-content subscription-modal-content">
@@ -652,7 +619,7 @@
         <div class="loading-animation-wrapper">
           <img
             id="pocoyoGifModal"
-            src="img/loading-pocoyo.gif"
+            src="img/Pocoyo.gif"
             alt="Cargando..."
             class="pocoyo-gif"
           />
@@ -692,4 +659,14 @@
 
     <script src="js/global.js" type="module"></script>
   </body>
+  <footer class="w-full text-gray-400 text-center py-6 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+    <p class="text-xs mt-2">
+      <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
+      <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
+    </p>
+  </footer>
 </html>

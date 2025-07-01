@@ -8,7 +8,6 @@
   max-width: 1200px;
   border-radius: 1.25rem; /* Más redondeado */
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
-  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
   height: 380px; /* Altura ligeramente aumentada */
 }
 
@@ -16,11 +15,15 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 720px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: rgba(30, 41, 59, 0.8); Fondo oscuro con opacidad */
+  /* background-image: url("../img/banner.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative; */
 }
 
 .carousel-slides {
@@ -39,12 +42,12 @@
   align-items: center;
   text-align: center;
   padding: 2.5rem;
-  background-color: #1e293b;
-  background-image: linear-gradient(
-    145deg,
-    #1e293b 0%,
-    #1a202c 100%
-  ); /* Degradado sutil */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Fondo semitransparente para mejorar la legibilidad */
 }
 .carousel-slide h5 {
   font-size: 2.5rem; /* text-4xl */
@@ -72,12 +75,6 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(
-    45,
-    55,
-    72,
-    0.8
-  ); /* gray-700 con opacidad ligeramente mayor */
   color: white;
   border: none;
   padding: 1rem 0.7rem; /* Más padding */
@@ -90,22 +87,15 @@
 }
 .carousel-nav-btn:hover {
   opacity: 1;
-  background-color: rgba(74, 85, 104, 0.95);
   transform: translateY(-50%) scale(1.05); /* Pequeña escala al hacer hover */
 }
 .carousel-nav-btn.prev {
   left: 0.75rem;
-  border-top-left-radius: 0.75rem;
-  border-bottom-left-radius: 0.75rem;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  z-index: 0;
 }
 .carousel-nav-btn.next {
   right: 0.75rem;
-  border-top-right-radius: 0.75rem;
-  border-bottom-right-radius: 0.75rem;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  z-index: 0;
 }
 .carousel-indicators-container {
   position: absolute;
@@ -139,7 +129,8 @@
   gap: 2rem; /* Más espacio */
 }
 .tool-card {
-  background-color: #1a202c; /* gris-900 */
+  background-color: rgba(0, 0, 0, 0.1); /* Gris oscuro con opacidad */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
   border: 1px solid #2d3748; /* Borde gris fijo por defecto RESTAURADO */
   border-radius: 1.25rem; /* Más redondeado */
   padding: 2rem; /* Más padding */
@@ -205,17 +196,16 @@
   }
 }
 .step-card {
-  background-color: #1a202c;
-  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
+  background-color: rgba(6, 182, 212, 0.1);
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
   border-radius: 1rem;
   padding: 1.5rem;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .step-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
 }
 .step-icon {
   font-size: 2.5rem;
@@ -229,7 +219,8 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem auto;
-  border: 2px solid #06b6d4;
+  border: 3px solid #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
 }
 .step-card h3 {
   font-size: 1.4rem;
@@ -257,8 +248,9 @@
   }
 }
 .testimonial-card {
-  background-color: #2d3748;
-  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
+  background-color: rgba(6, 182, 212, 0.1);
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+  border: 3px solid #06b6d4;
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
@@ -266,6 +258,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
 }
 .testimonial-card .quote {
   font-size: 1.05rem;
