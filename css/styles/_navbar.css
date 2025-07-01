@@ -59,8 +59,8 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: rgba(6, 182, 212, 0.1);
-  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px); /* Efecto de desenfoque para el fondo */
   border-radius: 0.5rem;
   min-width: 180px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
@@ -89,8 +89,8 @@
 }
 .submenu-item:hover {
   color: #67e8f9;
-  background-color: rgba(6, 182, 212, 0.1);
-  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px); /* Efecto de desenfoque para el fondo */
 }
 .submenu-item.active-link {
   background-color: rgba(6, 182, 212, 0.1);
@@ -114,7 +114,8 @@
     top: 64px;
     left: 0;
     width: 100%;
-    background-color: #1a202c;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px); /* Efecto de desenfoque para el fondo */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
     padding-bottom: 1rem;
     overflow-y: auto;
@@ -126,6 +127,7 @@
   .navbar-inner-content .flex-wrap.active {
     display: flex;
     transform: translateY(0);
+    flex-wrap: nowrap;
   }
   #menuToggle {
     display: block;
@@ -176,8 +178,10 @@
     opacity: 1;
     visibility: visible;
     padding: 0;
-    background-color: #1a202c;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px); /* Efecto de desenfoque para el fondo */
     pointer-events: auto;
+    overflow: hidden;
   }
   .submenu-item {
     padding-left: 2.5rem;

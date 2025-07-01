@@ -70,3 +70,27 @@ html {
   scrollbar-color: #06b6d4 #1a202c; /* thumb color track color */
   scrollbar-width: thin;
 }
+
+/* IA ESTILOS */
+/* --- Secciones de Contenido para IA-IMG (Globales en la página) --- */
+.ia-section {
+  width: 100%; /* Ahora ocupará el ancho completo del main */
+  padding: 7rem 1.5rem;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
+}
