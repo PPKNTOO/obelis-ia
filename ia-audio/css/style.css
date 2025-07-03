@@ -99,3 +99,55 @@ audio#audio-player {
     order: 1;
   }
 }
+
+/* --- ESTILOS PARA NUEVAS FUNCIONALIDADES --- */
+
+/* Modal de Anuncio */
+#ad-modal {
+  z-index: 100; /* Asegura que esté por encima de todo */
+}
+
+#ad-modal.hidden {
+  display: none;
+}
+
+#ad-iframe-container {
+  width: 100%;
+  height: 18rem; /* 288px, un tamaño estándar para video */
+  background-color: #000;
+  border: 1px solid #374151; /* gray-700 */
+  border-radius: 0.5rem;
+  overflow: hidden; /* Para que el iframe no se salga */
+}
+
+#ad-iframe-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#ad-timer {
+  color: #9ca3af; /* gray-400 */
+  font-size: 1.125rem; /* text-lg */
+}
+
+/* Barra de Progreso dentro del Modal de Carga */
+#loadingOverlayModal .modal-content {
+  min-width: 320px;
+}
+
+#progress-bar-container {
+  transition: opacity 0.3s;
+}
+
+#progress-bar-container.hidden {
+  display: none;
+}
+
+#pocoyo-gif.hidden {
+  display: none;
+}
+
+#progress-bar {
+  transition: width 0.5s ease-out; /* Animación suave para la barra de progreso */
+}
