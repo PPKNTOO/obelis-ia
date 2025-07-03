@@ -21,7 +21,7 @@ export function initApp() {
     audioPlayerContainer: document.getElementById("audio-player-container"),
     audioPlayer: document.getElementById("audio-player"),
     downloadAudioLink: document.getElementById("download-audio-link"),
-    adModal: document.getElementById("ad-modal"), // ✅ Nuevo modal
+    adModal: document.getElementById("ad-modal"),
     adIframeContainer: document.getElementById("ad-iframe-container"),
     adTimer: document.getElementById("ad-timer"),
   });
