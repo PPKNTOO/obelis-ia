@@ -1,73 +1,76 @@
 // edit-img/js/history.js
-import { drawImageOnCanvas } from "./canvas.js";
-import { updateUndoRedoButtons } from "./ui.js";
 
-// Usamos objetos para las referencias para que los valores se puedan actualizar globalmente
+import { DOMElements } from "../../js/global.js";
+import { drawImageOnCanvas, editorCtx, imageCanvas } from "./canvas.js";
+import { updateUndoRedoButtons, showMessage } from "./ui.js";
+import { currentImageBuffer } from "./main.js"; // Importamos el buffer de la imagen
+
 export const history = { current: [] };
-export const historyIndex = { current: -1 };
+export let historyIndex = { current: -1 };
 
 /**
  * Guarda el estado actual del canvas en el historial.
- * @param {HTMLCanvasElement} canvas - El elemento canvas a guardar.
- * @param {function} setHistoryStateCallback - Callback para actualizar el estado del historial.
+ * @param {HTMLCanvasElement} buffer - El canvas en memoria (buffer) que contiene el estado a guardar.
  */
-export function saveState(canvas, setHistoryStateCallback) {
-  if (!canvas) return;
+export function saveState(buffer) {
+  if (!buffer) return;
 
+  // Si hemos hecho undo y luego dibujamos algo nuevo, eliminamos el historial "futuro"
   if (historyIndex.current < history.current.length - 1) {
     history.current = history.current.slice(0, historyIndex.current + 1);
   }
-  history.current.push(canvas.toDataURL());
+
+  // Guardamos el estado del buffer como una data URL
+  history.current.push(buffer.toDataURL());
   historyIndex.current++;
-  updateUndoRedoButtons(
-    document.getElementById("undoBtn"),
-    document.getElementById("redoBtn"),
-    historyIndex.current,
-    history.current.length
-  );
+
+  updateUndoRedoButtons();
 }
 
 /**
  * Restaura un estado del historial al canvas.
  * @param {string} dataURL - La DataURL del estado a restaurar.
- * @param {HTMLCanvasElement} canvas - El elemento canvas HTML.
- * @param {CanvasRenderingContext2D} ctx - El contexto 2D del canvas.
- * @param {HTMLElement} placeholderText - El elemento de texto placeholder.
- * @param {HTMLCanvasElement} currentImageBuffer - El canvas de buffer para actualizar.
- * @param {Object} historyIndexRef - Referencia al objeto historyIndex (para actualizar su 'current').
- * @param {function} updateUndoRedoButtonsCallback - Callback para actualizar los botones Deshacer/Rehacer.
- * @param {HTMLElement} undoBtn - El botón de deshacer.
- * @param {HTMLElement} redoBtn - El botón de rehacer.
- * @param {Array<string>} historyArray - El array del historial.
  */
-export function restoreState(
-  dataURL,
-  canvas,
-  ctx,
-  placeholderText,
-  currentImageBuffer,
-  historyIndexRef,
-  updateUndoRedoButtonsCallback,
-  undoBtn,
-  redoBtn,
-  historyArray
-) {
+function restoreState(dataURL) {
   const img = new Image();
   img.onload = () => {
-    drawImageOnCanvas(img, canvas, ctx, placeholderText);
+    // Dibuja la imagen del historial en el canvas visible
+    drawImageOnCanvas(img);
+    // Y también actualiza el buffer en memoria al mismo estado
     if (currentImageBuffer) {
       currentImageBuffer.width = img.width;
       currentImageBuffer.height = img.height;
       currentImageBuffer.getContext("2d").drawImage(img, 0, 0);
     }
-    updateUndoRedoButtonsCallback(
-      undoBtn,
-      redoBtn,
-      historyIndexRef.current,
-      historyArray.length
-    );
+    updateUndoRedoButtons();
   };
   img.src = dataURL;
+}
+
+/**
+ * Función para deshacer la última acción.
+ */
+export function undo() {
+  if (historyIndex.current > 0) {
+    historyIndex.current--;
+    restoreState(history.current[historyIndex.current]);
+    showMessage("Acción deshecha.", "info");
+  } else {
+    showMessage("No hay más acciones para deshacer.", "warning");
+  }
+}
+
+/**
+ * Función para rehacer la última acción deshecha.
+ */
+export function redo() {
+  if (historyIndex.current < history.current.length - 1) {
+    historyIndex.current++;
+    restoreState(history.current[historyIndex.current]);
+    showMessage("Acción rehecha.", "info");
+  } else {
+    showMessage("No hay más acciones para rehacer.", "warning");
+  }
 }
 
 /**
@@ -77,11 +80,5 @@ export function restoreState(
 export function setHistoryState(newHistory) {
   history.current = newHistory;
   historyIndex.current = newHistory.length - 1;
-  // Opcional: Llamar a updateUndoRedoButtons si necesitas actualizar los botones inmediatamente.
-  updateUndoRedoButtons(
-    document.getElementById("undoBtn"),
-    document.getElementById("redoBtn"),
-    historyIndex.current,
-    history.current.length
-  );
+  updateUndoRedoButtons();
 }

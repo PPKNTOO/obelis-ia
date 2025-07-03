@@ -2,10 +2,7 @@
 .main-content-wrapper {
   width: 100%;
   max-width: 1200px; /* Alinea con la navbar */
-  margin-top: calc(
-    64px + 1rem
-  ); /* Empuja el contenido debajo de la navbar fija + 1rem de espacio */
-  padding: 0 1rem; /* Padding horizontal consistente */
+  padding: 6rem 1rem 0; /* Padding consistente */
   display: flex;
   flex-direction: column; /* Apila el menú y el layout principal verticalmente */
   gap: 1rem; /* Espacio entre la barra de menú y el layout principal */
