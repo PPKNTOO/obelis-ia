@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Convertidor de Imágenes Gratuito - Todos los Formatos | ObelisIA
+    </title>
+    <link rel="icon" href="../img/favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <meta
+      name="description"
+      content="Convierte tus imágenes a diferentes formatos como JPEG, PNG, WebP, GIF, BMP, TIFF, ICO de forma gratuita y sencilla. Herramienta online rápida y segura."
+    />
+    <meta
+      name="keywords"
+      content="convertidor de imágenes, convertir imagen, cambiar formato imagen, JPEG, PNG, WebP, GIF, BMP, TIFF, ICO, herramienta gratuita, ObelisIA"
+    />
+    <meta name="author" content="ObelisIA" />
+
+    <meta property="og:type" content="software.application" />
+    <meta
+      property="og:url"
+      content="https://obelis-ia.vercel.app/convert-img/index.html"
+    />
+    <meta
+      property="og:title"
+      content="Convertidor de Imágenes Gratuito - Todos los Formatos | ObelisIA"
+    />
+    <meta
+      property="og:description"
+      content="Convierte tus imágenes a diferentes formatos como JPEG, PNG, WebP, GIF, BMP, TIFF, ICO de forma gratuita y sencilla. Herramienta online rápida y segura."
+    />
+    <meta property="og:image" content="../img/logo.webp" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://obelis-ia.vercel.app/convert-img/index.html"
+    />
+    <meta
+      name="twitter:title"
+      content="Convertidor de Imágenes Gratuito - Todos los Formatos | ObelisIA"
+    />
+    <meta
+      name="twitter:description"
+      content="Convierte tus imágenes a diferentes formatos como JPEG, PNG, WebP, GIF, BMP, TIFF, ICO de forma gratuita y sencilla. Herramienta online rápida y segura."
+    />
+    <meta name="twitter:image" content="../img/logo.webp" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
+    </head>
+  <body class="min-h-screen flex flex-col">
+    <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
+    </amp-auto-ads>
+
+    <nav class="nav-bar text-white p-4 w-full fixed top-0 left-0 z-10 h-16">
+      <div class="navbar-inner-content">
+        <a
+          href="../index.html"
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
+        >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../ia-img/index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="../ia-text/index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+              <a
+                href="../ia-audio/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador de Música/Audio IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+              <a
+                href="../ia-upscale/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Mejorador de Imágenes IA (Próximamente)</a
+              >
+              <a
+                href="../ia-bgremove/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Removedor de Fondo IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Utilidades Digitales
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a
+                href="../image-compressor/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Compresor de Imágenes (Próximamente)</a
+              >
+              <a
+                href="../color-palette/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador/Extractor de Paletas de Colores (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="ia-convert-app-main-container">
+      <main class="flex flex-col items-center w-full flex-grow paralaje">
+        <section class="ia-section intro-section">
+          <h2 class="section-title">
+            Convertidor de Imágenes:
+            <span class="text-cyan-500">Transforma tus Fotos con Facilidad</span>
+          </h2>
+          <p class="section-description">
+            Con nuestro convertidor de imágenes online, puedes cambiar el formato
+            de tus fotos de manera rápida y gratuita. Compatible con JPEG, PNG,
+            WebP, GIF, BMP, TIFF, ICO, y muchos más, aseguramos la mejor calidad
+            y privacidad para todas tus conversiones. Ideal para web, imprenta o
+            cualquier necesidad.
+          </p>
+          <div class="feature-grid">
+            <div class="feature-item">
+              <i class="fas fa-exchange-alt feature-icon"></i>
+              <p>
+                <strong>Múltiples Formatos:</strong> Soporta los formatos más
+                populares y muchos otros.
+              </p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-cloud-upload-alt feature-icon"></i>
+              <p>
+                <strong>Procesamiento Rápido:</strong> Conversiones en segundos,
+                directamente en tu navegador.
+              </p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-lock feature-icon"></i>
+              <p>
+                <strong>100% Seguro:</strong> Tus imágenes no se suben a ningún
+                servidor externo.
+              </p>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-infinity feature-icon"></i>
+              <p>
+                <strong>Uso Gratuito:</strong> Convierte sin límites de tamaño o
+                cantidad de archivos.
+              </p>
+            </div>
+          </div>
+          <a href="#converterToolSection" class="btn-primary mt-8 inline-block">
+            Empezar a Convertir
+          </a>
+        </section>
+
+        <section class="ia-section how-to-section paralaje-svg">
+          <h2 class="section-title">
+            Cómo <span class="text-cyan-500">Convertir</span> una Imagen
+          </h2>
+          <div class="how-to-steps-grid">
+            <div class="step-card-ia">
+              <div class="step-number">1</div>
+              <h3>Sube tu Imagen</h3>
+              <p>
+                Haz clic en el área de carga o arrastra y suelta tu archivo de
+                imagen (JPEG, PNG, WebP, etc.).
+              </p>
+            </div>
+            <div class="step-card-ia">
+              <div class="step-number">2</div>
+              <h3>Elige el Formato</h3>
+              <p>
+                Selecciona el formato de salida deseado (por ejemplo, JPEG, PNG,
+                WebP) en el menú desplegable.
+              </p>
+            </div>
+            <div class="step-card-ia">
+              <div class="step-number">3</div>
+              <h3>Convierte y Descarga</h3>
+              <p>
+                Haz clic en "Convertir Imagen" y luego en "Descargar Imagen"
+                cuando esté lista.
+              </p>
+            </div>
+          </div>
+          <a href="#converterToolSection" class="btn-primary mt-8 inline-block">
+            Ir al Convertidor
+          </a>
+        </section>
+
+        <section class="ia-section tips-section">
+          <h2 class="section-title">
+            Consejos para una <span class="text-cyan-500">Mejor Conversión</span>
+          </h2>
+          <p class="section-description">
+            Asegura resultados óptimos con estos sencillos consejos:
+          </p>
+          <ul class="tips-list">
+            <li>
+              <strong>Calidad Original:</strong> La calidad de la imagen de salida
+              dependerá de la calidad de la imagen original.
+            </li>
+            <li>
+              <strong>Entender los Formatos:</strong> JPEG es para fotos con color
+              completo, PNG para transparencia y gráficos, WebP para web moderno.
+            </li>
+            <li>
+              <strong>Tamaño del Archivo:</strong> Algunos formatos (como JPEG)
+              permiten ajustar la calidad para reducir el tamaño del archivo.
+            </li>
+            <li>
+              <strong>Transparencia:</strong> Si tu imagen original tiene
+              transparencia (PNG, GIF), convertir a JPEG la reemplazará con un
+              fondo blanco o negro.
+            </li>
+            <li>
+              <strong>Nombres de Archivo:</strong> Usa nombres de archivo simples
+              sin caracteres especiales para evitar problemas.
+            </p>
+          </ul>
+          <a href="#converterToolSection" class="btn-primary mt-8 inline-block">
+            Convertir Ahora
+          </a>
+        </section>
+
+        <section class="ia-section use-cases-section paralaje-svg">
+          <h2 class="section-title">
+            Casos de Uso <span class="text-cyan-500">Comunes</span>
+          </h2>
+          <div class="use-cases-grid">
+            <div class="use-case-item">
+              <i class="fas fa-globe use-case-icon"></i>
+              <h3>Optimización Web</h3>
+              <p>
+                Reduce el tamaño de tus imágenes y mejora la velocidad de carga
+                de tu sitio web.
+              </p>
+            </div>
+            <div class="use-case-item">
+              <i class="fas fa-print use-case-icon"></i>
+              <p>
+                <strong>Preparación para Impresión:</strong> Convierte imágenes a
+                formatos de alta calidad para proyectos de impresión.
+              </p>
+            </div>
+            <div class="use-case-item">
+              <i class="fas fa-palette use-case-icon"></i>
+              <h3>Compatibilidad</h3>
+              <p>
+                Adapta imágenes a formatos específicos requeridos por software,
+                plataformas o dispositivos.
+              </p>
+            </div>
+            <div class="use-case-item">
+              <i class="fas fa-file-image use-case-icon"></i>
+              <h3>Organización de Archivos</h3>
+              <p>
+                Estandariza tu colección de imágenes a un formato único para
+                mejorar la organización.
+              </p>
+            </div>
+          </div>
+          <a href="#converterToolSection" class="btn-primary mt-8 inline-block">
+            Empezar a Usar
+          </a>
+        </section>
+
+        <div class="main-tool-section" id="converterToolSection">
+          <h1
+            class="text-3xl font-extrabold text-center mb-6 text-white tracking-tight"
+          >
+            Convertidor de Imágenes <span class="text-cyan-500">Online</span>
+          </h1>
+
+          <div class="input-group">
+            <label for="imageUpload" class="file-input" id="fileInputArea">
+              <span class="text-lg"
+                >Haz clic para seleccionar una imagen o arrástrala aquí</span
+              >
+              <input
+                type="file"
+                id="imageUpload"
+                accept="
+                          image/*,
+                          .jpg, .jpeg, .png, .gif, .bmp, .webp, .svg, .ico, .tif, .tiff,
+                          .heic, .heif, .psd, .dng, .cr2, .nef, .arw, .orf, .sr2, .raw
+                      "
+                class="hidden"
+              />
+            </label>
+            <span id="fileName" class="text-gray-400 text-sm"
+              >Ningún archivo seleccionado</span
+            >
+          </div>
+
+          <div class="canvas-container">
+            <canvas id="imageCanvas"></canvas>
+            <span id="placeholderText" class="text-gray-500 text-xl"
+              >Previsualización de la imagen</span
+            >
+          </div>
+
+          <div class="flex items-center gap-4">
+            <label for="outputFormat" class="text-gray-300 font-medium text-lg"
+              >Convertir a:</label
+            >
+            <select id="outputFormat">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WebP</option>
+              <option value="image/gif">GIF</option>
+              <option value="image/bmp">BMP</option>
+              <option value="image/tiff">TIFF</option>
+              <option value="image/x-icon">ICO</option>
+              <option value="image/avif">AVIF</option>
+              <option value="image/jp2">JPEG 2000 (JP2)</option>
+              <option value="image/jpx">JPEG 2000 (JPX)</option>
+              <option value="application/pdf">PDF</option>
+              <option value="image/vnd.adobe.photoshop">PSD</option>
+              <option value="image/heic">HEIC (Entrada)</option>
+              <option value="image/heif">HEIF (Salida, si soporta)</option>
+              <option value="image/x-raw">RAW (Entrada)</option>
+              <option value="image/dng">DNG (Entrada)</option>
+              <option value="image/svg+xml">SVG (Si es vectorial)</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button id="convertBtn" class="btn btn-primary disabled-btn" disabled>
+              Convertir Imagen
+            </button>
+            <button
+              id="downloadBtn"
+              class="btn btn-secondary disabled-btn"
+              disabled
+            >
+              Descargar Imagen
+            </button>
+          </div>
+
+          <p
+            id="conversionCounterDisplay"
+            class="text-sm text-gray-400 mt-2 text-center"
+          >
+            Conversiones gratuitas restantes: --
+          </p>
+          <button
+            id="watchAdButton"
+            class="hidden bg-purple-600 hover:bg-purple-700 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3"
+          >
+            Ver Anuncio para +3 Conversiones
+          </button>
+          </div>
+
+        <section class="ia-section faq-section">
+          <h2 class="section-title">
+            Preguntas <span class="text-cyan-500">Frecuentes</span>
+          </h2>
+          <div class="faq-container">
+            <div class="faq-item">
+              <h3 class="faq-question">
+                ¿Qué formatos de imagen puedo convertir?
+                <i class="fas fa-chevron-down faq-arrow"></i>
+              </h3>
+              <div class="faq-answer">
+                Puedes convertir entre los formatos más comunes como JPEG, PNG,
+                WebP, GIF, BMP, TIFF, y también algunos menos usuales como ICO,
+                AVIF, JPEG 2000, e incluso PSD y RAW (para entrada).
+              </div>
+            </div>
+            <div class="faq-item">
+              <h3 class="faq-question">
+                ¿La conversión es realmente gratuita y ilimitada?
+                <i class="fas fa-chevron-down faq-arrow"></i>
+              </h3>
+              <div class="faq-answer">
+                Sí, ofrecemos un número de conversiones gratuitas al día. Si
+                necesitas más, puedes obtener conversiones adicionales viendo un
+                breve anuncio, lo que nos ayuda a mantener la plataforma gratuita
+                para todos.
+              </div>
+            </div>
+            <div class="faq-item">
+              <h3 class="faq-question">
+                ¿Mis imágenes son seguras y privadas?
+                <i class="fas fa-chevron-down faq-arrow"></i>
+              </h3>
+              <div class="faq-answer">
+                Absolutamente. Todas las conversiones se realizan directamente
+                en tu navegador. Tus imágenes nunca se suben a nuestros
+                servidores ni a ningún otro lugar, garantizando tu privacidad y
+                seguridad.
+              </div>
+            </div>
+            <div class="faq-item">
+              <h3 class="faq-question">
+                ¿Cómo afecta la conversión a la calidad de la imagen?
+                <i class="fas fa-chevron-down faq-arrow"></i>
+              </h3>
+              <div class="faq-answer">
+                La calidad de la imagen convertida depende de la calidad de la
+                imagen original y del formato de salida elegido. Formatos como
+                JPEG son de "pérdida" (comprimen la imagen, perdiendo algo de
+                detalle), mientras que PNG es "sin pérdida". Nuestro convertidor
+                se esfuerza por mantener la mejor calidad posible.
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      
+    </div>
+    <div id="subscriptionModal" class="modal-overlay subscription-modal">
+      <div class="modal-content subscription-modal-content">
+        <h3 class="text-2xl font-bold mb-4 text-cyan-500">
+          ¡Únete a nuestra comunidad!
+        </h3>
+        <p class="mb-4 text-gray-300">
+          Suscríbete a nuestro boletín para recibir las últimas novedades y
+          herramientas de IA.
+        </p>
+        <input
+          type="email"
+          id="emailInput"
+          placeholder="Tu correo electrónico"
+          class="mb-4 p-3 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <div class="flex justify-center space-x-4">
+          <button
+            id="subscribeButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            Suscribirse
+          </button>
+          <button
+            id="noThanksButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="adModal" class="modal-overlay ad-modal-overlay">
+      <div class="modal-content ad-modal-content">
+        <h3 class="text-2xl font-bold text-cyan-500 mb-4">
+          ¡Reproduciendo Anuncio!
+        </h3>
+        <p class="text-gray-300 mb-4">
+          Esto es un anuncio simulado. Por favor, espera...
+        </p>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-4 border-cyan-500 mx-auto"
+        ></div>
+        <p id="adTimer" class="mt-4 text-gray-400 text-sm">
+          Tiempo restante: 5 segundos
+        </p>
+      </div>
+    </div>
+
+    <div id="loadingOverlayModal" class="modal-overlay loading-overlay-modal">
+      <div class="modal-content loading-modal-content">
+        <button id="loadingModalCloseButton" class="modal-close-button hidden">
+          &times;
+        </button>
+        <div class="loading-animation-wrapper">
+          <img
+            id="pocoyoGifModal"
+            src="../img/Pocoyo.gif"
+            alt="Cargando..."
+            class="pocoyo-gif"
+          />
+          <div id="loadingSpinnerModal" class="modern-spinner hidden"></div>
+        </div>
+        <p id="loadingMessageTextModal" class="loading-message-text-modal">
+          Cargando...
+        </p>
+        <p id="loadingErrorTextModal" class="loading-error-text-modal hidden">
+          Ha ocurrido un error.
+        </p>
+      </div>
+    </div>
+
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-sm">
+        Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
+        aceptas su uso.
+      </p>
+      <button
+        id="acceptCookiesButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg transition duration-200 text-sm shadow-md"
+      >
+        Aceptar
+      </button>
+    </div>
+
+    <div id="messageModal" class="modal-overlay">
+      <div id="messageModalContent" class="modal-content">
+        <button id="messageModalCloseButton" class="modal-close-button">
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js" defer></script>
+  </body>
+  <footer class="w-full text-gray-400 text-center py-6 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+    <p class="text-xs mt-2">
+      <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
+      <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
+    </p>
+  </footer>
+</html>

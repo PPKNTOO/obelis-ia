@@ -1,0 +1,15 @@
+/* Importaciones de estilos modulares */
+@import url("./styles/_base.css");
+@import url("./styles/_utilities.css");
+@import url("./styles/_global-ad-banner.css");
+@import url("./styles/_global-modals.css");
+@import url("./styles/_navbar.css");
+@import url("./styles/_editor.css");
+@import url("./styles/_about-section.css");
+@import url("./styles/_faq-section.css");
+@import url("./styles/_buttons.css");
+@import url("./styles/_forms.css");
+
+/* Puedes añadir estilos específicos de main.css aquí si no encajan en ningún módulo existente,
+   pero la idea es que este archivo sea principalmente un orquestador de imports. */
+/* Por ejemplo, si necesitas un estilo global que no encaje en los módulos, puedes añadirlo aquí. */

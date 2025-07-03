@@ -1,0 +1,241 @@
+/* Estilos para la sección de introducción (feature-grid) */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.feature-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+.feature-item .feature-icon {
+  font-size: 2.5rem;
+  color: #06b6d4;
+  margin-bottom: 0.75rem;
+}
+.feature-item p {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+.feature-item p strong {
+  color: white;
+}
+
+/* Estilos para la sección "Cómo Generar" (how-to-steps-grid) */
+.how-to-steps-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .how-to-steps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step-card-ia {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step-card-ia:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.step-card-ia .step-number {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.15);
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  border: 3px solid #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+.step-card-ia h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+.step-card-ia p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* Estilos para la sección de consejos (tips-list) */
+.tips-list {
+  list-style: none; /* Quita viñetas por defecto */
+  padding: 0;
+  margin: 2rem auto 0 auto;
+  max-width: 700px;
+  text-align: left;
+}
+.tips-list li {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+.tips-list li:hover {
+  background-color: #374151;
+}
+.tips-list li::before {
+  content: "\f058"; /* Icono de check */
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #34d399; /* Verde de éxito */
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.tips-list li strong {
+  color: #06b6d4; /* cyan-500 */
+}
+.tips-list li p {
+  color: #e2e8f0;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0; /* Reiniciar margin para p dentro de li */
+}
+
+/* Estilos para la sección de Casos de Uso (use-cases-grid) */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.use-case-item {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.use-case-item:hover {
+  transform: translateY(-5px);
+  background-color: #374151;
+}
+.use-case-item .use-case-icon {
+  font-size: 2.8rem;
+  color: #34d399;
+  margin-bottom: 0.75rem;
+}
+.use-case-item h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+.use-case-item p {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* --- ESTILOS DEL MODAL DE CARGA Y MENSAJES (NUEVO) --- */
+.loading-overlay-modal {
+  /* Hereda de .modal-overlay */
+  z-index: 2010; /* Muy alto, para estar siempre por encima */
+}
+.loading-modal-content {
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: white;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+/* Nota: Las clases de animación de carga (pocoyo-gif, modern-spinner, @keyframes spin)
+     han sido movidas a _global-modals.css y se heredan automáticamente. */
+.loading-modal-content #pocoyoGifModal,
+.loading-modal-content #loadingSpinnerModal {
+  margin-bottom: 1rem;
+}
+.loading-modal-content #loadingMessageTextModal {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+.loading-modal-content #loadingErrorTextModal {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* --- Media Queries para responsividad del generador (adoptados de ia-img) --- */
+@media (max-width: 1024px) {
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .section-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .step-card-ia h3 {
+    font-size: 1.3rem;
+  }
+  .step-card-ia p {
+    font-size: 0.9rem;
+  }
+  .feature-item p {
+    font-size: 0.85rem;
+  }
+  .use-case-item h3 {
+    font-size: 1.25rem;
+  }
+  .use-case-item p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  .section-description {
+    font-size: 0.95rem;
+  }
+  .feature-item p,
+  .step-card-ia p,
+  .tips-list li p,
+  .use-case-item p {
+    font-size: 0.85rem;
+  }
+}

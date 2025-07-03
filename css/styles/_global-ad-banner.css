@@ -1,0 +1,30 @@
+/* --- Global Ad Banner Styles (General para todo el sitio si se usan) --- */
+.ad-banner {
+  background-color: #1f2937; /* gray-800 */
+  border: 1px solid #374151; /* gray-700, borde más suave */
+  color: #d1d5db; /* gray-300 */
+  padding: 1.25rem; /* Un poco más de padding */
+  text-align: center;
+  border-radius: 0.75rem; /* Bordes más redondeados */
+  font-style: italic;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  width: 100%;
+  max-width: 960px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra sutil */
+  margin-left: auto;
+  margin-right: auto;
+}
+.ad-banner-top {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ad-banner-bottom {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

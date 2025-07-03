@@ -1,0 +1,69 @@
+/* --- About Section Specific Styles (Para la página principal, si se usa) --- */
+.about-section-content {
+  background: linear-gradient(135deg, #1f2937, #111827);
+  border: 1px solid #374151; /* Borde gris original */
+  border-radius: 1.25rem;
+  padding: 3rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden; /* Asegura que el contenido respete el border-radius */
+}
+
+/* El pseudoelemento de brillo para .about-section-content */
+.about-section-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(31, 41, 55, 0.8),
+    rgba(31, 41, 55, 0.1)
+  );
+  z-index: 0;
+}
+
+.about-section-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+.about-logo {
+  width: 120px; /* Tamaño del logo */
+  height: auto;
+  opacity: 0.9;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 100px;
+  border: 3px solid #06b6d4;
+}
+
+.about-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+
+.about-section-content p {
+  color: #e5e7eb; /* Color de texto claro */
+  font-size: 1.125rem; /* Tamaño de fuente */
+  line-height: 1.75rem; /* Altura de línea */
+  margin-top: 1rem;
+  text-align: justify;
+}
+
+.about-section-content h2,
+.about-section-content p {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .about-section-content {
+    padding: 2.5rem 1.5rem;
+  }
+  .about-logo {
+    width: 100px;
+  }
+}

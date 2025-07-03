@@ -1,0 +1,9 @@
+# Directorio de módulos de Node
+node_modules/
+
+# Variables de entorno local
+.env
+
+# Logs de Vercel (si se generan localmente)
+.vercel/
+.vercel

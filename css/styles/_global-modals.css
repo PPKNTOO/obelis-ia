@@ -1,0 +1,232 @@
+/* --- Global Modals Styles (Subscription, Cookie Consent, Generic Message, Lightbox, Editor Image, Loading Overlay) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Z-index base para todos los overlays */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  overflow-y: auto; /* Permite scroll si el contenido del modal excede la altura del viewport */
+}
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-content {
+  position: relative;
+  background-color: #1e293b;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  color: white;
+  max-width: 90%;
+  max-height: 90vh; /* Limita la altura del contenido del modal */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transform: translateY(-20px);
+  transition: transform 0.4s ease;
+  border: 1px solid #2d3748; /* Borde gris original */
+}
+.modal-overlay.show .modal-content {
+  transform: translateY(0);
+}
+.modal-close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(45, 55, 72, 0.7);
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  line-height: 1;
+  border-radius: 9999px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.modal-close-button:hover {
+  opacity: 1;
+  background-color: rgba(74, 85, 104, 0.9);
+}
+
+/* Subscription Modal Specifics (Hereda de .modal-overlay y .modal-content) */
+.subscription-modal {
+  /* Inherits from .modal-overlay */
+  z-index: 1010; /* Superior a otros modales base */
+}
+.subscription-modal-content {
+  /* Inherits from .modal-content */
+  /* No se necesitan overrides aquí si hereda bien */
+}
+.subscription-modal-content input {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  color: white;
+  padding: 0.9rem;
+  border-radius: 0.6rem;
+  width: 100%;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+}
+.subscription-modal-content input::placeholder {
+  color: #a0aec0;
+}
+.subscription-modal-content button {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.subscription-modal-content button:hover {
+  transform: translateY(-2px);
+}
+
+/* Cookie Consent Specifics */
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(26, 32, 44, 0.95);
+  color: white;
+  padding: 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1005; /* Entre el contenido y el modal de suscripción */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100%);
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid #2d3748; /* Borde gris original */
+  border-left: 1px solid #2d3748; /* Borde gris original */
+  border-right: 1px solid #2d3748; /* Borde gris original */
+}
+.cookie-consent.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (min-width: 768px) {
+  .cookie-consent {
+    flex-direction: row;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    width: auto;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+  }
+  .cookie-consent.show {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Generic Message Modal Specifics (Hereda de .modal-overlay y .modal-content) */
+#messageModal {
+  z-index: 2000; /* Alto z-index para mensajes importantes */
+}
+#messageModalContent {
+  /* Inherits from .modal-content */
+  /* No se necesitan overrides aquí si hereda bien */
+}
+#messageModalCloseButton {
+  /* No cambiar, es global */
+}
+#messageModalText {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+#messageModalIcon {
+  margin-top: 1.25rem;
+  font-size: 3rem;
+}
+#messageModalIcon.success {
+  color: #34d399;
+}
+#messageModalIcon.error {
+  color: #ef4444;
+}
+#messageModalIcon.info {
+  color: #60a5fa;
+}
+
+/* Loading Overlay Modal (Nuevo, ahora global) */
+.loading-overlay-modal {
+  /* Hereda de .modal-overlay */
+  z-index: 2010; /* Muy alto, para estar siempre por encima */
+}
+.loading-modal-content {
+  background-color: #1a202c;
+  border: 1px solid #2d3748; /* Borde gris original */
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: white;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.loading-modal-content .loading-animation-wrapper {
+  /* Copiado de ia-img/style.css */
+  width: 80px;
+  height: 80px;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loading-modal-content .pocoyo-gif {
+  /* Copiado de ia-img/style.css */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.loading-modal-content .modern-spinner {
+  /* Copiado de ia-img/style.css */
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #06b6d4;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  /* Keyframes también globales */
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-modal-content #pocoyoGifModal,
+.loading-modal-content #loadingSpinnerModal {
+  margin-bottom: 1rem;
+}
+.loading-modal-content #loadingMessageTextModal {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+.loading-modal-content #loadingErrorTextModal {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}

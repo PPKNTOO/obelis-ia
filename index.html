@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ObelisIA - Herramientas de IA y Edición Gratuita</title>
+
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <meta
+      name="description"
+      content="Descubre Obelis IA: tu plataforma gratuita para generación de imágenes y texto con IA, edición y conversión de imágenes, ¡y mucho más! Herramientas potentes y fáciles de usar para todos tus proyectos creativos."
+    />
+    <meta
+      name="keywords"
+      content="IA, AI, inteligencia artificial, Obelis, Obelisco, obelisco, obelis, obelisai, ObelisAI, ObelisIA, generador de imágenes, generador de texto, editor de imágenes, convertidor de imágenes, herramientas gratuitas, editor de fotos, conversión de formatos, creatividad digital"
+    />
+    <meta name="author" content="ObelisIA" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://obelis-ia.vercel.app" />
+    <link rel="icon" href="img/favicon.ico" type="image/ico" />
+    <link rel="apple-touch-icon" href="img/logo.webp" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://obelis-ia.vercel.app" />
+    <meta
+      property="og:site_name"
+      content="ObelisIA - Herramientas de IA y Edición Gratuita"
+    />
+    <meta
+      property="og:title"
+      content="ObelisIA - Herramientas de IA y Edición Gratuita"
+    />
+    <meta
+      property="og:description"
+      content="Crea, edita y transforma con la ayuda de la inteligencia artificial. Genera imágenes, textos y edita tus fotos online con ObelisIA."
+    />
+    <meta property="og:image" content="img/logo.webp" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://obelis-ia.vercel.app" />
+    <meta
+      name="twitter:title"
+      content="ObelisIA - Herramientas de IA y Edición Gratuita"
+    />
+    <meta
+      name="twitter:description"
+      content="Crea, edita y transforma con la ayuda de la inteligencia artificial. Genera imágenes, textos y edita tus fotos online con ObelisIA."
+    />
+    <meta property="twitter:image" content="img/logo.webp" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ObelisIA - Herramientas de IA y Edición Gratuita",
+        "description": "Plataforma web gratuita que ofrece herramientas de inteligencia artificial para generación de imágenes y texto, así como edición y conversión de imágenes.",
+        "applicationCategory": "Utilities",
+        "operatingSystem": "Web",
+        "url": "https://obelis-ia.vercel.app",
+        "inLanguage": "es",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "category": "Free"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ObelisIA"
+        }
+      }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
+    </amp-auto-ads>
+
+    <nav class="nav-bar text-white p-4 w-full fixed top-0 left-0 z-10 h-16">
+      <div class="navbar-inner-content">
+        <a
+          href="index.html"
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
+        >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="ia-img/index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="ia-text/index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+              <a
+                href="ia-audio/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador de Música/Audio IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="convert-img/index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+              <a
+                href="ia-upscale/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Mejorador de Imágenes IA (Próximamente)</a
+              >
+              <a
+                href="ia-bgremove/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Removedor de Fondo IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Utilidades Digitales
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a
+                href="image-compressor/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Compresor de Imágenes (Próximamente)</a
+              >
+              <a
+                href="color-palette/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador/Extractor de Paletas de Colores (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="banner-heroCarousel">
+      <section class="w-full">
+        <div id="heroCarousel" class="hero-carousel">
+          <div id="carouselSlides" class="carousel-slides">
+            <div class="carousel-slide">
+              <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Crea, Edita y Transforma con
+                <span class="text-cyan-500">Inteligencia Artificial</span>
+              </h5>
+              <p
+                class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                ObelisIA te ofrece herramientas gratuitas y potentes para dar
+                vida a tus ideas. Desde la generación de imágenes hasta la
+                edición avanzada de texto y fotos.
+              </p>
+              <a href="ia-img/index.html">
+                <button class="carousel-button">¡Empieza a Crear Ahora!</button>
+              </a>
+            </div>
+
+            <div class="carousel-slide">
+              <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Da Vida a Tus Ideas con
+                <span class="text-cyan-500">IA de Imagen</span>
+              </h5>
+              <p
+                class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                Describe lo que imaginas y nuestra IA lo creará al instante.
+                Perfecto para artistas, diseñadores y mentes creativas.
+              </p>
+              <a
+                href="ia-img/index.html"
+                class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-lg"
+              >
+                Generar Imágenes IA
+              </a>
+            </div>
+
+            <div class="carousel-slide">
+              <h5 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Perfecciona tus Fotos con Nuestro
+                <span class="text-cyan-500">Editor Online</span>
+              </h5>
+              <p
+                class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                Ajusta, recorta, dibuja y aplica filtros con facilidad. Tus
+                imágenes, a tu manera.
+              </p>
+              <a
+                href="edit-img/index.html"
+                class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300 text-lg"
+              >
+                Editar Fotos Ahora
+              </a>
+            </div>
+          </div>
+
+          <button id="prevSlide" class="carousel-nav-btn prev">&#10094;</button>
+          <button id="nextSlide" class="carousel-nav-btn next">&#10095;</button>
+
+          <div
+            id="carouselIndicators"
+            class="carousel-indicators-container"
+          ></div>
+        </div>
+      </section>
+    </div>
+
+    <main class="flex flex-col items-center w-full mx-auto flex-grow paralaje">
+      <section class="w-full py-12 text-white text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Bienvenido a <span class="text-cyan-500">ObelisIA</span>
+        </h2>
+        <p class="text-lg md:text-xl text-gray-300 mb-6 max-w-3xl mx-auto">
+          Explora nuestras herramientas de inteligencia artificial y edición
+          digital. Desde la generación de imágenes y textos hasta la edición de
+          fotos, ObelisIA te ofrece todo lo que necesitas para potenciar tu
+          creatividad de forma gratuita y accesible. No importa si eres un
+          artista, diseñador o simplemente alguien con una idea, nuestras
+          herramientas están aquí para ayudarte a hacerla realidad.
+        </p>
+      </section>
+
+      <section class="w-full py-12 text-white text-center paralaje-svg">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Cómo <span class="text-cyan-500">Funciona</span>
+        </h2>
+        <div class="how-it-works-grid">
+          <div class="step-card">
+            <div class="step-icon">1</div>
+            <h3>Elige tu Herramienta</h3>
+            <p>
+              Navega por nuestra selección de herramientas de IA y edición.
+              Encontrarás generadores de texto e imagen, un potente editor de
+              fotos y un versátil conversor de formatos.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">2</div>
+            <h3>Crea y Edita</h3>
+            <p>
+              Utiliza la interfaz intuitiva para introducir tus indicaciones,
+              subir tus imágenes o seleccionar las opciones de edición. Nuestra
+              tecnología avanzada hará el trabajo por ti.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">3</div>
+            <h3>Descarga y Comparte</h3>
+            <p>
+              Obtén resultados de alta calidad en segundos. Descarga tus
+              creaciones directamente a tu dispositivo o compártelas en tus
+              plataformas favoritas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="w-full py-12 px-10">
+        <h2
+          class="text-3xl md:text-4xl font-extrabold text-center text-white mb-10"
+        >
+          Nuestras <span class="text-cyan-500">Herramientas</span> Principales
+        </h2>
+        <div
+          class="tool-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3>Generador de Imágenes IA</h3>
+            <p>
+              Transforma tus descripciones de texto en impresionantes obras de
+              arte digital, ilustraciones y conceptos visuales únicos en
+              cuestión de segundos. Ideal para artistas, diseñadores o
+              cualquiera que busque inspiración visual.
+            </p>
+            <a href="ia-img/index.html" class="btn-card">Generar Imágenes</a>
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-pen-fancy"></i>
+            </div>
+            <h3>Generador de Texto IA</h3>
+            <p>
+              Supera el bloqueo del escritor generando ideas, historias, poemas,
+              guiones, artículos o correos electrónicos. Nuestra IA de contenido
+              creativo te ayuda a redactar textos originales y relevantes al
+              instante.
+            </p>
+            <a href="ia-text/index.html" class="btn-card">Generar Texto</a>
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-paint-brush"></i>
+            </div>
+            <h3>Editor de Imágenes Online</h3>
+            <p>
+              Edita tus fotos con facilidad y precisión. Dibuja, borra, recorta,
+              aplica una variedad de filtros artísticos y ajusta colores como
+              brillo y contraste, todo directamente en tu navegador.
+            </p>
+            <a href="edit-img/index.html" class="btn-card">Editar Imágenes</a>
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <h3>Convertidor de Imágenes</h3>
+            <p>
+              Cambia el formato de tus imágenes a los tipos más populares como
+              JPEG, PNG, WebP y más. Optimiza tus archivos para la web o
+              ajústalos para cualquier uso específico de forma rápida y
+              sencilla, manteniendo la calidad.
+            </p>
+            <a href="convert-img/index.html" class="btn-card"
+              >Convertir Imágenes</a
+            >
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-video"></i>
+            </div>
+            <h3>Generador de Videos IA</h3>
+            <p>
+              Transforma texto en videos dinámicos y atractivos con la ayuda de
+              la inteligencia artificial. Ideal para crear contenido para redes
+              sociales, presentaciones o proyectos personales de forma gratuita.
+            </p>
+            <a href="ia-video/index.html" class="btn-card">Generar Videos</a>
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-search-plus"></i>
+            </div>
+            <h3>Mejorador de Imágenes IA</h3>
+            <p>
+              Aumenta la resolución y mejora la calidad de tus imágenes con
+              inteligencia artificial. Dale vida a fotos antiguas o de baja
+              calidad, realzando detalles y colores de forma sorprendente.
+            </p>
+            <a
+              href="ia-upscale/index.html"
+              class="btn-card opacity-50 cursor-not-allowed"
+              >Mejorar Imágenes (Próximamente)</a
+            >
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-cut"></i>
+            </div>
+            <h3>Removedor de Fondo IA</h3>
+            <p>
+              Elimina automáticamente el fondo de cualquier imagen en segundos,
+              dejando un sujeto perfectamente recortado con transparencia. Ideal
+              para productos, retratos y composiciones.
+            </p>
+            <a
+              href="ia-bgremove/index.html"
+              class="btn-card opacity-50 cursor-not-allowed"
+              >Remover Fondo (Próximamente)</a
+            >
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-compress-alt"></i>
+            </div>
+            <h3>Compresor de Imágenes</h3>
+            <p>
+              Optimiza el tamaño de tus archivos de imagen sin sacrificar la
+              calidad. Reduce el peso para cargas más rápidas en la web, envíos
+              por email o ahorro de espacio de almacenamiento.
+            </p>
+            <a
+              href="image-compressor/index.html"
+              class="btn-card opacity-50 cursor-not-allowed"
+              >Comprimir Imágenes (Próximamente)</a
+            >
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-palette"></i>
+            </div>
+            <h3>Generador de Paletas de Colores</h3>
+            <p>
+              Crea paletas de colores armónicas o extrae colores dominantes de
+              tus imágenes. Perfecto para diseñadores, artistas y creadores que
+              buscan inspiración cromática.
+            </p>
+            <a
+              href="color-palette/index.html"
+              class="btn-card opacity-50 cursor-not-allowed"
+              >Explorar Colores (Próximamente)</a
+            >
+          </div>
+
+          <div class="tool-card">
+            <div class="icon">
+              <i class="fas fa-music"></i>
+            </div>
+            <h3>Generador de Música/Audio IA</h3>
+            <p>
+              Transforma descripciones de texto en melodías, ritmos o efectos de
+              sonido únicos. Crea bandas sonoras para tus proyectos, podcasts o
+              simplemente para experimentar con la música generada por IA.
+            </p>
+            <a
+              href="ia-audio/index.html"
+              class="btn-card opacity-50 cursor-not-allowed"
+              >Generar Audio (Próximamente)</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="w-full py-10 px-10 text-white text-center rounded-lg shadow-xl paralaje-svg"
+      >
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Historias de <span class="text-cyan-500">Éxito</span>
+        </h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <p class="quote">
+              "ObelisIA ha revolucionado mi flujo de trabajo. La herramienta de
+              generación de imágenes IA es increíblemente potente y fácil de
+              usar. ¡Mis diseños nunca han sido tan originales!"
+            </p>
+            <p class="author">- Ana R., Diseñadora Gráfica</p>
+          </div>
+          <div class="testimonial-card">
+            <p class="quote">
+              "Como estudiante, el generador de texto IA me ayuda a superar el
+              bloqueo creativo y a estructurar mis ensayos rápidamente. ¡Una
+              herramienta indispensable!"
+            </p>
+            <p class="author">- Carlos M., Estudiante de Literatura</p>
+          </div>
+          <div class="testimonial-card">
+            <p class="quote">
+              "El editor de imágenes es sorprendentemente completo para ser
+              gratuito y online. Puedo hacer todos mis ajustes básicos sin
+              problemas. ¡Muy recomendado!"
+            </p>
+            <p class="author">- Sofía P., Creadora de Contenido</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="w-full py-12 px-10 text-white text-center">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-10">
+          Preguntas <span class="text-cyan-500">Frecuentes</span>
+        </h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿ObelisIA es realmente gratuito?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Sí, todas las herramientas principales de ObelisIA son
+              completamente gratuitas y de libre acceso. No requerimos
+              suscripciones ni pagos para usar nuestras funcionalidades básicas
+              y avanzadas.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Mis datos o imágenes son seguros?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Priorizamos tu privacidad. Las imágenes subidas para edición o
+              conversión se procesan en tu navegador y no se almacenan en
+              nuestros servidores. Para las herramientas de IA, la comunicación
+              es segura y se maneja con el debido respeto a la privacidad del
+              usuario. Consulta nuestra Política de Privacidad para más
+              detalles.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Necesito conocimientos técnicos para usar las herramientas?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              ¡Absolutamente no! Hemos diseñado ObelisIA para ser lo más
+              intuitivo y fácil de usar posible. La interfaz es amigable y
+              nuestras herramientas están pensadas para que cualquier persona,
+              sin importar su nivel de experiencia, pueda empezar a crear de
+              inmediato.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="subscriptionModal" class="modal-overlay subscription-modal">
+      <div class="modal-content subscription-modal-content">
+        <h3 class="text-2xl font-bold mb-4 text-cyan-500">
+          ¡Únete a nuestra comunidad!
+        </h3>
+        <p class="mb-4 text-gray-300">
+          Suscríbete a nuestro boletín para recibir las últimas novedades y
+          herramientas de IA.
+        </p>
+        <input
+          type="email"
+          id="emailInput"
+          placeholder="Tu correo electrónico"
+          class="mb-4 p-3 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <div class="flex justify-center space-x-4">
+          <button
+            id="subscribeButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            Suscribirse
+          </button>
+          <button
+            id="noThanksButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-sm">
+        Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
+        aceptas su uso.
+      </p>
+      <button
+        id="acceptCookiesButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg transition duration-200 text-sm shadow-md"
+      >
+        Aceptar
+      </button>
+    </div>
+
+    <div id="messageModal" class="modal-overlay">
+      <div id="messageModalContent" class="modal-content">
+        <button id="messageModalCloseButton" class="modal-close-button">
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/home-app.js" defer></script>
+  </body>
+  <footer class="w-full text-gray-400 text-center py-6 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+    <p class="text-xs mt-2">
+      <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
+      <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
+    </p>
+  </footer>
+</html>

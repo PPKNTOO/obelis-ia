@@ -1,0 +1,410 @@
+/* Estilos específicos para el carrusel, tarjetas de herramientas y nuevas secciones */
+
+/* --- Hero Carousel Styles --- */
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 90%;
+  max-width: 1200px;
+  border-radius: 1.25rem; /* Más redondeado */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+  height: 380px; /* Altura ligeramente aumentada */
+}
+
+.banner-heroCarousel {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 650px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-image: url("../img/banner.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative; */
+}
+
+.banner-heroCarousel section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-slides {
+  display: flex;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Curva de transición más suave */
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Fondo semitransparente para mejorar la legibilidad */
+}
+.carousel-slide h5 {
+  font-size: 2rem; /* text-4xl */
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.carousel-slide p {
+  font-size: 1rem; /* text-lg */
+  color: #cbd5e1;
+  max-width: 700px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
+}
+.carousel-slide .slide-image {
+  max-width: 100%;
+  height: 180px; /* Altura ligeramente aumentada */
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.carousel-button {
+  display: inline-block;
+  background-color: #06b6d4; /* cyan-500 */
+  color: white;
+  padding: 0.8rem 1.5rem; /* Más padding */
+  font-size: 0.9rem; /* Tamaño de fuente ligeramente mayor */
+  border-radius: 0.5rem; /* Más redondeado */
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.carousel-button:hover {
+  background-color: #0891b2; /* cyan-600 */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  border: none;
+  padding: 1rem 0.7rem; /* Más padding */
+  cursor: pointer;
+  font-size: 1.8rem; /* Tamaño más grande */
+  z-index: 10;
+  opacity: 0.9;
+  transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 0.75rem; /* Más redondeado */
+}
+.carousel-nav-btn:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05); /* Pequeña escala al hacer hover */
+}
+.carousel-nav-btn.prev {
+  left: 0.75rem;
+  z-index: 0;
+}
+.carousel-nav-btn.next {
+  right: 0.75rem;
+  z-index: 0;
+}
+.carousel-indicators-container {
+  position: absolute;
+  bottom: 2rem; /* Ajustado para estar más centrado con el pie */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.6rem; /* Más espacio entre indicadores */
+  z-index: 10;
+}
+.carousel-indicator {
+  width: 14px; /* Un poco más grande */
+  height: 14px;
+  background-color: rgba(6, 182, 212, 0.5); /* cyan-500 con opacidad */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.carousel-indicator.active {
+  background-color: #06b6d4; /* cyan-500 sólido */
+  transform: scale(1.3); /* Escala más pronunciada */
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5); /* Anillo sutil */
+}
+
+/* --- Tool Cards Styles --- */
+.tool-grid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  ); /* Mejor responsividad */
+  gap: 2rem; /* Más espacio */
+}
+.tool-card {
+  background-color: rgba(0, 0, 0, 0.1); /* Gris oscuro con opacidad */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+  border: 1px solid #2d3748; /* Borde gris fijo por defecto RESTAURADO */
+  border-radius: 1.25rem; /* Más redondeado */
+  padding: 2rem; /* Más padding */
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más grande */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Para espaciar bien contenido y botón */
+  min-height: 280px; /* Asegurar altura mínima para consistencia */
+}
+.tool-card:hover {
+  transform: translateY(-8px) scale(1.02); /* Efecto hover más dinámico */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  border-color: #06b6d4; /* Borde cian al hacer hover */
+}
+.tool-card .icon {
+  font-size: 3.5rem; /* Icono más grande */
+  color: #06b6d4;
+  margin-bottom: 1.25rem;
+}
+.tool-card h3 {
+  font-size: 1.6rem; /* Tamaño de título ligeramente mayor */
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+.tool-card p {
+  font-size: 1.05rem; /* Tamaño de párrafo ligeramente mayor */
+  color: #cbd5e1;
+  margin-bottom: 1.5rem; /* Más espacio antes del botón */
+  line-height: 1.6;
+  flex-grow: 1; /* Para que el párrafo ocupe el espacio disponible */
+}
+.tool-card .btn-card {
+  display: inline-block;
+  background-color: #0891b2;
+  color: white;
+  padding: 0.9rem 1.8rem; /* Más padding */
+  border-radius: 0.6rem; /* Más redondeado */
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.tool-card .btn-card:hover {
+  background-color: #0e7490;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- How It Works Section Styles --- */
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .how-it-works-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.step-card {
+  background-color: rgba(6, 182, 212, 0.1);
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+.step-icon {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.1);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+  border: 3px solid #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+.step-card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+.step-card p {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* --- Testimonials Section Styles --- */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.testimonial-card {
+  background-color: rgba(6, 182, 212, 0.1);
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+  border: 3px solid #06b6d4;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+}
+.testimonial-card .quote {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+.testimonial-card .author {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #06b6d4;
+  margin-top: auto; /* Empuja el autor hacia abajo */
+}
+
+/* Media queries para ajustes finos */
+@media (max-width: 640px) {
+  .carousel-slide h5 {
+    font-size: 2rem;
+  }
+  .carousel-slide p {
+    font-size: 1rem;
+  }
+  .tool-card h3 {
+    font-size: 1.4rem;
+  }
+  .tool-card p {
+    font-size: 0.9rem;
+  }
+  .step-card h3 {
+    font-size: 1.25rem;
+  }
+  .step-card p {
+    font-size: 0.9rem;
+  }
+  .faq-question {
+    font-size: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .faq-answer {
+    padding: 0 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  /* .hero-carousel {
+    height: 300px; Altura reducida para pantallas más pequeñas
+  } */
+  .carousel-slide h5 {
+    font-size: 1.8rem;
+  }
+
+  .carousel-slide p {
+    font-size: 0.9rem;
+  }
+
+  .carousel-nav-btn {
+    font-size: 0.9rem; /* Tamaño más pequeño para botones */
+    padding: 0rem; /* Menos padding */
+  }
+
+  .carousel-button {
+    font-size: 0.9rem; /* Tamaño más pequeño para el botón */
+    padding: 0.5rem 1rem; /* Menos padding */
+  }
+  .tool-card {
+    padding: 1.5rem; /* Menos padding en pantallas pequeñas */
+  }
+  .tool-card h3 {
+    font-size: 1.4rem; /* Ajuste de tamaño de texto */
+  }
+}
+
+@media (max-width: 580px) {
+  .banner-heroCarousel {
+    height: 600px; /* Altura reducida para pantallas pequeñas */
+  }
+  .carousel-slide h5 {
+    font-size: 1.5rem;
+  }
+
+  .carousel-slide p {
+    font-size: 0.7rem;
+  }
+
+  .carousel-nav-btn {
+    font-size: 0.7rem; /* Tamaño más pequeño para botones */
+    padding: 0rem; /* Menos padding */
+  }
+
+  .carousel-button {
+    font-size: 0.7rem; /* Tamaño más pequeño para el botón */
+    padding: 0.5rem 1rem; /* Menos padding */
+  }
+}
+
+@media (max-width: 300px) {
+  .banner-heroCarousel {
+    height: 550px; /* Altura reducida para pantallas muy pequeñas */
+  }
+  .carousel-slide h5 {
+    font-size: 1rem;
+  }
+
+  .carousel-slide p {
+    font-size: 0.7rem;
+  }
+
+  .carousel-nav-btn {
+    font-size: 0.7rem; /* Tamaño más pequeño para botones */
+    padding: 0rem; /* Menos padding */
+  }
+
+  .carousel-button {
+    font-size: 0.7rem; /* Tamaño más pequeño para el botón */
+    padding: 0.5rem 1rem; /* Menos padding */
+  }
+}

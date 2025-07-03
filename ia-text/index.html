@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Generador de Contenido IA Gratuito - Historias, Poemas y Más | ObelisIA
+    </title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <meta
+      name="description"
+      content="Genera historias, guiones, poemas, canciones, artículos y más con nuestra avanzada IA de texto. Herramienta gratuita para escritores, creativos y profesionales."
+    />
+    <meta
+      name="keywords"
+      content="generador de texto IA, IA gratuita, escritura creativa, historias, poemas, guiones, canciones, artículos, prompt para IA, herramienta de escritura, ObelisIA"
+    />
+    <meta name="author" content="ObelisIA" />
+
+    <meta property="og:type" content="software.application" />
+    <meta
+      property="og:url"
+      content="https://obelis-ia.vercel.app/ia-text/index.html"
+    />
+    <link rel="icon" href="../img/favicon.ico" type="image/ico" />
+    <meta
+      property="og:title"
+      content="Generador de Contenido IA Gratuito - Historias, Poemas y Más | ObelisIA"
+    />
+    <meta
+      property="og:description"
+      content="Crea textos asombrosos: historias, guiones, poemas, canciones y más con nuestra potente IA. Herramienta gratuita y fácil de usar para todas tus necesidades de escritura."
+    />
+    <meta property="og:image" content="../img/logo.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://obelis-ia.vercel.app/ia-text/index.html"
+    />
+    <meta
+      name="twitter:title"
+      content="Generador de Contenido IA Gratuito - Historias, Poemas y Más | ObelisIA"
+    />
+    <meta
+      name="twitter:description"
+      content="Crea textos asombrosos: historias, guiones, poemas, canciones y más con nuestra potente IA. Herramienta gratuita y fácil de usar para todas tus necesidades de escritura."
+    />
+    <meta name="twitter:image" content="../img/logo.webp" />
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Generador de Contenido Creativo con IA - ObelisIA",
+        "description": "Aplicación web gratuita para generar diversos tipos de contenido textual (historias, guiones, poemas, etc.) utilizando inteligencia artificial. Incluye lector de voz, opciones de tono y descarga.",
+        "applicationCategory": "Utilities",
+        "operatingSystem": "Web",
+        "url": "https://obelis-ia.vercel.app/ia-text/index.html",
+        "inLanguage": "es",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "category": "Free"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "ObelisIA"
+        }
+      }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <amp-auto-ads
+      type="adsense"
+      data-ad-client="ca-pub-9956937945939380"
+    ></amp-auto-ads>
+
+    <nav class="nav-bar text-white p-4 w-full fixed top-0 left-0 z-10 h-16">
+      <div class="navbar-inner-content">
+        <a
+          href="../index.html"
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
+        >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../ia-img/index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+              <a
+                href="../ia-audio/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador de Música/Audio IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="../convert-img/index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+              <a
+                href="../ia-upscale/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Mejorador de Imágenes IA (Próximamente)</a
+              >
+              <a
+                href="../ia-bgremove/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Removedor de Fondo IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Utilidades Digitales
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a
+                href="../image-compressor/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Compresor de Imágenes (Próximamente)</a
+              >
+              <a
+                href="../color-palette/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador/Extractor de Paletas de Colores (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex flex-col items-center w-full mx-auto flex-grow paralaje">
+      <section class="ia-section intro-section">
+        <h2 class="section-title">
+          Generador de Contenido IA:
+          <span class="text-cyan-500">Tu Escritor Personal Gratuito</span>
+        </h2>
+        <p class="section-description">
+          Desata tu creatividad con nuestro generador de texto impulsado por
+          inteligencia artificial. Ya sea que necesites historias cautivadoras,
+          guiones ingeniosos, poemas emotivos, letras de canciones pegadizas o
+          artículos informativos, ObelisIA está aquí para ayudarte a superar el
+          bloqueo del escritor y generar contenido original y de calidad en
+          segundos.
+        </p>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <i class="fas fa-feather-alt feature-icon"></i>
+            <p>
+              <strong>Variedad de Contenido:</strong> Historias, guiones,
+              poemas, canciones, artículos, emails y más.
+            </p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-robot feature-icon"></i>
+            <p>
+              <strong>IA Avanzada:</strong> Generación de texto inteligente y
+              contextualizado.
+            </p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-volume-up feature-icon"></i>
+            <p>
+              <strong>Lector de Voz Integrado:</strong> Escucha tu contenido
+              generado en diferentes idiomas y voces.
+            </p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-download feature-icon"></i>
+            <p>
+              <strong>Descarga Fácil:</strong> Guarda tu contenido como PDF al
+              instante.
+            </p>
+          </div>
+        </div>
+        <a href="#iaTextGeneratorSection" class="btn-primary mt-8 inline-block">
+          Comenzar a Escribir
+        </a>
+      </section>
+
+      <section class="ia-section how-to-section paralaje-svg">
+        <h2 class="section-title">
+          Cómo <span class="text-cyan-500">Generar</span> Contenido
+        </h2>
+        <div class="how-to-steps-grid">
+          <div class="step-card-ia">
+            <div class="step-number">1</div>
+            <h3>Describe tu Idea</h3>
+            <p>
+              En el cuadro de texto, describe claramente el contenido que
+              deseas. Sé tan específico como necesites.
+            </p>
+          </div>
+          <div class="step-card-ia">
+            <div class="step-number">2</div>
+            <h3>Elige Tipo y Tono</h3>
+            <p>
+              Selecciona el tipo de contenido (historia, poema, artículo, etc.)
+              y un tono de escritura adecuado (formal, creativo,
+              humorístico...).
+            </p>
+          </div>
+          <div class="step-card-ia">
+            <div class="step-number">3</div>
+            <h3 class="font-bold">Genera y Revisa</h3>
+            <p>
+              Haz clic en "Generar Contenido". Revisa el texto, ajústalo si es
+              necesario, y luego puedes leerlo en voz alta o descargarlo.
+            </p>
+          </div>
+        </div>
+        <a href="#iaTextGeneratorSection" class="btn-primary mt-8 inline-block">
+          Probar Ahora
+        </a>
+      </section>
+
+      <section class="ia-section use-cases-section">
+        <h2 class="section-title">
+          Casos de Uso <span class="text-cyan-500">Comunes</span>
+        </h2>
+        <div class="use-cases-grid">
+          <div class="use-case-item">
+            <i class="fas fa-lightbulb use-case-icon"></i>
+            <h3>Superar Bloqueos Creativos</h3>
+            <p>
+              Genera ideas iniciales, sinopsis o borradores para arrancar tus
+              proyectos de escritura.
+            </p>
+          </div>
+          <div class="use-case-item">
+            <i class="fas fa-graduation-cap use-case-icon"></i>
+            <p>
+              <strong>Apoyo Académico:</strong> Crea resúmenes, párrafos
+              argumentativos o esquemas para ensayos y trabajos de estudio.
+            </p>
+          </div>
+          <div class="use-case-item">
+            <i class="fas fa-bullhorn use-case-icon"></i>
+            <h3>Marketing y Contenido Web</h3>
+            <p>
+              Desarrolla descripciones de productos, posts para blogs, scripts
+              de anuncios o contenido para redes sociales.
+            </p>
+          </div>
+          <div class="use-case-item">
+            <i class="fas fa-user-tie use-case-icon"></i>
+            <h3>Comunicación Profesional</h3>
+            <p>
+              Redacta correos electrónicos formales, propuestas o comunicados
+              con el tono adecuado.
+            </p>
+          </div>
+        </div>
+        <a href="#iaTextGeneratorSection" class="btn-primary mt-8 inline-block">
+          Empezar a Generar
+        </a>
+      </section>
+
+      <section class="ia-section tips-section paralaje-svg">
+        <h2 class="section-title">
+          Consejos para Prompts <span class="text-cyan-500">Efectivos</span>
+        </h2>
+        <p class="section-description">
+          Un buen prompt es la clave para obtener el contenido exacto que
+          deseas. Aquí algunos trucos:
+        </p>
+        <ul class="tips-list">
+          <li>
+            <strong>Sé Detallado:</strong> Incluye personajes, escenarios,
+            conflictos, emociones, y cualquier elemento clave.
+          </li>
+          <li>
+            <strong>Define el Estilo:</strong> ¿Quieres una historia de terror
+            gótico o una comedia romántica? ¡Díselo a la IA!
+          </li>
+          <li>
+            <strong>Especifica el Formato:</strong> Si es un guion, indica si es
+            para cine, teatro, etc. Para artículos, el público objetivo.
+          </li>
+          <li>
+            <strong>Usa Palabras Clave:</strong> Palabras relevantes a tu tema
+            ayudarán a la IA a enfocar la generación.
+          </li>
+          <li>
+            <strong>Experimenta con Tonos:</strong> Un mismo prompt puede dar
+            resultados muy diferentes con tonos distintos.
+          </li>
+        </ul>
+        <a href="#iaTextGeneratorSection" class="btn-primary mt-8 inline-block">
+          Ir al Generador
+        </a>
+      </section>
+
+      <div class="ia-generator-layout-container" id="iaTextGeneratorSection">
+        <div class="ia-generator-main-content">
+          <h1
+            class="text-3xl font-extrabold text-center mb-6 text-white tracking-tight"
+          >
+            Generador de Contenido Creativo con
+            <span class="text-cyan-500">IA</span>
+          </h1>
+
+          <form id="contentForm" class="space-y-6 w-full">
+            <div>
+              <label
+                for="prompt"
+                class="block text-lg font-medium text-gray-300 mb-2"
+              >
+                Describe lo que quieres generar:
+              </label>
+              <textarea
+                id="prompt"
+                class="w-full p-4 rounded-xl border border-gray-700 bg-gray-800 text-white focus:ring-cyan-500 focus:border-cyan-500 text-base shadow-inner resize-y h-36 placeholder-gray-500"
+                placeholder="Ejemplo: Una historia de ciencia ficción sobre un robot que descubre emociones profundas y decide cambiar el mundo."
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-lg font-medium text-gray-300 mb-3">
+                Tipo de Contenido:
+              </label>
+              <div
+                class="flex flex-wrap gap-4 justify-center"
+                id="contentTypeOptions"
+              >
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="story"
+                    checked
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Historia</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="script"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Guion</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="poem"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Poema</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="song"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Canción</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="article"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Artículo</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="email"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Correo Electrónico</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="product_description"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg"
+                    >Descripción de Producto</span
+                  >
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="summary"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Resumen</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="argumentative_paragraph"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg"
+                    >Párrafo Argumentativo</span
+                  >
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="recipe"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Receta</span>
+                </label>
+                <label
+                  class="flex items-center space-x-2 cursor-pointer bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition duration-200 border border-transparent hover:border-cyan-500"
+                >
+                  <input
+                    type="radio"
+                    name="contentType"
+                    value="ai_prompt"
+                    class="form-radio text-cyan-500 focus:ring-cyan-300 h-5 w-5"
+                  />
+                  <span class="text-gray-200 text-lg">Prompt para IA</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <label
+                for="toneSelect"
+                class="block text-lg font-medium text-gray-300 mb-2"
+              >
+                Tono de Contenido:
+              </label>
+              <select
+                id="toneSelect"
+                class="w-full p-3 rounded-xl border border-gray-700 bg-gray-800 text-white focus:ring-cyan-500 focus:border-cyan-500 text-base shadow-inner"
+              >
+                <option value="">Neutro (Predeterminado)</option>
+                <option value="formal">Formal</option>
+                <option value="informal">Informal</option>
+                <option value="humorístico">Humorístico</option>
+                <option value="serio">Serio</option>
+                <option value="persuasivo">Persuasivo</option>
+                <option value="poético">Poético</option>
+                <option value="académico">Académico</option>
+                <option value="técnico">Técnico</option>
+                <option value="creativo">Creativo</option>
+              </select>
+            </div>
+
+            <button
+              id="generateButton"
+              type="submit"
+              class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 text-xl focus:outline-none focus:ring-4 focus:ring-cyan-300"
+            >
+              <svg
+                id="spinner"
+                class="animate-spin h-6 w-6 mr-3 text-white hidden"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span id="buttonText">Generar Contenido</span>
+            </button>
+            <p
+              id="generationCounterDisplay"
+              class="text-sm text-gray-400 mt-2 text-center"
+            >
+              Generaciones disponibles hoy: 5/5
+            </p>
+            <button
+              id="watchAdButton"
+              class="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 hidden"
+            >
+              <i class="fas fa-video text-xl"></i>
+              <span>Ver Anuncio para +3 Generaciones</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="ia-generator-aside ia-generator-right-aside">
+          <h2 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-history text-cyan-400 mr-2"></i>Historial de
+            Contenido
+          </h2>
+          <div id="contentHistoryContainer" class="history-content-scrollable">
+            <p class="text-gray-500 text-center">
+              No hay contenido en el historial.
+            </p>
+          </div>
+          <div class="flex justify-center mt-6">
+            <button
+              id="clearHistoryButton"
+              class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md flex items-center space-x-2"
+            >
+              <i class="fas fa-trash-alt text-lg"></i>
+              <span>Limpiar Historial</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <section class="ia-section faq-section">
+        <h2 class="section-title">
+          Preguntas <span class="text-cyan-500">Frecuentes</span>
+        </h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Qué tipo de contenido puedo generar?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Puedes generar una amplia variedad de textos, como historias,
+              guiones, poemas, letras de canciones, artículos, correos
+              electrónicos, descripciones de productos, resúmenes, párrafos
+              argumentativos, recetas e incluso prompts para otras IAs.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Es el generador de texto realmente gratuito?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Sí, ofrecemos un número de generaciones gratuitas al día. Si
+              necesitas más, puedes obtener generaciones adicionales viendo un
+              breve anuncio, lo que nos ayuda a mantener la plataforma gratuita
+              para todos.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Puedo usar el contenido generado comercialmente?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              El contenido generado por IA es una herramienta para la creación.
+              Generalmente, eres libre de usarlo como inspiración o base para
+              tus propios trabajos comerciales, pero siempre es recomendable
+              revisarlo y adaptarlo para asegurar su originalidad y adecuación a
+              tus necesidades específicas.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Cómo puedo mejorar la calidad del contenido generado?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              La clave está en proporcionar prompts muy específicos y
+              detallados. Experimenta con diferentes tonos, estilos y palabras
+              clave en tu descripción. Cuanta más información y contexto le des
+              a la IA, mejor será el resultado.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="contentModal" class="modal-overlay">
+      <div class="modal-content">
+        <button id="modalCloseButton" class="modal-close-button">
+          &times;
+        </button>
+        <h2
+          class="text-3xl font-extrabold text-center mb-6 text-cyan-500 tracking-tight"
+        >
+          Contenido Generado
+        </h2>
+        <div class="flex justify-center mb-6">
+          <button
+            id="togglePlayPauseButton"
+            class="w-16 h-16 rounded-full bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center shadow-lg transition duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-cyan-300 focus:ring-opacity-50"
+          >
+            <i id="playIcon" class="fas fa-play-circle text-4xl"></i>
+            <i id="pauseIcon" class="fas fa-pause-circle text-4xl hidden"></i>
+          </button>
+        </div>
+        <div
+          id="generatedText"
+          class="bg-gray-800 p-8 rounded-xl text-gray-200 leading-relaxed shadow-xl border border-gray-700 mb-6"
+        ></div>
+        <div class="flex justify-center mb-6 space-x-4">
+          <button
+            id="copyTextButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center space-x-2"
+          >
+            <i class="fas fa-copy text-xl"></i>
+            <span>Copiar Texto</span>
+          </button>
+        </div>
+        <div
+          class="p-4 bg-gray-800 rounded-xl shadow-inner border border-gray-700 mb-6"
+        >
+          <h3 class="text-xl font-semibold text-gray-300 mb-4 text-center">
+            Opciones de Audio
+          </h3>
+          <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex-1 min-w-[200px]">
+              <label
+                for="voiceLanguage"
+                class="block text-gray-400 text-sm font-bold mb-2"
+                >Idioma:</label
+              >
+              <select
+                id="voiceLanguage"
+                class="w-full p-3 rounded-xl bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              ></select>
+            </div>
+            <div class="flex-1 min-w-[200px]">
+              <label
+                for="voiceSelect"
+                class="block text-gray-400 text-sm font-bold mb-2"
+                >Voz:</label
+              >
+              <select
+                id="voiceSelect"
+                class="w-full p-3 rounded-xl bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              ></select>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="p-4 bg-gray-800 rounded-xl shadow-inner border border-gray-700"
+        >
+          <h3 class="text-xl font-semibold text-gray-300 mb-4 text-center">
+            Descargar Contenido
+          </h3>
+          <div class="flex justify-center space-x-4">
+            <button
+              id="downloadPdfButton"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center space-x-2"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              <span>Descargar PDF</span>
+            </button>
+          </div>
+          <p class="text-sm text-gray-400 mt-4 text-center">
+            (La descarga en formatos Word y Excel directamente en el navegador
+            es más compleja y no está disponible en esta versión.)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="adModal" class="modal-overlay ad-modal-overlay">
+      <div class="modal-content ad-modal-content">
+        <h3 class="text-2xl font-bold text-cyan-500 mb-4">
+          ¡Reproduciendo Anuncio!
+        </h3>
+        <p class="text-gray-300 mb-4">
+          Esto es un anuncio simulado. Por favor, espera...
+        </p>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-4 border-cyan-500 mx-auto"
+        ></div>
+        <p id="adTimer" class="mt-4 text-gray-400 text-sm">
+          Tiempo restante: 5 segundos
+        </p>
+      </div>
+    </div>
+
+    <div id="loadingOverlayModal" class="modal-overlay loading-overlay-modal">
+      <div class="modal-content loading-modal-content">
+        <button id="loadingModalCloseButton" class="modal-close-button hidden">
+          &times;
+        </button>
+        <div class="loading-animation-wrapper">
+          <img
+            id="pocoyoGifModal"
+            src="../img/Pocoyo.gif"
+            alt="Cargando..."
+            class="pocoyo-gif"
+          />
+          <div id="loadingSpinnerModal" class="modern-spinner hidden"></div>
+        </div>
+        <p id="loadingMessageTextModal" class="loading-message-text-modal">
+          Cargando...
+        </p>
+        <p id="loadingErrorTextModal" class="loading-error-text-modal hidden">
+          Ha ocurrido un error.
+        </p>
+      </div>
+    </div>
+
+    <div id="subscriptionModal" class="modal-overlay subscription-modal">
+      <div class="modal-content subscription-modal-content">
+        <h3 class="text-2xl font-bold mb-4 text-cyan-500">
+          ¡Únete a nuestra comunidad!
+        </h3>
+        <p class="mb-4 text-gray-300">
+          Suscríbete a nuestro boletín para recibir las últimas novedades y
+          herramientas de IA.
+        </p>
+        <input
+          type="email"
+          id="emailInput"
+          placeholder="Tu correo electrónico"
+          class="mb-4 p-3 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <div class="flex justify-center space-x-4">
+          <button
+            id="subscribeButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            Suscribirse
+          </button>
+          <button
+            id="noThanksButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-sm">
+        Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
+        aceptas su uso.
+      </p>
+      <button
+        id="acceptCookiesButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg transition duration-200 text-sm shadow-md"
+      >
+        Aceptar
+      </button>
+    </div>
+
+    <div id="messageModal" class="modal-overlay">
+      <div id="messageModalContent" class="modal-content">
+        <button id="messageModalCloseButton" class="modal-close-button">
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js" defer></script>
+  </body>
+  <footer class="w-full text-gray-400 text-center py-4 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+  </footer>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ObelisAI - Generador de Imágenes IA</title>
+    <link rel="icon" href="../img/favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <meta
+      name="description"
+      content="Genera imágenes impresionantes con inteligencia artificial de forma gratuita. ObelisAI te ofrece un generador de imágenes IA rápido, fácil de usar y con opciones avanzadas de edición, galería y descarga. Crea arte digital, ilustraciones y visuales únicos a partir de texto."
+    />
+    <meta
+      name="keywords"
+      content="IA, inteligencia artificial, generador de imágenes, herramientas gratuitas, ObelisAI, generar imágenes con IA, texto a imagen, arte digital, IA gratis, editor de imágenes IA, descarga de imágenes IA, AI art generator"
+    />
+    <meta name="author" content="ObelisAI" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://obelis-ia.vercel.app/ia-img/index.html"
+    />
+    <link rel="icon" href="../img/favicon.ico" type="image/ico" />
+
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://obelis-ia.vercel.app/ia-img/index.html"
+    />
+    <meta property="og:title" content="ObelisAI - Generador de Imágenes IA" />
+    <meta
+      property="og:description"
+      content="Crea imágenes impresionantes con inteligencia artificial de forma gratuita. ObelisAI te ofrece un generador de imágenes IA rápido, fácil de usar y con opciones avanzadas de edición, galería y descarga. Crea arte digital, ilustraciones y visuales únicos a partir de texto."
+    />
+    <meta property="og:image" content="../img/logo.webp" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://obelis-ia.vercel.app/ia-img/index.html"
+    />
+    <meta name="twitter:title" content="ObelisAI - Generador de Imágenes IA" />
+    <meta
+      name="twitter:description"
+      content="Crea imágenes impresionantes con inteligencia artificial de forma gratuita. ObelisAI te ofrece un generador de imágenes IA rápido, fácil de usar y con opciones avanzadas de edición, galería y descarga. Crea arte digital, ilustraciones y visuales únicos a partir de texto."
+    />
+    <meta
+      property="twitter:image"
+      content="https://placehold.co/1200x675/2d3748/06b6d4?text=ObelisAI+Image+Gen"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ObelisAI Image Generator",
+        "applicationCategory": "Multimedia",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "150"
+        },
+        "description": "Herramienta gratuita de ObelisAI para generar imágenes de alta calidad a partir de texto utilizando inteligencia artificial, con funciones de edición, galería y descarga.",
+        "softwareHelp": {
+          "@type": "CreativeWork",
+          "url": "https://obelis-ia.vercel.app/ia-img/index.html"
+        },
+        "url": "https://obelis-ia.vercel.app/ia-img/index.html",
+        "featureList": [
+          "Generación de imágenes por IA",
+          "Edición básica de imágenes",
+          "Galería de imágenes guardadas",
+          "Descarga de imágenes",
+          "Sugerencias de prompts por IA",
+          "Límite de generaciones con anuncios"
+        ],
+        "installUrl": "https://obelis-ia.vercel.app/ia-img/index.html",
+        "screenshot": "https://placehold.co/800x600/2d3748/06b6d4?text=ObelisAI+Screenshot"
+      }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <meta name="google-adsense-account" content="ca-pub-9956937945939380" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9956937945939380"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      async
+      custom-element="amp-auto-ads"
+      src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+    ></script>
+  </head>
+  <body class="min-h-screen flex flex-col items-center">
+    <amp-auto-ads
+      type="adsense"
+      data-ad-client="ca-pub-9956937945939380"
+    ></amp-auto-ads>
+
+    <nav class="nav-bar text-white p-4 w-full fixed top-0 left-0 z-10 h-16">
+      <div class="navbar-inner-content">
+        <a
+          href="../index.html"
+          class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
+        >
+        <button id="menuToggle" class="md:hidden">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-wrap flex items-center md:flex">
+          <a href="../index.html" class="nav-item">
+            <i class="fas fa-home nav-icon"></i> Inicio
+          </a>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-robot nav-icon"></i> Herramientas IA
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="index.html" class="submenu-item"
+                >Generador de Imágenes IA</a
+              >
+              <a href="../ia-text/index.html" class="submenu-item"
+                >Generador de Texto IA</a
+              >
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+              <a
+                href="../ia-audio/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador de Música/Audio IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a href="../edit-img/index.html" class="submenu-item"
+                >Editor de Imágenes</a
+              >
+              <a href="../convert-img/index.html" class="submenu-item"
+                >Convertir Imágenes</a
+              >
+              <a
+                href="../ia-upscale/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Mejorador de Imágenes IA (Próximamente)</a
+              >
+              <a
+                href="../ia-bgremove/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Removedor de Fondo IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Utilidades Digitales
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a
+                href="../image-compressor/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Compresor de Imágenes (Próximamente)</a
+              >
+              <a
+                href="../color-palette/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador/Extractor de Paletas de Colores (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex flex-col items-center w-full flex-grow paralaje">
+      <section class="ia-section intro-section">
+        <h2 class="section-title">
+          Generador de Imágenes IA:
+          <span class="text-cyan-500">Tu Creatividad Sin Límites</span>
+        </h2>
+        <p class="section-description">
+          Bienvenido al Generador de Imágenes con Inteligencia Artificial de
+          ObelisAI. Aquí, tus ideas más abstractas o detalladas se transforman
+          en visuales impactantes con tan solo unas palabras. Nuestra
+          herramienta aprovecha el poder de la IA para ofrecerte una solución
+          rápida, gratuita y eficaz para todas tus necesidades creativas, desde
+          arte digital único hasta ilustraciones para tus proyectos.
+        </p>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <i class="fas fa-robot feature-icon"></i>
+            <p>
+              <strong>Potenciado por IA Avanzada:</strong> Resultados de alta
+              calidad impulsados por modelos de última generación.
+            </p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-dollar-sign feature-icon"></i>
+            <p>
+              <strong>Completamente Gratuito:</strong> Genera imágenes sin
+              coste, con opciones para obtener más generaciones.
+            </p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-brush feature-icon"></i>
+            <p>
+              <strong>Personalización y Edición:</strong> Ajusta y mejora tus
+              creaciones directamente en nuestra plataforma.
+            </p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-save feature-icon"></i>
+            <p>
+              <strong>Galería Integrada:</strong> Guarda y organiza tus imágenes
+              favoritas en tu galería local.
+            </p>
+          </div>
+        </div>
+        <a href="#iaGeneratorSection" class="btn-primary mt-8 inline-block">
+          Ir al Generador
+        </a>
+      </section>
+
+      <section class="ia-section how-to-section paralaje-svg">
+        <h2 class="section-title">
+          Cómo <span class="text-cyan-500">Generar</span> tu Imagen
+        </h2>
+        <div class="how-to-steps-grid">
+          <div class="step-card-ia">
+            <div class="step-number">1</div>
+            <h3>Describe tu Idea</h3>
+            <p>
+              Escribe un texto (prompt) detallado sobre lo que quieres ver. Sé
+              específico con colores, objetos, estilos y ambiente.
+            </p>
+          </div>
+          <div class="step-card-ia">
+            <div class="step-number">2</div>
+            <h3>Mejora el Prompt (Opcional)</h3>
+            <p>
+              Usa nuestra función de "Mejorar Prompt" con IA para enriquecer tu
+              descripción y obtener resultados más precisos y creativos.
+            </p>
+          </div>
+          <div class="step-card-ia">
+            <div class="step-number">3</div>
+            <h3>Genera y Guarda</h3>
+            <p>
+              Haz clic en "Generar Imagen" y en segundos tendrás tu creación.
+              Guárdala en tu galería o descárgala directamente.
+            </p>
+          </div>
+        </div>
+        <a href="#iaGeneratorSection" class="btn-primary mt-8 inline-block">
+          Comenzar a Generar
+        </a>
+      </section>
+
+      <section class="ia-section tips-section">
+        <h2 class="section-title">
+          Consejos para Prompts <span class="text-cyan-500">Efectivos</span>
+        </h2>
+        <p class="section-description">
+          La clave para obtener imágenes impresionantes es un buen prompt. Aquí
+          te damos algunos consejos para guiar a la IA:
+        </p>
+        <ul class="tips-list">
+          <li>
+            <strong>Sé Descriptivo:</strong> Cuantos más detalles, mejor. Piensa
+            en colores, texturas, iluminación y ambiente.
+          </li>
+          <li>
+            <strong>Define el Estilo:</strong> ¿Arte digital, pintura al óleo,
+            acuarela, fotografía realista, estilo anime? Especifica el tipo de
+            arte.
+          </li>
+          <li>
+            <strong>Añade Emoción y Ambiente:</strong> Las palabras que
+            transmiten sentimientos o atmósferas pueden influir mucho en el
+            resultado.
+          </li>
+          <li>
+            <strong>Usa Adjetivos y Adverbios:</strong> "Un gato perezoso
+            durmiendo" es mejor que "un gato durmiendo".
+          </li>
+          <li>
+            <strong>Prueba y Experimenta:</strong> No tengas miedo de probar
+            diferentes prompts y tonos hasta encontrar lo que buscas.
+          </li>
+        </ul>
+        <a href="#iaGeneratorSection" class="btn-primary mt-8 inline-block">
+          Probar Ahora
+        </a>
+      </section>
+
+      <section class="ia-section use-cases-section paralaje-svg">
+        <h2 class="section-title">
+          Casos de Uso <span class="text-cyan-500">Comunes</span>
+        </h2>
+        <div class="use-cases-grid">
+          <div class="use-case-item">
+            <i class="fas fa-palette use-case-icon"></i>
+            <h3>Arte Digital</h3>
+            <p>
+              Crea obras de arte únicas para tus colecciones personales,
+              proyectos artísticos o para inspirarte.
+            </p>
+          </div>
+          <div class="use-case-item">
+            <i class="fas fa-blog use-case-icon"></i>
+            <h3>Contenido para Blogs y Redes</h3>
+            <p>
+              Genera imágenes originales y atractivas para tus artículos,
+              publicaciones o perfiles.
+            </p>
+          </div>
+          <div class="use-case-item">
+            <i class="fas fa-book-open use-case-icon"></i>
+            <h3>Ilustraciones para Historias</h3>
+            <p>
+              Visualiza personajes, escenas y mundos para tus relatos, cuentos o
+              libros infantiles.
+            </p>
+          </div>
+          <div class="use-case-item">
+            <i class="fas fa-desktop use-case-icon"></i>
+            <h3>Fondos de Pantalla</h3>
+            <p>
+              Diseña fondos de escritorio o móviles personalizados con paisajes,
+              patrones o escenas fantásticas.
+            </p>
+          </div>
+        </div>
+        <a href="#iaGeneratorSection" class="btn-primary mt-8 inline-block">
+          Empezar a Crear
+        </a>
+      </section>
+
+      <div class="ia-generator-layout-container" id="iaGeneratorSection">
+        <div class="ia-generator-aside ia-generator-left-aside">
+          <h2 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-sliders-h text-cyan-400 mr-2"></i>Opciones
+            Avanzadas
+          </h2>
+          <div class="options-group">
+            <h3 class="text-lg font-semibold text-gray-300 mb-2">
+              Estilo de Imagen
+            </h3>
+            <select
+              id="styleSelect"
+              class="w-full p-2 mb-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-cyan-500 focus:border-cyan-500 text-sm"
+            >
+              <option value="none">Por Defecto</option>
+              <option value="realistic">Realista</option>
+              <option value="cartoon">Dibujo Animado</option>
+              <option value="anime">Anime</option>
+              <option value="digital-art">Arte Digital</option>
+              <option value="watercolor">Acuarela</option>
+              <option value="oil-painting">Pintura al Óleo</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="fantasy">Fantasía</option>
+            </select>
+          </div>
+          <div class="options-group">
+            <h3 class="text-lg font-semibold text-gray-300 mb-2">
+              Relación de Aspecto
+            </h3>
+            <select
+              id="aspectRatioSelect"
+              class="w-full p-2 mb-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-cyan-500 focus:border-cyan-500 text-sm"
+            >
+              <option value="1:1">1:1 (Cuadrado)</option>
+              <option value="16:9">16:9 (Horizontal)</option>
+              <option value="9:16">9:16 (Vertical)</option>
+              <option value="4:3">4:3 (Estándar)</option>
+            </select>
+          </div>
+          <p class="text-gray-500 text-xs mt-4">
+            Más opciones y configuraciones (próximamente).
+          </p>
+        </div>
+
+        <div class="ia-generator-main-content">
+          <h1 class="text-3xl font-extrabold text-white mb-4 text-center">
+            Generador de Imágenes con <span class="text-cyan-500">IA</span>
+          </h1>
+          <p class="text-gray-300 mb-6 text-base text-center">
+            Describe la imagen que te gustaría generar. Se usará una API de IA
+            gratuita para crearla.
+          </p>
+
+          <div class="mb-6 w-full">
+            <textarea
+              id="promptInput"
+              class="w-full p-3 border border-gray-700 bg-gray-800 text-white rounded-lg focus:ring-cyan-500 focus:border-cyan-500 text-base shadow-inner resize-none placeholder-gray-500"
+              rows="3"
+              placeholder="Ej: Un dragón volando sobre un castillo iluminado por la luna."
+            ></textarea>
+            <div id="promptSuggestionBox" class="prompt-suggestion-box hidden">
+              <p>
+                ¿No sabes qué generar? Prueba nuestro generador de prompts con
+                IA.
+              </p>
+              <button id="generatePromptSuggestionButton">
+                Generar Prompt
+              </button>
+              <div id="promptSuggestionLoading" class="hidden mt-2">
+                <div
+                  class="animate-spin rounded-full h-6 w-6 border-b-2 border-cyan-400 mx-auto"
+                ></div>
+                <p class="text-gray-400 text-xs mt-1">Generando prompt...</p>
+              </div>
+            </div>
+
+            <div
+              class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3"
+            >
+              <select
+                id="toneSelect"
+                class="bg-gray-800 border border-gray-700 text-white rounded-lg p-2 focus:ring-cyan-500 focus:border-cyan-500 text-sm"
+              >
+                <option value="Neutro">Tono: Neutro</option>
+                <option value="Creativo">Tono: Creativo</option>
+                <option value="Descriptivo">Tono: Descriptivo</option>
+                <option value="Caprichoso">Tono: Caprichoso</option>
+                <option value="Dramático">Tono: Dramático</option>
+                <option value="Minimalista">Tono: Minimalista</option>
+              </select>
+              <button
+                id="improvePromptButton"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 text-sm"
+              >
+                Mejorar Prompt
+              </button>
+            </div>
+          </div>
+
+          <button
+            id="generateButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-cyan-300"
+          >
+            Generar Imagen
+          </button>
+          <p id="generationCounter" class="text-gray-400 text-sm mt-2">
+            Generaciones gratuitas restantes: --
+          </p>
+          <button
+            id="watchAdButton"
+            class="hidden bg-blue-700 hover:bg-blue-800 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm mt-3"
+          >
+            Ver Anuncio para +3 Generaciones
+          </button>
+
+          <div id="imageDisplay" class="mt-6 w-full">
+            <img
+              id="generatedImage"
+              src="https://placehold.co/600x400/374151/D1D5DB?text=Tu+imagen+aparecerá+quí"
+              alt="Placeholder para imagen generada por IA"
+              class="w-full h-auto rounded-xl shadow-md border border-gray-700"
+              onerror="this.src='https://placehold.co/600x400/374151/D1D5DB?text=Error+al+cargar+la+imagen+de+IA+o+tiempo+excedido'"
+            />
+            <p id="imagePlaceholderText" class="text-gray-500 mt-3 text-sm">
+              Ingresa una descripción y haz clic en "Generar Imagen".
+            </p>
+            <button
+              id="downloadMainImageButton"
+              class="mt-3 bg-gray-700 hover:bg-gray-600 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 hidden text-sm"
+            >
+              Descargar Imagen
+            </button>
+          </div>
+        </div>
+
+        <div class="ia-generator-aside ia-generator-right-aside">
+          <h2 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-history text-cyan-400 mr-2"></i>Historial Reciente
+          </h2>
+          <div id="recentGenerationsGallery" class="recent-generations-grid">
+            <p class="text-gray-500 text-sm text-center">
+              Aquí aparecerán tus últimas imágenes.
+            </p>
+          </div>
+          <p class="text-gray-500 text-xs mt-4">
+            Acceso rápido a tus últimas creaciones (se sincroniza con tu
+            galería).
+          </p>
+          <hr class="border-gray-700 my-4" />
+          <h2 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-download text-cyan-400 mr-2"></i>Descarga Rápida
+          </h2>
+          <button
+            id="downloadLastGeneratedButton"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg text-sm w-full transition duration-200 opacity-50 cursor-not-allowed"
+            disabled
+          >
+            Descargar Última Imagen
+          </button>
+        </div>
+
+        <section class="ia-img-gallery-section ia-generator-full-width-section">
+          <div class="w-full text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">
+              Tu Galería de Imágenes
+            </h2>
+            <div
+              class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3 mb-4"
+            >
+              <button
+                id="selectAllButton"
+                class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 text-sm"
+              >
+                Seleccionar Todo
+              </button>
+              <button
+                id="downloadSelectedButton"
+                class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 opacity-50 cursor-not-allowed text-sm"
+                disabled
+              >
+                Descargar Seleccionadas
+              </button>
+              <button
+                id="clearSelectionButton"
+                class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 opacity-50 cursor-not-allowed text-sm"
+                disabled
+              >
+                Limpiar Selección
+              </button>
+              <button
+                id="deleteSelectedButton"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 px-3 rounded-lg shadow-md transition duration-200 opacity-50 cursor-not-allowed text-sm"
+                disabled
+              >
+                Eliminar Seleccionadas
+              </button>
+            </div>
+            <div id="localStorageUsage" class="mt-4 text-gray-400 text-sm">
+              Uso del Almacenamiento Local: --
+            </div>
+            <div
+              id="galleryContainer"
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 max-h-96 overflow-y-auto p-3 bg-gray-800 rounded-lg border border-gray-700 shadow-inner"
+            ></div>
+          </div>
+        </section>
+      </div>
+      <section class="ia-section faq-section">
+        <h2 class="section-title">
+          Preguntas <span class="text-cyan-500">Frecuentes</span>
+        </h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Qué tipo de imágenes puedo generar?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Puedes generar una amplia variedad de imágenes, desde paisajes
+              realistas hasta arte fantástico, retratos, objetos y escenas
+              abstractas. La clave está en la descripción (prompt) que
+              proporciones a la IA.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Son gratuitas las imágenes generadas?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              Sí, todas las imágenes generadas a través de nuestra plataforma
+              son gratuitas para uso personal. Te proporcionamos un límite de
+              generaciones gratuitas que puedes recargar viendo anuncios.
+            </div>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-question">
+              ¿Por qué mi imagen no se generó o salió extraña?
+              <i class="fas fa-chevron-down faq-arrow"></i>
+            </h3>
+            <div class="faq-answer">
+              La generación de IA puede ser compleja. Si una imagen no se genera
+              o el resultado no es el esperado, considera los siguientes puntos:
+              <ul class="list-disc list-inside mt-2">
+                <li>El prompt puede ser demasiado ambiguo o muy complejo.</li>
+                <li>Intenta simplificar o detallar más tu descripción.</li>
+                <li>
+                  Prueba la función "Mejorar Prompt" para una descripción más
+                  elaborada.
+                </li>
+                <li>
+                  Puede haber una alta demanda en la API o un problema temporal.
+                  Intenta de nuevo más tarde.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="lightbox" class="modal-overlay">
+      <button class="modal-close-button" id="lightboxCloseButton">
+        &times;
+      </button>
+      <button class="lightbox-nav-button prev" id="lightboxPrevButton">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <button class="lightbox-nav-button next" id="lightboxNextButton">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+      <div class="modal-content" id="lightboxContent">
+        <img
+          src=""
+          alt="Imagen en grande del lightbox"
+          class="lightbox-img"
+          id="lightboxImage"
+        />
+        <div
+          id="lightboxThumbnails"
+          class="lightbox-thumbnails-container"
+        ></div>
+      </div>
+    </div>
+
+    <div id="imageEditorModal" class="modal-overlay">
+      <div class="modal-content editor-layout-container">
+        <button class="modal-close-button" id="editorCloseButton">
+          &times;
+        </button>
+        <h3 class="text-2xl font-bold text-white mb-2 text-center">
+          Editar Imagen
+        </h3>
+
+        <div class="editor-main-layout-flex">
+          <div class="editor-sidebar editor-left-sidebar">
+            <h4 class="text-lg font-semibold text-cyan-400 mb-2">
+              Historial / Capas
+            </h4>
+            <p class="text-gray-400 text-sm">
+              Funcionalidad de historial de edición y capas de imagen
+              (próximamente).
+            </p>
+            <div class="flex flex-col gap-2 mt-4">
+              <button
+                class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm opacity-50 cursor-not-allowed"
+              >
+                <i class="fas fa-undo mr-2"></i>Deshacer
+              </button>
+              <button
+                class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm opacity-50 cursor-not-allowed"
+              >
+                <i class="fas fa-redo mr-2"></i>Rehacer
+              </button>
+              <hr class="border-gray-600 my-4" />
+              <h5 class="text-md font-semibold text-gray-300">Capas</h5>
+              <p class="text-gray-500 text-xs">
+                Gestión de capas (próximamente)
+              </p>
+              <button
+                class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm opacity-50 cursor-not-allowed mt-2"
+              >
+                <i class="fas fa-plus mr-2"></i>Añadir Capa
+              </button>
+            </div>
+          </div>
+
+          <div class="editor-canvas-area">
+            <canvas id="editorCanvas" class="max-w-full max-h-full"></canvas>
+          </div>
+
+          <div class="editor-sidebar editor-right-sidebar">
+            <div>
+              <h4 class="text-lg font-semibold text-cyan-400 mb-2">Filtros</h4>
+              <div
+                id="filterThumbnails"
+                class="flex overflow-x-auto gap-2 pb-2"
+              ></div>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-cyan-400 mb-2">
+                Añadir Texto
+              </h4>
+              <input
+                type="text"
+                id="editorTextInput"
+                placeholder="Escribe tu texto aquí"
+                class="w-full p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm mb-2"
+              />
+              <div class="flex items-center justify-between mb-2">
+                <input
+                  type="color"
+                  id="editorTextColor"
+                  value="#FFFFFF"
+                  class="h-8 w-8 rounded-lg cursor-pointer"
+                />
+                <input
+                  type="number"
+                  id="editorTextSize"
+                  value="30"
+                  min="10"
+                  max="100"
+                  class="w-20 p-1 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm text-center"
+                />
+                <select
+                  id="editorTextPosition"
+                  class="bg-gray-700 border border-gray-600 text-white rounded-lg p-1 text-sm"
+                >
+                  <option value="bottomRight">Abajo Derecha</option>
+                  <option value="topLeft">Arriba Izquierda</option>
+                  <option value="topRight">Arriba Derecha</option>
+                  <option value="bottomLeft">Abajo Izquierda</option>
+                  <option value="center">Centro</option>
+                </select>
+              </div>
+              <button
+                id="addTextToCanvasButton"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm"
+              >
+                Aplicar Texto
+              </button>
+            </div>
+
+            <div>
+              <h4 class="text-lg font-semibold text-cyan-400 mb-2">Recorte</h4>
+              <p class="text-gray-400 text-xs mb-2">
+                Recorte centrado. Ingresa las nuevas dimensiones en píxeles.
+              </p>
+              <div class="flex gap-2 mb-3">
+                <input
+                  type="number"
+                  id="cropWidthInput"
+                  placeholder="Ancho (px)"
+                  class="w-1/2 p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm text-center"
+                />
+                <input
+                  type="number"
+                  id="cropHeightInput"
+                  placeholder="Alto (px)"
+                  class="w-1/2 p-2 rounded-lg bg-gray-700 border border-gray-600 text-white text-sm text-center"
+                />
+              </div>
+              <button
+                id="applyCropButton"
+                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg text-sm"
+              >
+                Aplicar Recorte
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-center gap-3 mt-4 editor-actions">
+          <button
+            id="saveEditedImageButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg shadow-md transition duration-200"
+          >
+            Guardar Edición
+          </button>
+          <button
+            id="cancelEditButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg shadow-md transition duration-200"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="subscriptionModal" class="modal-overlay subscription-modal">
+      <div class="modal-content subscription-modal-content">
+        <h3 class="text-2xl font-bold mb-4 text-cyan-500">
+          ¡Únete a nuestra comunidad!
+        </h3>
+        <p class="mb-4 text-gray-300">
+          Suscríbete a nuestro boletín para recibir las últimas novedades y
+          herramientas de IA.
+        </p>
+        <input
+          type="email"
+          id="emailInput"
+          placeholder="Tu correo electrónico"
+          class="mb-4 p-3 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <div class="flex justify-center space-x-4">
+          <button
+            id="subscribeButton"
+            class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            Suscribirse
+          </button>
+          <button
+            id="noThanksButton"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg transition duration-200 shadow-md"
+          >
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="adModal" class="modal-overlay ad-modal-overlay">
+      <div class="modal-content ad-modal-content">
+        <h3 class="text-2xl font-bold text-cyan-500 mb-4">
+          ¡Reproduciendo Anuncio!
+        </h3>
+        <p class="text-gray-300 mb-4">
+          Esto es un anuncio simulado. Por favor, espera...
+        </p>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-4 border-cyan-500 mx-auto"
+        ></div>
+        <p id="adTimer" class="mt-4 text-gray-400 text-sm">
+          Tiempo restante: 5 segundos
+        </p>
+      </div>
+    </div>
+
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-sm">
+        Este sitio utiliza cookies para mejorar tu experiencia. Al continuar,
+        aceptas su uso.
+      </p>
+      <button
+        id="acceptCookiesButton"
+        class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1 px-3 rounded-lg transition duration-200 text-sm shadow-md"
+      >
+        Aceptar
+      </button>
+    </div>
+
+    <div id="loadingOverlayModal" class="modal-overlay loading-overlay-modal">
+      <div class="modal-content loading-modal-content">
+        <button id="loadingModalCloseButton" class="modal-close-button hidden">
+          &times;
+        </button>
+        <div class="loading-animation-wrapper">
+          <img
+            id="pocoyoGifModal"
+            src="../img/Pocoyo.gif"
+            alt="Pocoyo bailando"
+            class="pocoyo-gif"
+            onerror="this.classList.add('hidden'); document.getElementById('loadingSpinnerModal').classList.remove('hidden');"
+          />
+          <div id="loadingSpinnerModal" class="modern-spinner hidden"></div>
+        </div>
+        <p id="loadingMessageTextModal" class="text-gray-300 text-lg mt-3">
+          Por favor espera...
+        </p>
+        <p
+          id="loadingErrorTextModal"
+          class="text-red-400 font-semibold mt-2 text-sm hidden"
+        ></p>
+        <button
+          id="loadingModalCloseButton"
+          class="hidden mt-4 bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+
+    <div id="messageModal" class="modal-overlay">
+      <div class="modal-content" id="messageModalContent">
+        <button id="messageModalCloseButton" class="modal-close-button">
+          &times;
+        </button>
+        <p id="messageModalText" class="text-white text-lg font-semibold"></p>
+        <div id="messageModalIcon" class="mt-4 text-4xl"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js" defer></script>
+  </body>
+  <footer class="w-full text-gray-400 text-center py-6 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+    <p class="text-xs mt-2">
+      <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
+      <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
+    </p>
+  </footer>
+</html>

@@ -1,0 +1,216 @@
+/* /convert-img/css/style.css */
+
+/* --- Estilos para el contenedor principal de la aplicación --- */
+.ia-convert-app-main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%; /* Ocupa el 100% de la altura de su padre (body) */
+  width: 100%; /* Ocupa todo el ancho */
+}
+/* El main dentro de este contenedor tendrá flex-grow: 1 para empujar el footer */
+
+/* --- Estilos para la herramienta principal de conversión (anteriormente .container) --- */
+.main-tool-section {
+  background-color: #1a202c; /* bg-gray-900 */
+  border-radius: 1.25rem; /* Bordes más redondeados */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); /* Sombra más pronunciada y oscura */
+  padding: 2.5rem; /* Más padding */
+  max-width: 960px; /* Ancho máximo un poco mayor */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem; /* Espaciado entre elementos un poco mayor */
+  border: 1px solid #2d3748; /* border-gray-700 */
+  transition: all 0.3s ease; /* para el hover:scale */
+  margin-top: 3rem; /* Espacio para separarse de la sección anterior */
+  margin-bottom: 3rem; /* Espacio antes del footer/banners */
+}
+.main-tool-section:hover {
+  transform: scale(1.005); /* Efecto de zoom más sutil */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); /* Sombra más intensa al hover */
+}
+
+/* Grupo de entrada de archivo */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem; /* Más espacio */
+  width: 100%;
+}
+.file-input {
+  border: 2px dashed #4a5568; /* Borde punteado - gris-600 */
+  border-radius: 1rem; /* Más redondeado */
+  padding: 2rem; /* Más padding para hacer el área más grande */
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  background-color: #2d3748; /* gris-800 */
+  color: #cbd5e1; /* gris-300 */
+  font-size: 1.25rem; /* Texto más grande */
+  font-weight: 500; /* Un poco más de peso */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra interna sutil */
+}
+.file-input:hover {
+  border-color: #06b6d4; /* cyan-500 al pasar el ratón */
+  background-color: #4a5568; /* gris-700 */
+  box-shadow: inset 0 2px 8px rgba(6, 182, 212, 0.3); /* Sombra interna con resplandor al hover */
+}
+.file-input input[type="file"] {
+  display: none; /* Ocultar el input de archivo predeterminado */
+}
+
+/* Contenedor del canvas de previsualización */
+.canvas-container {
+  width: 100%;
+  min-height: 250px; /* Altura mínima para el canvas un poco mayor */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1a202c; /* Fondo del canvas - gris-900 */
+  border-radius: 1rem; /* Más redondeado */
+  overflow: hidden; /* Asegurar que la imagen no se desborde */
+  border: 1px solid #2d3748; /* border-gray-700 */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra interna */
+}
+canvas {
+  display: block; /* Eliminar espacio extra debajo del canvas */
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem; /* Más redondeado */
+}
+#placeholderText {
+  color: #a0aec0; /* gris-400 */
+  font-size: 1.5rem; /* Texto de placeholder más grande */
+}
+
+/* Grupo de botones */
+.button-group {
+  display: flex;
+  flex-wrap: wrap; /* Permitir que los botones se envuelvan */
+  gap: 1.25rem; /* Más espacio */
+  justify-content: center;
+  width: 100%;
+}
+/* .btn-primary y .btn-secondary ahora heredan de main.css para estilos base */
+.btn.disabled-btn {
+  opacity: 0.5; /* Más opaco */
+  cursor: not-allowed;
+  box-shadow: none; /* Sin sombra cuando deshabilitado */
+}
+.btn-secondary {
+  /* Reafirmar estilo de botón secundario si es necesario */
+  background-color: #4a5568; /* bg-gray-700 */
+  color: #e2e8f0; /* text-gray-200 */
+  padding: 0.9rem 1.8rem; /* Ajustar padding para coherencia */
+  border-radius: 0.6rem; /* Ajustar border-radius */
+  font-size: 1.15rem; /* Ajustar tamaño de fuente */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.btn-secondary:hover {
+  background-color: #2d3748; /* hover:bg-gray-600 */
+  transform: translateY(-2px); /* Efecto de levitación */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Estilos para el select de formato */
+#outputFormat {
+  background-color: #2d3748; /* gris-800 */
+  color: #e2e8f0; /* gris-200 */
+  border: 1px solid #4a5568; /* gris-700 */
+  border-radius: 0.6rem; /* Más redondeado */
+  padding: 0.9rem 1.25rem; /* Más padding */
+  font-size: 1.05rem; /* Un poco más grande */
+  appearance: none; /* Eliminar estilo nativo del select */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%23CBD5E1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e"); /* Flecha SVG personalizada */
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.5em 1.5em;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Sombra interna sutil */
+}
+#outputFormat:focus {
+  outline: none;
+  border-color: #06b6d4; /* cyan-500 */
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.4); /* ring-cyan-500 más pronunciado */
+}
+
+/* Estilos para el contador de conversiones y botón de anuncio */
+#conversionCounterDisplay {
+  color: #9ca3af; /* gray-400 */
+  font-size: 0.95rem; /* Texto un poco más grande */
+  margin-top: 0.75rem; /* Más margen */
+}
+#watchAdButton {
+  background-color: #6d28d9; /* blue-700 -> purple-700 para variar */
+  color: white;
+  font-weight: 700; /* bold */
+  padding: 0.5rem 1rem; /* Un poco más de padding */
+  border-radius: 0.6rem; /* Más redondeado */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más fuerte */
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+  font-size: 0.95rem; /* Texto un poco más grande */
+  margin-top: 1rem; /* Más margen */
+}
+#watchAdButton:hover {
+  background-color: #5b21b6; /* purple-800 */
+  transform: translateY(-2px); /* Efecto de levitación */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Ad Modal for "Watching an Ad" simulation - Ahora usa clases globales de main.css */
+.ad-modal-overlay {
+  z-index: 2000;
+}
+.ad-modal-content {
+  background-color: #1a202c; /* Fondo más oscuro para el anuncio */
+  border: 1px solid #06b6d4; /* Borde cian distintivo */
+  border-radius: 1.25rem; /* Más redondeado */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); /* Sombra más intensa */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Ajustes para Tablets & Móviles */
+  .main-tool-section {
+    padding: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .file-input {
+    padding: 1.5rem;
+    font-size: 1.1rem;
+  }
+  .canvas-container {
+    min-height: 180px;
+  }
+  #placeholderText {
+    font-size: 1.25rem;
+  }
+  .button-group {
+    flex-direction: column;
+  }
+  .btn,
+  .btn-secondary,
+  #outputFormat,
+  #watchAdButton {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Ajustes para móviles muy pequeños */
+  .main-tool-section {
+    padding: 1.5rem;
+  }
+  .file-input {
+    font-size: 1rem;
+  }
+}
