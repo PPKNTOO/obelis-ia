@@ -1,5 +1,11 @@
 // ia-img/js/aiService.js
 
+import {
+  DOMElements,
+  showCustomMessage,
+  showLoadingOverlay,
+  hideLoadingOverlay,
+} from "../../js/global.js";
 import { CONFIG } from "./config.js";
 import {
   freeGenerationsLeft,
@@ -17,25 +23,19 @@ import {
   renderGallery,
   renderRecentGenerations,
 } from "./galleryManager.js";
-import {
-  DOMElements,
-  showCustomMessage,
-  showLoadingOverlay,
-  hideLoadingOverlay,
-} from "../../js/global.js";
 import { updateGenerationCounterUI } from "./uiUpdater.js";
 
 export async function generatePromptSuggestion() {
   if (!DOMElements.promptInput || !DOMElements.generatePromptSuggestionButton)
     return;
-  showLoadingOverlay("Generando una sugerencia de prompt...", false);
+
+  showLoadingOverlay("Generando una sugerencia...", false);
   DOMElements.generatePromptSuggestionButton.disabled = true;
 
   try {
-    const promptForLLM = // <-- Definición aquí
-      "Genera una idea de prompt detallada y creativa para una imagen de IA. Asegúrate de que sea concisa pero inspiradora. Por ejemplo: 'Un bosque místico con árboles bioluminiscentes y criaturas de fantasía, estilo arte digital, iluminación etérea.'";
-
-    let chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }];
+    const promptForLLM =
+      "Genera una idea de prompt detallada y creativa para una imagen de IA. Asegúrate de que sea concisa pero inspiradora.";
+    const chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }];
 
     const response = await fetch("/api/gemini", {
       method: "POST",
@@ -43,36 +43,26 @@ export async function generatePromptSuggestion() {
       body: JSON.stringify({ contents: chatHistory }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Error al generar prompt desde el proxy: ${
-          errorData.error?.message || response.statusText || "Error desconocido"
-        }`
-      );
-    }
+    if (!response.ok)
+      throw new Error(`Error del proxy Gemini: ${response.statusText}`);
 
     const result = await response.json();
-    if (
-      result.candidates &&
-      result.candidates.length > 0 &&
-      result.candidates[0].content &&
-      result.candidates[0].content.parts &&
-      result.candidates[0].content.parts.length > 0
-    ) {
-      const generatedText = result.candidates[0].content.parts[0].text;
-      DOMElements.promptInput.value = generatedText;
+    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (generatedText) {
+      DOMElements.promptInput.value = generatedText.replace(/["*]/g, ""); // Limpia comillas o asteriscos
       if (DOMElements.promptSuggestionBox)
         DOMElements.promptSuggestionBox.classList.remove("show");
-      showCustomMessage("Sugerencia de prompt generada.", "success");
+      showCustomMessage("Sugerencia generada.", "success");
     } else {
-      throw new Error(
-        "Respuesta inesperada de la IA para el prompt a través del proxy: no se encontró contenido válido."
-      );
+      throw new Error("Respuesta inesperada de la IA.");
     }
   } catch (error) {
-    console.error("Error al generar prompt sugerido (frontend):", error);
-    showLoadingOverlay(`No se pudo generar un prompt: ${error.message}`, true);
+    console.error("Error al generar prompt sugerido:", error);
+    showCustomMessage(
+      `No se pudo generar un prompt: ${error.message}`,
+      "error"
+    );
   } finally {
     hideLoadingOverlay();
     if (DOMElements.generatePromptSuggestionButton)
@@ -81,35 +71,26 @@ export async function generatePromptSuggestion() {
 }
 
 export async function improvePrompt() {
-  if (
-    !DOMElements.promptInput ||
-    !DOMElements.improvePromptButton ||
-    !DOMElements.generateButton ||
-    !DOMElements.toneSelect
-  )
+  const { promptInput, improvePromptButton, generateButton, toneSelect } =
+    DOMElements;
+  if (!promptInput || !improvePromptButton || !generateButton || !toneSelect)
     return;
-  const currentPrompt = DOMElements.promptInput.value.trim();
+
+  const currentPrompt = promptInput.value.trim();
   if (!currentPrompt) {
-    showCustomMessage(
-      "Por favor, escribe algo en el prompt para mejorarlo.",
-      "error"
-    );
+    showCustomMessage("Escribe algo para mejorarlo.", "error");
     return;
   }
 
-  showLoadingOverlay("Mejorando el prompt... Por favor, espera.", false);
-
-  DOMElements.improvePromptButton.disabled = true;
-  DOMElements.generateButton.disabled = true;
-  DOMElements.promptInput.disabled = true;
+  showLoadingOverlay("Mejorando prompt...", false);
+  improvePromptButton.disabled = true;
+  generateButton.disabled = true;
+  promptInput.disabled = true;
 
   try {
-    const selectedTone = DOMElements.toneSelect.value;
-    const promptForLLM =
-      // <-- Definición aquí
-      `Reescribe y expande el siguiente prompt para una imagen de IA. Hazlo mucho más detallado, con al menos ${CONFIG.MIN_IMPROVED_PROMPT_LENGTH} caracteres, y aplica un tono '${selectedTone}'. Solo devuelve el prompt puro, sin comentarios ni texto adicional. Prompt original: '${currentPrompt}'`;
-
-    let chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }];
+    const selectedTone = toneSelect.value;
+    const promptForLLM = `Reescribe y expande el siguiente prompt para una imagen de IA. Hazlo mucho más detallado, con al menos 150 caracteres, y aplica un tono '${selectedTone}'. Devuelve solo el prompt puro, sin comentarios ni texto adicional. Prompt original: '${currentPrompt}'`;
+    const chatHistory = [{ role: "user", parts: [{ text: promptForLLM }] }];
 
     const response = await fetch("/api/gemini", {
       method: "POST",
@@ -117,105 +98,62 @@ export async function improvePrompt() {
       body: JSON.stringify({ contents: chatHistory }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Error al mejorar prompt desde el proxy: ${
-          errorData.error?.message || response.statusText || "Error desconocido"
-        }`
-      );
-    }
+    if (!response.ok)
+      throw new Error(`Error del proxy Gemini: ${response.statusText}`);
 
     const result = await response.json();
-    if (
-      result.candidates &&
-      result.candidates.length > 0 &&
-      result.candidates[0].content &&
-      result.candidates[0].content.parts &&
-      result.candidates[0].content.parts.length > 0
-    ) {
-      let generatedText = result.candidates[0].content.parts[0].text.trim();
+    const generatedText =
+      result.candidates?.[0]?.content?.parts?.[0]?.text.trim();
 
-      if (generatedText.length < CONFIG.MIN_IMPROVED_PROMPT_LENGTH) {
-        showCustomMessage(
-          `El prompt generado fue demasiado corto (${generatedText.length} caracteres). Intenta de nuevo o ajusta el tono.`,
-          "info"
-        );
-      } else {
-        showCustomMessage("¡Prompt mejorado con éxito!", "success");
-      }
-      DOMElements.promptInput.value = generatedText;
+    if (generatedText) {
+      promptInput.value = generatedText.replace(/["*]/g, ""); // Limpia comillas o asteriscos
+      showCustomMessage("¡Prompt mejorado!", "success");
     } else {
-      throw new Error(
-        "Respuesta inesperada de la IA al mejorar el prompt a través del proxy: no se encontró contenido válido."
-      );
+      throw new Error("Respuesta inesperada de la IA.");
     }
   } catch (error) {
-    console.error("Error al mejorar prompt (frontend):", error);
-    showLoadingOverlay(`No se pudo mejorar el prompt: ${error.message}`, true);
+    console.error("Error al mejorar prompt:", error);
+    showCustomMessage(`No se pudo mejorar: ${error.message}`, "error");
   } finally {
     hideLoadingOverlay();
-    DOMElements.improvePromptButton.disabled = false;
-    DOMElements.generateButton.disabled = false;
-    DOMElements.promptInput.disabled = false;
+    improvePromptButton.disabled = false;
+    generateButton.disabled = false;
+    promptInput.disabled = false;
   }
 }
 
 export async function generateImage() {
   if (freeGenerationsLeft <= 0) {
-    showCustomMessage(
-      "Has agotado tus generaciones gratuitas. Mira un anuncio para obtener más.",
-      "error"
-    );
+    showCustomMessage("Has agotado tus generaciones gratuitas.", "error");
     return;
   }
 
-  if (
-    !DOMElements.promptInput ||
-    !DOMElements.generatedImage ||
-    !DOMElements.imagePlaceholderText ||
-    !DOMElements.downloadMainImageButton ||
-    !DOMElements.styleSelect ||
-    !DOMElements.aspectRatioSelect
-  )
-    return;
-
-  const prompt = DOMElements.promptInput.value.trim();
+  const {
+    promptInput,
+    generatedImage,
+    imagePlaceholderText,
+    downloadMainImageButton,
+    styleSelect,
+    aspectRatioSelect,
+  } = DOMElements;
+  const prompt = promptInput.value.trim();
   if (!prompt) {
-    showCustomMessage(
-      "Por favor, ingresa una descripción para la imagen.",
-      "error"
-    );
+    showCustomMessage("Ingresa una descripción para la imagen.", "error");
     return;
   }
 
-  showLoadingOverlay(
-    `Generando tu imagen de "${prompt}"... Esto puede tardar unos 2-3 minutos, por favor espera.`,
-    false
-  );
-  DOMElements.generatedImage.classList.add("hidden");
-  DOMElements.imagePlaceholderText.classList.add("hidden");
-  DOMElements.downloadMainImageButton.classList.add("hidden");
-  if (DOMElements.promptSuggestionBox)
-    DOMElements.promptSuggestionBox.classList.remove("show");
+  showLoadingOverlay(`Generando tu imagen...`);
+  generatedImage.classList.add("hidden");
+  imagePlaceholderText.classList.add("hidden");
+  downloadMainImageButton.classList.add("hidden");
 
-  const selectedStyle = DOMElements.styleSelect.value;
-  const selectedAspectRatio = DOMElements.aspectRatioSelect.value;
+  const finalPrompt =
+    styleSelect.value !== "none"
+      ? `${prompt}, ${styleSelect.value} style`
+      : prompt;
 
-  // Definir finalPrompt aquí, antes de su uso
-  let finalPrompt = prompt; // <-- Asegurarse que finalPrompt se define aquí
-  if (selectedStyle !== "none") {
-    finalPrompt += `, ${selectedStyle} style`;
-  }
-
-  let width = CONFIG.DEFAULT_IMAGE_WIDTH;
-  let height = CONFIG.DEFAULT_IMAGE_HEIGHT;
-
-  switch (selectedAspectRatio) {
-    case "1:1":
-      width = 768;
-      height = 768;
-      break;
+  let width, height;
+  switch (aspectRatioSelect.value) {
     case "16:9":
       width = 1024;
       height = 576;
@@ -228,127 +166,86 @@ export async function generateImage() {
       width = 800;
       height = 600;
       break;
+    default:
+      width = 768;
+      height = 768;
+      break;
   }
 
   const encodedPrompt = encodeURIComponent(finalPrompt);
-  let originalImageUrl = "";
-  let processedImageUrl = "";
   let success = false;
+  let finalImageUrl = "";
 
-  for (
-    let attemptCount = 0;
-    attemptCount <= CONFIG.MAX_RETRIES && !success;
-    attemptCount++
-  ) {
+  for (let attempt = 0; attempt < CONFIG.MAX_RETRIES && !success; attempt++) {
     try {
-      const currentPollinationUrl = `${
+      const url = `${
         CONFIG.API_BASE_URL
-      }${encodedPrompt}?width=${width}&height=${height}&_=${new Date().getTime()}&attempt=${attemptCount}`;
-
-      const loadImagePromise = new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(currentPollinationUrl);
-        img.onerror = (e) => {
-          console.error(
-            `Error loading image from Pollinations.ai (attempt ${
-              attemptCount + 1
-            }):`,
-            e
-          );
-          reject(new Error("Error al cargar la imagen de IA."));
-        };
-        img.src = currentPollinationUrl;
+      }${encodedPrompt}?width=${width}&height=${height}&seed=${Date.now()}&attempt=${attempt}`;
+      const response = await fetch(url, {
+        signal: AbortSignal.timeout(CONFIG.TIMEOUT_MS),
       });
 
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(
-          () =>
-            reject(new Error("Tiempo de espera excedido para la API de IA.")),
-          CONFIG.TIMEOUT_MS
-        )
-      );
+      if (!response.ok)
+        throw new Error(`API de imagen falló con status ${response.status}`);
 
-      originalImageUrl = await Promise.race([loadImagePromise, timeoutPromise]);
-      processedImageUrl = await processImageWithLogo(originalImageUrl);
-
+      // La URL final después de redirecciones es la que importa
+      const originalImageUrl = response.url;
+      const processedImageUrl = await processImageWithLogo(originalImageUrl);
       const optimizedImageUrlForGallery = await processImageForGallery(
         processedImageUrl
       );
 
       saveImageToGallery(optimizedImageUrlForGallery);
       setLastGeneratedImageUrl(processedImageUrl);
-      localStorage.setItem("lastGeneratedImageUrlDisplayed", processedImageUrl);
-
-      success = true;
-
       setFreeGenerationsLeft(freeGenerationsLeft - 1);
-      localStorage.setItem("freeGenerationsLeft", freeGenerationsLeft);
       updateGenerationCounterUI();
+
+      finalImageUrl = processedImageUrl;
+      success = true;
     } catch (error) {
-      console.warn(`Intento ${attemptCount + 1} fallido: ${error.message}`);
-      if (attemptCount === CONFIG.MAX_RETRIES) {
-        showLoadingOverlay(
-          `Todos los intentos para generar la imagen con IA fallaron: ${error.message}.`,
-          true
-        );
-      } else {
-        await new Promise((resolve) =>
-          setTimeout(resolve, CONFIG.RETRY_DELAY_MS)
+      console.warn(`Intento ${attempt + 1} fallido:`, error);
+      if (attempt === CONFIG.MAX_RETRIES - 1) {
+        showCustomMessage(
+          `No se pudo generar la imagen: ${error.message}`,
+          "error",
+          5000
         );
       }
     }
   }
 
-  if (success && processedImageUrl) {
-    DOMElements.generatedImage.src = processedImageUrl;
-    DOMElements.generatedImage.alt = `Imagen generada: ${prompt}`;
-    DOMElements.generatedImage.classList.remove("hidden");
-    DOMElements.imagePlaceholderText.classList.add("hidden");
-    DOMElements.downloadMainImageButton.classList.remove("hidden");
-
-    renderGallery();
-    renderRecentGenerations();
-
-    showCustomMessage(
-      "¡Imagen generada y guardada en tu galería!",
-      "success",
-      3000
-    );
+  if (success) {
+    generatedImage.src = finalImageUrl;
+    showCustomMessage("¡Imagen generada!", "success");
   } else {
-    const fallbackUrl = CONFIG.FALLBACK_IMAGES[fallbackImageIndex];
+    generatedImage.src = CONFIG.FALLBACK_IMAGES[fallbackImageIndex];
     setFallbackImageIndex(
       (fallbackImageIndex + 1) % CONFIG.FALLBACK_IMAGES.length
     );
-    DOMElements.generatedImage.src = fallbackUrl;
-    DOMElements.generatedImage.alt = "Imagen de ejemplo";
-    DOMElements.downloadMainImageButton.classList.add("hidden");
-    showCustomMessage(
-      "No se pudo generar la imagen con IA. Se mostró una imagen de ejemplo.",
-      "info"
-    );
-    renderGallery();
-    renderRecentGenerations();
   }
 
+  generatedImage.classList.remove("hidden");
+  if (success) downloadMainImageButton.classList.remove("hidden");
+  renderGallery();
+  renderRecentGenerations();
   hideLoadingOverlay();
 }
 
 export function watchAdForGenerations() {
   if (!DOMElements.watchAdButton) return;
-  showCustomMessage("Simulando anuncio... por favor espera.", "info", 3000);
+
+  showCustomMessage("Simulando anuncio...", "info", 3000);
   DOMElements.watchAdButton.disabled = true;
 
   setTimeout(() => {
     setFreeGenerationsLeft(
       freeGenerationsLeft + CONFIG.GENERATIONS_PER_AD_WATCH
     );
-    localStorage.setItem("freeGenerationsLeft", freeGenerationsLeft);
     updateGenerationCounterUI();
-    DOMElements.watchAdButton.disabled = false;
     showCustomMessage(
       `¡Has obtenido +${CONFIG.GENERATIONS_PER_AD_WATCH} generaciones!`,
-      "success",
-      3000
+      "success"
     );
+    DOMElements.watchAdButton.disabled = false;
   }, 3000);
 }

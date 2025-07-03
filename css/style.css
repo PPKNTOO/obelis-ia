@@ -305,57 +305,6 @@
   margin-top: auto; /* Empuja el autor hacia abajo */
 }
 
-/* --- FAQ Section Styles --- */
-.faq-container {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: left;
-}
-.faq-item {
-  background-color: #1a202c;
-  border: 1px solid #2d3748; /* Borde gris original RESTAURADO */
-  border-radius: 0.75rem;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.faq-question {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 1.5rem;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: white;
-  cursor: pointer;
-  background-color: #2d3748;
-  transition: background-color 0.3s ease;
-}
-.faq-question:hover {
-  background-color: #374151;
-}
-.faq-arrow {
-  font-size: 1rem;
-  transition: transform 0.3s ease;
-}
-.faq-arrow.rotated {
-  transform: rotate(180deg);
-}
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0 1.5rem;
-  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
-  background-color: #1a202c;
-  color: #cbd5e1;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-.faq-answer[style*="max-height:"][style*="px"] {
-  padding-top: 1rem;
-  padding-bottom: 1.5rem;
-}
-
 /* Media queries para ajustes finos */
 @media (max-width: 640px) {
   .carousel-slide h5 {

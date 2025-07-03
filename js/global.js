@@ -1,549 +1,310 @@
-// raiz/js/global.js
+// js/global.js
 
-// Exporta DOMElements para que otros módulos puedan importarlo
+// 1. Exporta el objeto DOMElements para que sea el 'almacén' de elementos del DOM compartido.
 export let DOMElements = {};
 
-// Helper function to safely get elements (returns null if not found)
+// 2. Función auxiliar para obtener elementos del DOM de forma segura.
 function getElement(selector, isQuerySelectorAll = false) {
   const element = isQuerySelectorAll
     ? document.querySelectorAll(selector)
     : document.querySelector(selector);
   if (!element || (isQuerySelectorAll && element.length === 0)) {
-    // console.warn(`Elemento(s) con selector "${selector}" no encontrado(s).`);
     return null;
   }
   return element;
 }
 
-// --- FUNCIONES DE UTILIDAD GENERAL ---
+// 3. Lógica de componentes (Navbar, FAQ, Carrusel, Modales)
+// Estas funciones ahora usarán el objeto DOMElements.
 
-/**
- * Descarga una imagen dada su URL o Data URL de forma robusta.
- * Convierte la imagen a un Blob para asegurar la descarga directa.
- * @param {string} imageUrl - La URL o Data URL de la imagen.
- * @param {string} filename - El nombre del archivo para la descarga (con extensión).
- * @returns {Promise<void>}
- */
-async function downloadImage(imageUrl, filename = "imagen.png") {
-  try {
-    // Si la URL es una data URL, la convertimos a Blob directamente
-    if (imageUrl.startsWith("data:")) {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename; // Establece el nombre de archivo
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url); // Libera el objeto URL
-      console.log(`Descarga iniciada para: ${filename}`);
-    } else {
-      // Para URLs externas, intentamos un fetch para crear un Blob
-      const response = await fetch(imageUrl, {
-        mode: "cors", // Asegúrate de que CORS esté habilitado si es una URL externa
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+function initializeNavbar() {
+  const { menuToggle, navLinksContainer, navbarInnerContent } = DOMElements;
+  if (menuToggle && navLinksContainer) {
+    menuToggle.addEventListener("click", () => {
+      navLinksContainer.classList.toggle("active");
+      const icon = menuToggle.querySelector("i");
+      if (icon) {
+        icon.classList.toggle("fa-bars");
+        icon.classList.toggle("fa-times");
       }
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename; // Establece el nombre de archivo
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url); // Libera el objeto URL
-      console.log(`Descarga iniciada para: ${filename}`);
-    }
-  } catch (error) {
-    console.error("Error al descargar la imagen:", error);
-    // showCustomMessage ya está definido, se usa globalmente.
-    showCustomMessage(
-      `Error al descargar la imagen: ${error.message}.`,
-      "error",
-      5000
-    );
-  }
-}
-
-/**
- * Muestra un mensaje personalizado en el modal genérico.
- */
-function showCustomMessage(message, type = "info", duration = 3000) {
-  if (
-    !DOMElements.messageModalText ||
-    !DOMElements.messageModalIcon ||
-    !DOMElements.messageModal
-  ) {
-    console.warn(
-      "Error: Los elementos del modal de mensajes no están inicializados en DOMElements."
-    );
-    return;
-  }
-  DOMElements.messageModalText.textContent = message;
-  switch (type) {
-    case "success":
-      DOMElements.messageModalIcon.textContent = "✔️";
-      DOMElements.messageModalIcon.className = "mt-4 text-4xl success";
-      break;
-    case "error":
-      DOMElements.messageModalIcon.textContent = "❌";
-      DOMElements.messageModalIcon.className = "mt-4 text-4xl error";
-      break;
-    case "info":
-    default:
-      DOMElements.messageModalIcon.textContent = "💡";
-      DOMElements.messageModalIcon.className = "mt-4 text-4xl info";
-      break;
-  }
-  DOMElements.messageModal.classList.add("show");
-  setTimeout(() => {
-    hideCustomMessage();
-  }, duration);
-}
-
-/** Oculta el modal de mensajes genérico. */
-function hideCustomMessage() {
-  if (!DOMElements.messageModal) return;
-  DOMElements.messageModal.classList.remove("show");
-  if (DOMElements.messageModalText)
-    DOMElements.messageModalText.textContent = "";
-  if (DOMElements.messageModalIcon)
-    DOMElements.messageModalIcon.className = "mt-4 text-4xl";
-}
-
-/**
- * Muestra un overlay de carga global con un mensaje y un spinner/GIF.
- * @param {string} message - El mensaje a mostrar.
- * @param {boolean} isError - Si es un mensaje de error, cambia la apariencia y muestra un botón de cierre.
- */
-function showLoadingOverlay(
-  message = "Cargando, por favor espera...",
-  isError = false
-) {
-  if (!DOMElements.loadingOverlayModal) {
-    console.error("Loading overlay modal elements not found in DOMElements.");
-    return;
-  }
-
-  if (DOMElements.loadingMessageTextModal)
-    DOMElements.loadingMessageTextModal.textContent = message;
-  if (DOMElements.loadingErrorTextModal)
-    DOMElements.loadingErrorTextModal.classList.add("hidden"); // Ocultar errores previos
-
-  if (isError) {
-    if (DOMElements.loadingErrorTextModal) {
-      DOMElements.loadingErrorTextModal.textContent = message;
-      DOMElements.loadingErrorTextModal.classList.remove("hidden");
-    }
-    if (DOMElements.loadingMessageTextModal)
-      DOMElements.loadingMessageTextModal.textContent =
-        "¡Ha ocurrido un error!"; // Mensaje principal para error
-    if (DOMElements.pocoyoGifModal)
-      DOMElements.pocoyoGifModal.classList.add("hidden");
-    if (DOMElements.loadingSpinnerModal)
-      DOMElements.loadingSpinnerModal.classList.add("hidden");
-    if (DOMElements.loadingModalCloseButton)
-      DOMElements.loadingModalCloseButton.classList.remove("hidden"); // Mostrar botón de cierre en error
-  } else {
-    if (DOMElements.loadingModalCloseButton)
-      DOMElements.loadingModalCloseButton.classList.add("hidden"); // Ocultar botón si no hay error
-    // Decidir si mostrar Pocoyo o spinner
-    if (
-      DOMElements.pocoyoGifModal &&
-      !DOMElements.pocoyoGifModal.classList.contains("hidden")
-    ) {
-      // Pocoyo ya está visible o se intenta mostrar
-    } else if (DOMElements.loadingSpinnerModal) {
-      if (DOMElements.pocoyoGifModal)
-        DOMElements.pocoyoGifModal.classList.add("hidden"); // Asegurarse de que Pocoyo esté oculto si el spinner debe verse
-      DOMElements.loadingSpinnerModal.classList.remove("hidden");
-    }
-  }
-  DOMElements.loadingOverlayModal.classList.add("show");
-}
-
-/** Oculta el overlay de carga global. */
-function hideLoadingOverlay() {
-  if (!DOMElements.loadingOverlayModal) return;
-  DOMElements.loadingOverlayModal.classList.remove("show");
-  if (DOMElements.loadingMessageTextModal)
-    DOMElements.loadingMessageTextModal.textContent = "";
-  if (DOMElements.loadingErrorTextModal)
-    DOMElements.loadingErrorTextModal.textContent = "";
-  if (DOMElements.loadingErrorTextModal)
-    DOMElements.loadingErrorTextModal.classList.add("hidden");
-  if (DOMElements.pocoyoGifModal)
-    DOMElements.pocoyoGifModal.classList.remove("hidden"); // Resetear para la próxima vez
-  if (DOMElements.loadingSpinnerModal)
-    DOMElements.loadingSpinnerModal.classList.add("hidden"); // Ocultar spinner al finalizar
-  if (DOMElements.loadingModalCloseButton)
-    DOMElements.loadingModalCloseButton.classList.add("hidden"); // Asegurarse de que esté oculto
-}
-
-/**
- * Calcula y muestra el uso del almacenamiento local.
- */
-function updateLocalStorageUsage() {
-  if (!DOMElements.localStorageUsage) return;
-
-  let totalBytes = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    totalBytes += localStorage.getItem(key).length * 2;
-  }
-  const totalKB = totalBytes / 1024;
-  const totalMB = totalKB / 1024;
-
-  let usageText = "";
-  if (totalMB >= 1) {
-    usageText = `${totalMB.toFixed(2)} MB`;
-  } else {
-    usageText = `${totalKB.toFixed(2)} KB`;
-  }
-  DOMElements.localStorageUsage.textContent = `Uso del Almacenamiento Local: ${usageText}`;
-
-  const QUOTA_WARNING_MB = 4;
-  if (totalMB >= QUOTA_WARNING_MB) {
-    showCustomMessage(
-      `¡Advertencia! El almacenamiento local se está llenando (${usageText}). Considera limpiar la galería.`,
-      "info",
-      7000
-    );
-  }
-}
-
-// --- GESTIÓN DE COOKIES Y SUSCRIPCIÓN ---
-
-function showCookieConsent() {
-  if (DOMElements.cookieConsent && !localStorage.getItem("cookieAccepted")) {
-    DOMElements.cookieConsent.classList.add("show");
-  }
-}
-
-function acceptCookies() {
-  localStorage.setItem("cookieAccepted", "true");
-  if (DOMElements.cookieConsent) {
-    DOMElements.cookieConsent.classList.remove("show");
-  }
-  if (
-    !localStorage.getItem("subscribed") &&
-    !localStorage.getItem("noThanksSubscription")
-  ) {
-    showSubscriptionModal();
-  }
-}
-
-function showSubscriptionModal() {
-  if (
-    DOMElements.subscriptionModal &&
-    !localStorage.getItem("subscribed") &&
-    !localStorage.getItem("noThanksSubscription")
-  ) {
-    DOMElements.subscriptionModal.classList.add("show");
-  }
-}
-
-function handleSubscription() {
-  if (!DOMElements.emailInput || !DOMElements.subscriptionModal) return;
-  const email = DOMElements.emailInput.value.trim();
-  if (email) {
-    console.log("Correo suscrito:", email);
-    localStorage.setItem("subscribed", "true");
-    DOMElements.subscriptionModal.classList.remove("show");
-    showCustomMessage("¡Gracias por suscribirte!", "success");
-  } else {
-    showCustomMessage(
-      "Por favor, introduce un correo electrónico válido.",
-      "error"
-    );
-  }
-}
-
-function dismissSubscription() {
-  localStorage.setItem("noThanksSubscription", "true");
-  if (DOMElements.subscriptionModal) {
-    DOMElements.subscriptionModal.classList.remove("show");
-  }
-}
-
-// --- BARRA DE NAVEGACIÓN (ACTIVE CLASS) ---
-function updateActiveClass() {
-  const navbarContent = document.querySelector(".navbar-inner-content");
-  if (!navbarContent) {
-    return;
-  }
-
-  // Primero, resetea todas las clases 'active-link' de enlaces, submenús y spans de padres
-  navbarContent.querySelectorAll("a.active-link").forEach((link) => {
-    link.classList.remove("active-link");
-    link.removeAttribute("aria-current");
-  });
-  navbarContent
-    .querySelectorAll(".submenu-item.active-link")
-    .forEach((item) => {
-      item.classList.remove("active-link");
     });
-  navbarContent
-    .querySelectorAll(".nav-item.group > span.cursor-pointer.active-link")
-    .forEach((span) => {
-      span.classList.remove("active-link");
-    });
+  }
 
-  const currentPath = window.location.pathname;
-
-  const normalizePath = (path) => {
-    let normalized = path;
-    if (normalized.endsWith("/index.html") || normalized.endsWith(".html")) {
-      normalized = normalized.replace(/\/[^/]+\.html$/, "/");
-    }
-    if (!normalized.endsWith("/")) {
-      normalized += "/";
-    }
-    return normalized;
-  };
-
-  const normalizedCurrentPath = normalizePath(currentPath);
-
-  // Itera sobre todos los enlaces (<a>) y elementos de submenú (.submenu-item)
-  navbarContent.querySelectorAll("a, .submenu-item").forEach((item) => {
-    const href = item.getAttribute("href");
-
-    if (href === "#" || !href) {
-      return; // Pasa al siguiente elemento del bucle
-    }
-
-    const itemPath = normalizePath(
-      new URL(href, window.location.origin + window.location.pathname).pathname
-    );
-
-    let isActive = false;
-
-    if (itemPath === "/" && normalizedCurrentPath === "/") {
-      isActive = true;
-    } else if (itemPath !== "/" && normalizedCurrentPath.startsWith(itemPath)) {
-      isActive = true;
-    }
-
-    if (isActive) {
-      item.classList.add("active-link");
-      item.setAttribute("aria-current", "page");
-
-      const parentSubmenu = item.closest(".submenu");
-      if (parentSubmenu) {
-        const parentNavItem = parentSubmenu.closest(".nav-item.group");
-        if (parentNavItem) {
-          const parentSpan = parentNavItem.querySelector("span.cursor-pointer");
-          if (parentSpan) {
-            parentSpan.classList.add("active-link");
+  if (navbarInnerContent) {
+    const currentPath =
+      window.location.pathname.replace(/index\.html$/, "") || "/";
+    navbarInnerContent
+      .querySelectorAll("a.nav-item, a.submenu-item")
+      .forEach((link) => {
+        const linkPath =
+          new URL(link.href, window.location.origin).pathname.replace(
+            /index\.html$/,
+            ""
+          ) || "/";
+        if (
+          (linkPath === "/" && currentPath === "/") ||
+          (linkPath !== "/" && currentPath.startsWith(linkPath))
+        ) {
+          link.classList.add("active-link");
+          const parentGroup = link.closest(".nav-item.group");
+          if (parentGroup) {
+            parentGroup.querySelector("span")?.classList.add("active-link");
           }
         }
-      }
-    }
-  });
+      });
+  }
 }
 
-// Función para el listener de FAQ para poder reutilizarla en todos los módulos
 function toggleFaqAnswer(event) {
   const question = event.currentTarget;
   const answer = question.nextElementSibling;
-  const arrow = question.querySelector(".faq-arrow");
+  if (!answer) return;
+  const isOpen = answer.style.maxHeight && answer.style.maxHeight !== "0px";
 
-  // Forzar un reflow antes de verificar el estado para obtener el valor más actual de maxHeight
-  void answer.offsetWidth;
+  document.querySelectorAll(".faq-answer").forEach((ans) => {
+    ans.style.maxHeight = "0px";
+    ans.previousElementSibling
+      ?.querySelector(".faq-arrow")
+      ?.classList.remove("rotated");
+  });
 
-  const currentMaxHeight = getComputedStyle(answer).maxHeight;
-  const isOpen = currentMaxHeight !== "0px";
-
-  // Close all other open FAQs (assuming they are in the same faq-container)
-  const faqContainer = question.closest(".faq-container");
-  if (faqContainer) {
-    faqContainer.querySelectorAll(".faq-answer").forEach((otherAnswer) => {
-      if (
-        otherAnswer !== answer &&
-        getComputedStyle(otherAnswer).maxHeight !== "0px"
-      ) {
-        otherAnswer.style.maxHeight = "0px";
-        otherAnswer.style.paddingTop = "0px";
-        otherAnswer.style.paddingBottom = "0px";
-        const otherArrow =
-          otherAnswer.previousElementSibling.querySelector(".faq-arrow");
-        if (otherArrow) otherArrow.classList.remove("rotated");
-      }
-    });
-  }
-
-  // Toggle the current FAQ
-  if (isOpen) {
-    answer.style.maxHeight = "0px";
-    answer.style.paddingTop = "0px";
-    answer.style.paddingBottom = "0px";
-    arrow.classList.remove("rotated");
-  } else {
-    // Temporarily set max-height to 'auto' to get the true scrollHeight
-    // Apply desired paddings BEFORE measuring scrollHeight so it's included
-    answer.style.maxHeight = "auto";
-    answer.style.paddingTop = "1.5rem"; // Target padding top
-    answer.style.paddingBottom = "2rem"; // Target padding bottom
-
-    // Force reflow again after setting paddings to include them in scrollHeight
-    void answer.offsetWidth;
-
-    const scrollHeight = answer.scrollHeight;
-
-    // Set max-height to the calculated scrollHeight
-    answer.style.maxHeight = scrollHeight + "px";
-
-    arrow.classList.add("rotated");
+  if (!isOpen) {
+    answer.style.maxHeight = answer.scrollHeight + "px";
+    question.querySelector(".faq-arrow")?.classList.add("rotated");
   }
 }
 
-// --- initGlobalApp: la función principal de inicialización para scripts generales ---
-function initGlobalApp() {
-  // Inicialización robusta de DOMElements
-  // Aquí recogemos los elementos que deberían existir en TODAS las páginas que usan global.js
-  DOMElements.messageModal = getElement("#messageModal");
-  DOMElements.messageModalCloseButton = getElement("#messageModalCloseButton");
-  DOMElements.messageModalText = getElement("#messageModalText");
-  DOMElements.messageModalIcon = getElement("#messageModalIcon");
+function initializeFAQ() {
+  const faqQuestions = getElement(".faq-question", true);
+  if (faqQuestions) {
+    faqQuestions.forEach((q) => q.addEventListener("click", toggleFaqAnswer));
+  }
+}
 
-  DOMElements.cookieConsent = getElement("#cookieConsent");
-  DOMElements.acceptCookiesButton = getElement("#acceptCookiesButton");
-
-  DOMElements.subscriptionModal = getElement("#subscriptionModal");
-  DOMElements.emailInput = getElement("#emailInput");
-  DOMElements.subscribeButton = getElement("#subscribeButton");
-  DOMElements.noThanksButton = getElement("#noThanksButton");
-
-  DOMElements.localStorageUsage = getElement("#localStorageUsage"); // Para ia-img
-
-  DOMElements.menuToggle = getElement("#menuToggle");
-  DOMElements.navLinksContainer = getElement(
-    ".navbar-inner-content .flex-wrap"
+function initializeCarousel() {
+  const carousel = getElement("#heroCarousel");
+  if (!carousel) return;
+  const slidesContainer = getElement("#carouselSlides", false, carousel);
+  const slides = getElement(".carousel-slide", true, carousel);
+  const prevButton = getElement("#prevSlide", false, carousel);
+  const nextButton = getElement("#nextSlide", false, carousel);
+  const indicatorsContainer = getElement(
+    "#carouselIndicators",
+    false,
+    carousel
   );
 
-  // Elementos del modal de carga global (loadingOverlayModal)
-  DOMElements.loadingOverlayModal = getElement("#loadingOverlayModal");
-  DOMElements.pocoyoGifModal = getElement("#pocoyoGifModal"); // Puede ser null si solo hay spinner
-  DOMElements.loadingSpinnerModal = getElement("#loadingSpinnerModal"); // Puede ser null si solo hay gif
-  DOMElements.loadingMessageTextModal = getElement("#loadingMessageTextModal");
-  DOMElements.loadingErrorTextModal = getElement("#loadingErrorTextModal");
-  DOMElements.loadingModalCloseButton = getElement("#loadingModalCloseButton");
+  if (
+    !slidesContainer ||
+    !slides ||
+    !prevButton ||
+    !nextButton ||
+    !indicatorsContainer
+  )
+    return;
 
-  // Elementos del adModal global (si existe en la página principal y no en los módulos)
-  DOMElements.adModal = getElement("#adModal");
-  DOMElements.adTimerDisplay = getElement("#adTimer");
+  let currentIndex = 0;
+  const totalSlides = slides.length;
+  let slideInterval;
 
-  // Inicializaciones condicionales
-  if (DOMElements.localStorageUsage) updateLocalStorageUsage();
-  if (DOMElements.cookieConsent) showCookieConsent();
+  indicatorsContainer.innerHTML = "";
+  for (let i = 0; i < totalSlides; i++) {
+    const indicator = document.createElement("div");
+    indicator.classList.add("carousel-indicator");
+    indicator.dataset.index = i;
+    indicatorsContainer.appendChild(indicator);
+  }
+  const indicators = indicatorsContainer.querySelectorAll(
+    ".carousel-indicator"
+  );
 
-  // --- Configuración de Event Listeners Globales ---
-  if (DOMElements.acceptCookiesButton) {
-    DOMElements.acceptCookiesButton.addEventListener("click", acceptCookies);
-  }
-  if (DOMElements.subscribeButton) {
-    DOMElements.subscribeButton.addEventListener("click", handleSubscription);
-  }
-  if (DOMElements.noThanksButton) {
-    DOMElements.noThanksButton.addEventListener("click", dismissSubscription);
-  }
-  if (DOMElements.messageModalCloseButton) {
-    DOMElements.messageModalCloseButton.addEventListener(
-      "click",
-      hideCustomMessage
+  const goToSlide = (index) => {
+    currentIndex = (index + totalSlides) % totalSlides;
+    slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+    indicators.forEach((ind, i) =>
+      ind.classList.toggle("active", i === currentIndex)
     );
-  }
-  if (DOMElements.messageModal) {
-    DOMElements.messageModal.addEventListener("click", (event) => {
-      if (event.target === DOMElements.messageModal) {
-        hideCustomMessage();
-      }
-    });
-  }
-  if (DOMElements.loadingModalCloseButton) {
-    // Listener para cerrar el modal de carga/error
-    DOMElements.loadingModalCloseButton.addEventListener("click", () => {
-      DOMElements.loadingOverlayModal.classList.remove("show");
-    });
-  }
+  };
 
-  // Navegación responsive - Solo agrega listeners si AMBOS elementos se encuentran
-  if (DOMElements.menuToggle && DOMElements.navLinksContainer) {
-    DOMElements.menuToggle.addEventListener("click", () => {
-      DOMElements.navLinksContainer.classList.toggle("active");
-      const toggleIcon = DOMElements.menuToggle.querySelector("i");
-      if (toggleIcon) {
-        toggleIcon.classList.toggle("fa-bars");
-        toggleIcon.classList.toggle("fa-times");
-      }
-    });
+  const startCarousel = () => {
+    clearInterval(slideInterval);
+    slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
+  };
 
-    document.addEventListener("click", (event) => {
-      if (!DOMElements.navLinksContainer || !DOMElements.menuToggle) return;
+  nextButton.addEventListener("click", () => {
+    goToSlide(currentIndex + 1);
+    startCarousel();
+  });
+  prevButton.addEventListener("click", () => {
+    goToSlide(currentIndex - 1);
+    startCarousel();
+  });
+  indicators.forEach((ind) =>
+    ind.addEventListener("click", (e) => {
+      goToSlide(parseInt(e.target.dataset.index));
+      startCarousel();
+    })
+  );
 
-      const isClickInsideNav = DOMElements.navLinksContainer.contains(
-        event.target
-      );
-      const isClickOnToggle = DOMElements.menuToggle.contains(event.target);
-
-      if (
-        !isClickInsideNav &&
-        !isClickOnToggle &&
-        DOMElements.navLinksContainer.classList.contains("active")
-      ) {
-        DOMElements.navLinksContainer.classList.remove("active");
-        const toggleIcon = DOMElements.menuToggle.querySelector("i");
-        if (toggleIcon) {
-          toggleIcon.classList.remove("fa-times");
-          toggleIcon.classList.add("fa-bars");
-        }
-      }
-    });
-
-    DOMElements.navLinksContainer.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-          DOMElements.navLinksContainer.classList.remove("active");
-          const toggleIcon = DOMElements.menuToggle.querySelector("i");
-          if (toggleIcon) {
-            toggleIcon.classList.remove("fa-times");
-            toggleIcon.classList.add("fa-bars");
-          }
-        }
-      });
-    });
-  }
-
-  // **NUEVO/REVISADO: Funcionalidad FAQ GLOBAL**
-  const faqQuestions = document.querySelectorAll(".faq-question");
-  if (faqQuestions.length > 0) {
-    faqQuestions.forEach((question) => {
-      // Eliminar listeners antiguos si existieran para evitar duplicados
-      question.removeEventListener("click", toggleFaqAnswer);
-      // Añadir el nuevo listener
-      question.addEventListener("click", toggleFaqAnswer);
-    });
-  }
-
-  updateActiveClass();
+  goToSlide(0);
+  startCarousel();
 }
 
-// Llama a initGlobalApp cuando el DOM esté completamente cargado
-document.addEventListener("DOMContentLoaded", initGlobalApp);
+function initializeModals() {
+  const {
+    acceptCookiesButton,
+    cookieConsent,
+    subscribeButton,
+    noThanksButton,
+    messageModal,
+    messageModalCloseButton,
+    loadingModalCloseButton,
+  } = DOMElements;
+  if (cookieConsent && !localStorage.getItem("cookieAccepted")) {
+    cookieConsent.classList.add("show");
+  }
+  if (acceptCookiesButton) {
+    acceptCookiesButton.addEventListener("click", () => {
+      localStorage.setItem("cookieAccepted", "true");
+      if (cookieConsent) cookieConsent.classList.remove("show");
+      if (
+        DOMElements.subscriptionModal &&
+        !localStorage.getItem("subscribed") &&
+        !localStorage.getItem("noThanksSubscription")
+      ) {
+        DOMElements.subscriptionModal.classList.add("show");
+      }
+    });
+  }
+  if (subscribeButton) {
+    subscribeButton.addEventListener("click", () => {
+      const email = DOMElements.emailInput?.value.trim();
+      if (email && /\S+@\S+\.\S+/.test(email)) {
+        localStorage.setItem("subscribed", "true");
+        if (DOMElements.subscriptionModal)
+          DOMElements.subscriptionModal.classList.remove("show");
+        showCustomMessage("¡Gracias por suscribirte!", "success");
+      } else {
+        showCustomMessage("Por favor, introduce un correo válido.", "error");
+      }
+    });
+  }
+  if (noThanksButton) {
+    noThanksButton.addEventListener("click", () => {
+      localStorage.setItem("noThanksSubscription", "true");
+      if (DOMElements.subscriptionModal)
+        DOMElements.subscriptionModal.classList.remove("show");
+    });
+  }
+  if (messageModalCloseButton)
+    messageModalCloseButton.addEventListener("click", hideCustomMessage);
+  if (messageModal)
+    messageModal.addEventListener("click", (e) => {
+      if (e.target === messageModal) hideCustomMessage();
+    });
+  if (loadingModalCloseButton)
+    loadingModalCloseButton.addEventListener("click", hideLoadingOverlay);
+}
 
-// Exporta las funciones y variables que otros módulos necesitarán
-export {
-  downloadImage,
-  showCustomMessage,
-  hideCustomMessage,
-  showLoadingOverlay,
-  hideLoadingOverlay,
-  updateLocalStorageUsage,
-  toggleFaqAnswer,
-};
+// 4. Funciones de utilidad que serán exportadas para que otros módulos las usen.
+export function showCustomMessage(message, type = "info", duration = 3000) {
+  const { messageModal, messageModalText, messageModalIcon } = DOMElements;
+  if (!messageModal) return;
+  messageModalText.textContent = message;
+  messageModalIcon.className = "mt-4 text-4xl";
+  switch (type) {
+    case "success":
+      messageModalIcon.textContent = "✔️";
+      break;
+    case "error":
+      messageModalIcon.textContent = "❌";
+      break;
+    default:
+      messageModalIcon.textContent = "💡";
+      break;
+  }
+  messageModal.classList.add("show");
+  setTimeout(hideCustomMessage, duration);
+}
+
+export function hideCustomMessage() {
+  if (DOMElements.messageModal)
+    DOMElements.messageModal.classList.remove("show");
+}
+
+export function showLoadingOverlay(message = "Cargando...") {
+  const { loadingOverlayModal, loadingMessageTextModal } = DOMElements;
+  if (!loadingOverlayModal) return;
+  loadingMessageTextModal.textContent = message;
+  loadingOverlayModal.classList.add("show");
+}
+
+export function hideLoadingOverlay() {
+  if (DOMElements.loadingOverlayModal)
+    DOMElements.loadingOverlayModal.classList.remove("show");
+}
+
+export async function downloadImage(imageUrl, filename = "imagen.png") {
+  try {
+    const response = await fetch(
+      imageUrl.startsWith("data:")
+        ? imageUrl
+        : new Request(imageUrl, { mode: "cors" })
+    );
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error al descargar la imagen:", error);
+    showCustomMessage(`Error al descargar: ${error.message}.`, "error");
+  }
+}
+
+export function updateLocalStorageUsage() {
+  if (!DOMElements.localStorageUsage) return;
+  let totalBytes = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && localStorage.getItem(key))
+      totalBytes += localStorage.getItem(key).length * 2;
+  }
+  DOMElements.localStorageUsage.textContent = `Uso: ${(
+    totalBytes / 1024
+  ).toFixed(2)} KB`;
+}
+
+// 5. La función de inicialización global que será llamada por app.js.
+export function initGlobalApp() {
+  // Primero, poblamos DOMElements con todos los elementos comunes que puedan existir.
+  Object.assign(DOMElements, {
+    messageModal: getElement("#messageModal"),
+    messageModalText: getElement("#messageModalText"),
+    messageModalIcon: getElement("#messageModalIcon"),
+    messageModalCloseButton: getElement("#messageModalCloseButton"),
+    loadingOverlayModal: getElement("#loadingOverlayModal"),
+    loadingMessageTextModal: getElement("#loadingMessageTextModal"),
+    loadingModalCloseButton: getElement("#loadingModalCloseButton"),
+    cookieConsent: getElement("#cookieConsent"),
+    acceptCookiesButton: getElement("#acceptCookiesButton"),
+    subscriptionModal: getElement("#subscriptionModal"),
+    emailInput: getElement("#emailInput"),
+    subscribeButton: getElement("#subscribeButton"),
+    noThanksButton: getElement("#noThanksButton"),
+    menuToggle: getElement("#menuToggle"),
+    navLinksContainer: getElement(".navbar-inner-content .flex-wrap"),
+    navbarInnerContent: getElement(".navbar-inner-content"),
+    localStorageUsage: getElement("#localStorageUsage"), // Es usado en ia-img, pero lo podemos buscar globalmente.
+  });
+
+  // Luego, inicializamos los componentes que usan estos elementos.
+  initializeNavbar();
+  initializeFAQ();
+  initializeCarousel();
+  initializeModals();
+}

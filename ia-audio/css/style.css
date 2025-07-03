@@ -1,0 +1,101 @@
+/* ia-audio/css/style.css */
+
+/* Estilos para el layout principal del generador de audio */
+.ia-generator-layout-container {
+  display: grid;
+  grid-template-columns: minmax(250px, 320px) 1fr; /* Columna para opciones, columna para contenido principal */
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  padding: 1rem;
+}
+
+.ia-generator-aside {
+  background-color: #1f2937; /* gray-800 */
+  border: 1px solid #374151; /* gray-700 */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ia-generator-main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.options-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Estilo para el slider de duración */
+input[type="range"]#duration-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #374151; /* gray-700 */
+  border-radius: 5px;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+input[type="range"]#duration-slider:hover {
+  opacity: 1;
+}
+
+input[type="range"]#duration-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #0891b2; /* cyan-600 */
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+input[type="range"]#duration-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #0891b2; /* cyan-600 */
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+/* Estilos para el contenedor del reproductor de audio */
+#audio-player-container {
+  background-color: #1f2937;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border: 1px solid #374151;
+  transition: all 0.3s ease-in-out;
+}
+
+#audio-player-container.hidden {
+  display: none;
+}
+
+/* Estilos para el reproductor de audio nativo */
+audio#audio-player {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(170deg); /* Colorea el reproductor en tonos cian */
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+  .ia-generator-layout-container {
+    grid-template-columns: 1fr; /* Apila las columnas en pantallas pequeñas */
+  }
+
+  .ia-generator-aside {
+    order: 2; /* Mueve las opciones debajo del área principal en móviles */
+    margin-top: 1.5rem;
+  }
+
+  .ia-generator-main-content {
+    order: 1;
+  }
+}

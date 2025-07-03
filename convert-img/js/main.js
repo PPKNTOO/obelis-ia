@@ -1,36 +1,19 @@
 // convert-img/js/main.js
 
 // Importaciones desde el directorio global de JS
-import {
-  DOMElements,
-  showCustomMessage,
-  updateLocalStorageUsage,
-  toggleFaqAnswer,
-} from "../../js/global.js";
+import { DOMElements, showCustomMessage } from "../../js/global.js";
 
 // Importaciones desde los nuevos módulos de convert-img
-import { CONFIG } from "./config.js";
-import {
-  originalImage,
-  ctx,
-  setCtx,
-  setOriginalImage,
-  setConvertedBlob,
-  resetDailyCountersIfNeeded,
-} from "./state.js";
-import { loadPreferences, savePreferences } from "./storage.js";
-import { checkConversionLimit, simulateAdViewing } from "./limitManager.js";
-import { drawImageOnCanvas, convertImage } from "./imageProcessing.js";
+import { originalImage } from "./state.js";
+import { loadPreferences } from "./storage.js";
+import { convertImage, drawImageOnCanvas } from "./imageProcessing.js";
 import { handleImageUpload } from "./fileHandler.js";
 import { downloadImageFromBlob } from "./downloadManager.js";
-import {
-  updateConversionCounterUI,
-  handleFormatSelectChange,
-  toggleControlsState,
-} from "./uiUpdater.js";
+import { handleFormatSelectChange } from "./uiUpdater.js";
+import { simulateAdViewing } from "./limitManager.js";
 
-// initApp: la función principal de inicialización para este módulo
-function initApp() {
+// ✅ Exportamos la función para que app.js la pueda llamar
+export function initApp() {
   // Asignar elementos del DOM a DOMElements (extender el objeto global)
   Object.assign(DOMElements, {
     imageUpload: document.getElementById("imageUpload"),
@@ -45,24 +28,23 @@ function initApp() {
     ),
     watchAdButton: document.getElementById("watchAdButton"),
     fileInputArea: document.querySelector('label[for="imageUpload"]'),
+    adModal: document.getElementById("adModal"), // Necesario para limitManager
+    adTimerDisplay: document.getElementById("adTimer"), // Necesario para limitManager
   });
 
-  // Asignar contexto del canvas una vez que el elemento esté en DOMElements
+  // Asignar contexto del canvas
   if (DOMElements.imageCanvas) {
     const canvasCtx = DOMElements.imageCanvas.getContext("2d");
-    setCtx(canvasCtx); // Almacenar el contexto en el estado global del módulo
+    DOMElements.ctx = canvasCtx; // Lo añadimos directamente a DOMElements para que otros módulos lo usen
   } else {
-    console.error(
-      "Error: Canvas element not found! Conversion functionality might be limited."
-    );
+    console.error("Error: Elemento canvas no encontrado.");
   }
 
-  // Cargar preferencias de conversiones al inicio
+  // Cargar preferencias al inicio
   loadPreferences();
 
   // --- Event Listeners ESPECÍFICOS DEL MÓDULO ---
 
-  // Input de archivo y arrastrar/soltar
   if (DOMElements.imageUpload)
     DOMElements.imageUpload.addEventListener("change", handleImageUpload);
   if (DOMElements.fileInputArea) {
@@ -83,40 +65,32 @@ function initApp() {
         "border-cyan-500",
         "bg-gray-700"
       );
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        DOMElements.imageUpload.files = files;
-        DOMElements.imageUpload.dispatchEvent(new Event("change")); // Disparar el evento change
+      if (e.dataTransfer.files.length > 0) {
+        DOMElements.imageUpload.files = e.dataTransfer.files;
+        handleImageUpload({ target: DOMElements.imageUpload });
       }
     });
   }
 
-  // Controles de conversión
   if (DOMElements.outputFormatSelect)
-    DOMElements.outputFormatSelect.addEventListener("change", () =>
-      handleFormatSelectChange()
+    DOMElements.outputFormatSelect.addEventListener(
+      "change",
+      handleFormatSelectChange
     );
   if (DOMElements.convertBtn)
-    DOMElements.convertBtn.addEventListener("click", () => convertImage());
+    DOMElements.convertBtn.addEventListener("click", convertImage);
   if (DOMElements.downloadBtn)
-    DOMElements.downloadBtn.addEventListener("click", () =>
-      downloadImageFromBlob()
-    );
-
-  // Límite de conversiones y anuncios
+    DOMElements.downloadBtn.addEventListener("click", downloadImageFromBlob);
   if (DOMElements.watchAdButton)
-    DOMElements.watchAdButton.addEventListener("click", () =>
-      simulateAdViewing()
-    );
+    DOMElements.watchAdButton.addEventListener("click", simulateAdViewing);
 
-  // Reajustar canvas al cambiar el tamaño de la ventana
   window.addEventListener("resize", () => {
     if (originalImage) {
       drawImageOnCanvas(originalImage);
     }
   });
 
-  // Asegurar el estado inicial de los botones
+  // Estado inicial de los botones
   if (DOMElements.convertBtn) {
     DOMElements.convertBtn.disabled = true;
     DOMElements.convertBtn.classList.add("disabled-btn");
@@ -125,9 +99,6 @@ function initApp() {
     DOMElements.downloadBtn.disabled = true;
     DOMElements.downloadBtn.classList.add("disabled-btn");
   }
-
-  // La lógica del FAQ ya se maneja en global.js
 }
 
-// Llama a initApp cuando el DOM esté completamente cargado
-document.addEventListener("DOMContentLoaded", initApp);
+// ❌ ELIMINAMOS EL 'DOMContentLoaded' DE AQUÍ

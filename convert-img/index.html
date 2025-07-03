@@ -68,7 +68,7 @@
       src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
     ></script>
     </head>
-  <body class="min-h-screen flex flex-col pt-16 pb-8">
+  <body class="min-h-screen flex flex-col">
     <amp-auto-ads type="adsense" data-ad-client="ca-pub-9956937945939380">
     </amp-auto-ads>
 
@@ -164,8 +164,8 @@
     </nav>
 
     <div class="ia-convert-app-main-container">
-      <main class="flex flex-col items-center w-full max-w-7xl px-4 mt-8 mx-auto flex-grow">
-        <section class="ia-text-section intro-section">
+      <main class="flex flex-col items-center w-full flex-grow paralaje">
+        <section class="ia-section intro-section">
           <h2 class="section-title">
             Convertidor de Imágenes:
             <span class="text-cyan-500">Transforma tus Fotos con Facilidad</span>
@@ -212,7 +212,7 @@
           </a>
         </section>
 
-        <section class="ia-text-section how-to-section">
+        <section class="ia-section how-to-section paralaje-svg">
           <h2 class="section-title">
             Cómo <span class="text-cyan-500">Convertir</span> una Imagen
           </h2>
@@ -247,7 +247,7 @@
           </a>
         </section>
 
-        <section class="ia-text-section tips-section">
+        <section class="ia-section tips-section">
           <h2 class="section-title">
             Consejos para una <span class="text-cyan-500">Mejor Conversión</span>
           </h2>
@@ -282,7 +282,7 @@
           </a>
         </section>
 
-        <section class="ia-text-section use-cases-section">
+        <section class="ia-section use-cases-section paralaje-svg">
           <h2 class="section-title">
             Casos de Uso <span class="text-cyan-500">Comunes</span>
           </h2>
@@ -411,11 +411,7 @@
           </button>
           </div>
 
-        <div class="ad-banner ad-banner-bottom w-full max-w-3xl rounded-xl">
-          Espacio para Anuncio (Banner Inferior)
-        </div>
-
-        <section class="ia-text-section faq-section">
+        <section class="ia-section faq-section">
           <h2 class="section-title">
             Preguntas <span class="text-cyan-500">Frecuentes</span>
           </h2>
@@ -472,14 +468,7 @@
         </section>
       </main>
 
-      <footer
-        class="w-full bg-gray-900 text-gray-400 text-center py-4 mt-8 rounded-t-xl shadow-inner border-t border-gray-700"
-      >
-        <p class="text-sm">
-          © 2024 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
-          derechos reservados.
-        </p>
-      </footer>
+      
     </div>
     <div id="subscriptionModal" class="modal-overlay subscription-modal">
       <div class="modal-content subscription-modal-content">
@@ -576,7 +565,16 @@
       </div>
     </div>
 
-    <script type="module" src="../js/global.js" defer></script>
-    <script type="module"  src="js/main.js" defer></script>
+    <script type="module" src="js/app.js" defer></script>
   </body>
+  <footer class="w-full text-gray-400 text-center py-6 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+    <p class="text-xs mt-2">
+      <a href="#" class="hover:text-cyan-400">Política de Privacidad</a> |
+      <a href="#" class="hover:text-cyan-400">Términos de Servicio</a>
+    </p>
+  </footer>
 </html>

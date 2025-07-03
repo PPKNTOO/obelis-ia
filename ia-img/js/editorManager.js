@@ -9,34 +9,17 @@ import {
   editingImageUrl,
   setEditorCurrentFilter,
   setEditorTextData,
-  setEditingImageUrl, // Aunque no se usa directamente aquí, es buena práctica si se necesitara
 } from "./state.js";
 import {
   loadGalleryImages,
-  saveImageToGallery,
   renderGallery,
   renderRecentGenerations,
 } from "./galleryManager.js";
 
 export function closeImageEditor() {
-  if (!DOMElements.imageEditorModal) return;
-  DOMElements.imageEditorModal.classList.remove("show");
-  setEditorCurrentFilter("none"); // Reiniciar filtro
-  setEditorTextData({
-    // Reiniciar datos de texto
-    content: "",
-    color: "#FFFFFF",
-    size: 30,
-    position: "bottomRight",
-  });
-  if (DOMElements.editorTextInput) DOMElements.editorTextInput.value = "";
-  if (DOMElements.editorTextColor)
-    DOMElements.editorTextColor.value = "#FFFFFF";
-  if (DOMElements.editorTextSize) DOMElements.editorTextSize.value = "30";
-  if (DOMElements.editorTextPosition)
-    DOMElements.editorTextPosition.value = "bottomRight";
-  if (DOMElements.cropWidthInput) DOMElements.cropWidthInput.value = "";
-  if (DOMElements.cropHeightInput) DOMElements.cropHeightInput.value = "";
+  if (DOMElements.imageEditorModal) {
+    DOMElements.imageEditorModal.classList.remove("show");
+  }
 }
 
 export function redrawEditorCanvas() {
@@ -49,43 +32,17 @@ export function redrawEditorCanvas() {
     DOMElements.editorCanvas.width,
     DOMElements.editorCanvas.height
   );
-
   editorCtx.filter = editorCurrentFilter;
-
-  let drawX = 0,
-    drawY = 0,
-    drawW = originalEditorImage.naturalWidth,
-    drawH = originalEditorImage.naturalHeight;
-  let cropW =
-    parseInt(DOMElements.cropWidthInput.value) ||
-    originalEditorImage.naturalWidth;
-  let cropH =
-    parseInt(DOMElements.cropHeightInput.value) ||
-    originalEditorImage.naturalHeight;
-
-  if (
-    cropW < originalEditorImage.naturalWidth ||
-    cropH < originalEditorImage.naturalHeight
-  ) {
-    drawX = (originalEditorImage.naturalWidth - cropW) / 2;
-    drawY = (originalEditorImage.naturalHeight - cropH) / 2;
-    drawW = cropW;
-    drawH = cropH;
-  }
 
   editorCtx.drawImage(
     originalEditorImage,
-    drawX,
-    drawY,
-    drawW,
-    drawH,
     0,
     0,
     DOMElements.editorCanvas.width,
     DOMElements.editorCanvas.height
   );
 
-  editorCtx.filter = "none"; // Resetear el filtro para el texto
+  editorCtx.filter = "none";
 
   if (editorTextData.content) {
     editorCtx.font = `${editorTextData.size}px Arial`;
@@ -93,13 +50,11 @@ export function redrawEditorCanvas() {
     editorCtx.textAlign = "left";
     editorCtx.textBaseline = "top";
 
-    let textX, textY;
-    const margin = 20;
-
-    // Medir el texto después de configurar la fuente
     const textMetrics = editorCtx.measureText(editorTextData.content);
     const textWidth = textMetrics.width;
-    const textHeight = editorTextData.size; // Aproximación, depende de la fuente
+    const textHeight = editorTextData.size;
+    const margin = 20;
+    let textX, textY;
 
     switch (editorTextData.position) {
       case "topLeft":
@@ -129,60 +84,43 @@ export function redrawEditorCanvas() {
 }
 
 export function applyFilterToCanvas(filter) {
-  setEditorCurrentFilter(filter); // Actualiza el estado global
+  setEditorCurrentFilter(filter);
   redrawEditorCanvas();
 }
 
 export function addTextToCanvas() {
-  if (
-    !DOMElements.editorTextInput ||
-    !DOMElements.editorTextColor ||
-    !DOMElements.editorTextSize ||
-    !DOMElements.editorTextPosition
-  ) {
-    showCustomMessage(
-      "Error: Elementos de entrada de texto del editor no encontrados.",
-      "error"
-    );
-    return;
-  }
+  const {
+    editorTextInput,
+    editorTextColor,
+    editorTextSize,
+    editorTextPosition,
+  } = DOMElements;
+  if (!editorTextInput) return;
+
   setEditorTextData({
-    content: DOMElements.editorTextInput.value,
-    color: DOMElements.editorTextColor.value,
-    size: parseInt(DOMElements.editorTextSize.value),
-    position: DOMElements.editorTextPosition.value,
+    content: editorTextInput.value,
+    color: editorTextColor.value,
+    size: parseInt(editorTextSize.value),
+    position: editorTextPosition.value,
   });
   redrawEditorCanvas();
-  showCustomMessage("Texto añadido a la imagen.", "success", 2000);
+  showCustomMessage("Texto aplicado.", "success", 2000);
 }
 
 export function applyCrop() {
-  if (
-    !DOMElements.cropWidthInput ||
-    !DOMElements.cropHeightInput ||
-    !DOMElements.editorCanvas
-  ) {
-    showCustomMessage(
-      "Error: Elementos de recorte del editor no encontrados.",
-      "error"
-    );
-    return;
-  }
+  const { cropWidthInput, cropHeightInput, editorCanvas } = DOMElements;
+  if (!cropWidthInput || !cropHeightInput || !editorCanvas) return;
 
-  const width = parseInt(DOMElements.cropWidthInput.value);
-  const height = parseInt(DOMElements.cropHeightInput.value);
+  const width = parseInt(cropWidthInput.value);
+  const height = parseInt(cropHeightInput.value);
 
   if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
-    showCustomMessage(
-      "Por favor, ingresa dimensiones de recorte válidas.",
-      "error"
-    );
+    showCustomMessage("Dimensiones de recorte inválidas.", "error");
     return;
   }
 
   const tempCanvas = document.createElement("canvas");
   const tempCtx = tempCanvas.getContext("2d");
-
   tempCanvas.width = width;
   tempCanvas.height = height;
 
@@ -201,23 +139,20 @@ export function applyCrop() {
     height
   );
 
-  originalEditorImage.src = tempCanvas.toDataURL("image/png");
   originalEditorImage.onload = () => {
-    DOMElements.editorCanvas.width = originalEditorImage.naturalWidth;
-    DOMElements.editorCanvas.height = originalEditorImage.naturalHeight;
-    DOMElements.editorCanvas.style.width = `${originalEditorImage.naturalWidth}px`;
-    DOMElements.editorCanvas.style.height = `${originalEditorImage.naturalHeight}px`;
-
+    editorCanvas.width = originalEditorImage.naturalWidth;
+    editorCanvas.height = originalEditorImage.naturalHeight;
     redrawEditorCanvas();
-    showCustomMessage("Imagen recortada con éxito.", "success", 2000);
+    showCustomMessage("Imagen recortada.", "success", 2000);
   };
+  originalEditorImage.src = tempCanvas.toDataURL("image/png");
 }
 
 export function saveEditedImage() {
   if (!DOMElements.editorCanvas) return;
+
   redrawEditorCanvas();
   const editedImageUrl = DOMElements.editorCanvas.toDataURL("image/png");
-
   let images = loadGalleryImages();
   const indexToUpdate = images.findIndex((url) => url === editingImageUrl);
 
@@ -226,23 +161,19 @@ export function saveEditedImage() {
     localStorage.setItem("generatedImages", JSON.stringify(images));
     renderGallery();
     renderRecentGenerations();
-    showCustomMessage(
-      "Imagen editada y guardada en la galería.",
-      "success",
-      3000
-    );
+    showCustomMessage("Imagen guardada en la galería.", "success");
   } else {
     showCustomMessage(
-      "No se pudo encontrar la imagen original en la galería para actualizar.",
-      "error",
-      3000
+      "No se pudo encontrar la imagen para actualizar.",
+      "error"
     );
   }
-  closeImageEditor(); // Llama a la función de este módulo
+  closeImageEditor();
 }
 
 export function renderFilterThumbnails() {
   if (!DOMElements.filterThumbnails || !originalEditorImage.src) return;
+
   DOMElements.filterThumbnails.innerHTML = "";
   const filters = [
     { name: "none", label: "Original", filter: "none" },
@@ -256,30 +187,39 @@ export function renderFilterThumbnails() {
   ];
 
   filters.forEach((filter) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "flex flex-col items-center gap-1 cursor-pointer";
     const img = document.createElement("img");
     img.src = originalEditorImage.src;
     img.alt = filter.label;
-    img.classList.add(
-      "w-20",
-      "h-20",
-      "object-cover",
-      "rounded-lg",
-      "cursor-pointer",
-      "border-2",
-      "border-gray-700",
-      "hover:border-cyan-500",
-      "transition-all",
-      "duration-200"
-    );
+    img.className =
+      "w-16 h-16 object-cover rounded-md border-2 border-transparent hover:border-cyan-500 transition-all";
     img.style.filter = filter.filter;
 
-    img.addEventListener("click", () => {
+    const label = document.createElement("p");
+    label.className = "text-xs text-gray-400";
+    label.textContent = filter.label;
+
+    wrapper.addEventListener("click", () => {
       applyFilterToCanvas(filter.filter);
-      DOMElements.filterThumbnails.querySelectorAll("img").forEach((thumb) => {
-        thumb.classList.remove("border-cyan-500", "ring-2");
-      });
-      img.classList.add("border-cyan-500", "ring-2");
+      DOMElements.filterThumbnails
+        .querySelectorAll("img")
+        .forEach((thumb) =>
+          thumb.classList.remove(
+            "border-cyan-500",
+            "ring-2",
+            "ring-offset-2",
+            "ring-offset-gray-800"
+          )
+        );
+      img.classList.add(
+        "border-cyan-500",
+        "ring-2",
+        "ring-offset-2",
+        "ring-offset-gray-800"
+      );
     });
-    DOMElements.filterThumbnails.appendChild(img);
+    wrapper.append(img, label);
+    DOMElements.filterThumbnails.appendChild(wrapper);
   });
 }

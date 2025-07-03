@@ -1,5 +1,6 @@
 /* Importaciones de estilos modulares */
 @import url("./styles/_base.css");
+@import url("./styles/_utilities.css");
 @import url("./styles/_global-ad-banner.css");
 @import url("./styles/_global-modals.css");
 @import url("./styles/_navbar.css");
