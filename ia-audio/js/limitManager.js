@@ -3,17 +3,18 @@
 import { DOMElements, showCustomMessage } from "../../js/global.js";
 
 // --- Estado ---
-let generationCredits = 2; // El usuario empieza con 2 generaciones gratuitas
-const AD_DURATION_SECONDS = 30; // Duración del anuncio
-const AD_URL = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1"; // URL de ejemplo para el iframe del anuncio
+// En lugar de créditos, usamos una bandera simple: ¿puede el usuario generar ahora?
+let canGenerate = false;
+const AD_DURATION_SECONDS = 30;
+const AD_URL = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1"; // URL de ejemplo
 
 /**
- * Actualiza la UI del botón de generar para reflejar los créditos restantes.
+ * Actualiza la UI del botón de generar.
  */
 function updateGenerateButtonUI() {
   if (!DOMElements.generateAudioBtn) return;
 
-  if (generationCredits <= 0) {
+  if (!canGenerate) {
     DOMElements.generateAudioBtn.innerHTML =
       '<i class="fas fa-play-circle mr-2"></i> Ver Anuncio para Generar';
     DOMElements.generateAudioBtn.classList.add(
@@ -32,7 +33,7 @@ function updateGenerateButtonUI() {
 }
 
 /**
- * Muestra el modal del anuncio y resuelve una promesa cuando el temporizador termina.
+ * Muestra el modal del anuncio y otorga permiso para UNA generación al terminar.
  * @returns {Promise<boolean>} - Resuelve a 'true' si el anuncio se completó.
  */
 function showAd() {
@@ -42,15 +43,10 @@ function showAd() {
       !DOMElements.adIframeContainer ||
       !DOMElements.adTimer
     ) {
-      showCustomMessage(
-        "Error: No se encontraron los elementos del modal de anuncio.",
-        "error"
-      );
       resolve(false);
       return;
     }
 
-    // Inserta el iframe del anuncio
     DOMElements.adIframeContainer.innerHTML = `<iframe src="${AD_URL}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
     DOMElements.adModal.classList.remove("hidden");
 
@@ -64,42 +60,37 @@ function showAd() {
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
         DOMElements.adModal.classList.add("hidden");
-        DOMElements.adIframeContainer.innerHTML = ""; // Limpia el iframe
+        DOMElements.adIframeContainer.innerHTML = "";
 
-        generationCredits = 2; // Otorga 2 nuevos créditos de generación
+        canGenerate = true; // Otorga permiso para UNA generación
         updateGenerateButtonUI();
         showCustomMessage(
-          "¡Gracias! Has obtenido 2 nuevos créditos de generación.",
+          "¡Gracias! Ahora puedes generar una pista de audio.",
           "success"
         );
-        resolve(true); // El anuncio se completó exitosamente
+        resolve(true);
       }
     }, 1000);
   });
 }
 
 /**
- * Comprueba si el usuario tiene créditos. Si no, fuerza a ver un anuncio.
- * @returns {Promise<boolean>} - Resuelve a 'true' si el usuario puede generar, 'false' si no.
+ * Comprueba si el usuario debe ver un anuncio.
+ * @returns {Promise<boolean>} - Resuelve a 'true' si el usuario puede proceder.
  */
 export async function checkAdRequirement() {
-  if (generationCredits > 0) {
-    return true; // El usuario tiene créditos, puede continuar.
+  if (canGenerate) {
+    return true;
   } else {
-    // El usuario no tiene créditos, muestra el anuncio.
-    // La función showAd() se encargará de todo el proceso.
-    const adWatched = await showAd();
-    return adWatched; // Devuelve true si el anuncio se completó, permitiendo la generación.
+    return await showAd();
   }
 }
 
 /**
- * Decrementa un crédito después de una generación exitosa.
+ * Revoca el permiso de generación después de usarlo.
  */
 export function useGenerationCredit() {
-  if (generationCredits > 0) {
-    generationCredits--;
-  }
+  canGenerate = false;
   updateGenerateButtonUI();
 }
 
@@ -107,6 +98,7 @@ export function useGenerationCredit() {
  * Inicializa el estado del botón al cargar la página.
  */
 export function initLimitManager() {
-  // Podrías cargar los créditos desde localStorage si quisieras persistencia
+  // El usuario siempre empieza sin permiso para generar.
+  canGenerate = false;
   updateGenerateButtonUI();
 }

@@ -389,6 +389,18 @@ export function initGlobalApp() {
   initializeFAQ();
   initializeCarousel();
   initializeModals();
+
+  // ✅ AÑADE ESTO AL FINAL DE LA FUNCIÓN
+  const dynamicSliders = document.querySelectorAll(".dynamic-slider");
+  dynamicSliders.forEach((slider) => {
+    const updateFill = () => {
+      const percentage =
+        ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+      slider.style.background = `linear-gradient(to right, #0891b2 ${percentage}%, #374151 ${percentage}%)`;
+    };
+    slider.addEventListener("input", updateFill);
+    updateFill(); // Llama una vez para el estado inicial
+  });
 }
 
 // 6. Inicializa el objeto si no existe y define la función siq para seguimiento de eventos.

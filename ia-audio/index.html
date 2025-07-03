@@ -193,7 +193,10 @@
         </div>
       </section>
 
-      <section id="iaGeneratorSection" class="w-full max-w-5xl px-4 py-16">
+      <section
+        id="iaGeneratorSection"
+        class="w-full max-w-5xl px-4 py-16 paralaje-svg"
+      >
         <div
           class="ia-generator-layout-container"
           style="
@@ -215,12 +218,15 @@
                 id="genre-select"
                 class="w-full p-2 mb-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-cyan-500 focus:border-cyan-500 text-sm"
               >
-                <option value="lo-fi">Lo-fi</option>
-                <option value="cinematic">Cinemático</option>
-                <option value="ambient">Ambiental</option>
-                <option value="electronic">Electrónico</option>
                 <option value="acoustic">Acústico</option>
+                <option value="ambient">Ambiental</option>
+                <option value="cinematic">Cinemático</option>
+                <option value="electronic">Electrónico</option>
+                <option value="lo-fi">Lo-fi</option>
                 <option value="rock">Rock</option>
+                <option value="rap">HipHop</option>
+                <option value="reggae">Reggae</option>
+                <option value="reggaeton">Reggaeton</option>
               </select>
             </div>
             <div class="options-group">
@@ -244,16 +250,20 @@
               <label
                 for="duration-slider"
                 class="block text-lg font-semibold text-gray-300 mb-2"
-                >Duración: <span id="duration-value">30s</span></label
+                >Duración: <span id="duration-value">20s</span></label
               >
               <input
                 type="range"
                 id="duration-slider"
                 min="10"
                 max="30"
-                value="10"
-                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                value="20"
+                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer dynamic-slider"
               />
+              <div class="flex justify-between text-sm text-gray-400 mt-1">
+                <span>10s</span>
+                <span>30s</span>
+              </div>
             </div>
           </aside>
 

@@ -51,24 +51,6 @@ function setupEventListeners() {
   if (DOMElements.durationSlider && DOMElements.durationValue) {
     DOMElements.durationSlider.addEventListener("input", (event) => {
       DOMElements.durationValue.textContent = `${event.target.value}s`;
-      updateSliderFill(event.target); // <-- Línea añadida
     });
   }
-}
-
-/**
- * Actualiza el fondo del slider para mostrar el progreso.
- * @param {HTMLInputElement} slider - El elemento del slider.
- */
-// Esta función se llama cada vez que el usuario mueve el slider.
-// Actualiza el fondo del slider para reflejar el valor actual.
-// Utiliza un gradiente lineal para mostrar el porcentaje de progreso.
-// El color del progreso es #0891b2 y el color del fondo es #374151.
-// El porcentaje se calcula como ((valor actual - valor mínimo) / (valor máximo - valor mínimo)) * 100.
-// El gradiente se aplica de izquierda a derecha, mostrando el progreso en el color #0891b2 y el resto en #374151.
-// Esto proporciona una visualización clara del progreso del slider.
-function updateSliderFill(slider) {
-  const percentage =
-    ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
-  slider.style.background = `linear-gradient(to right, #0891b2 ${percentage}%, #374151 ${percentage}%)`;
 }
