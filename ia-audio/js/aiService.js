@@ -12,7 +12,7 @@ import { checkAdRequirement, useGenerationCredit } from "./limitManager.js";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
- * Llama a la IA de Gemini para mejorar el prompt del usuario.
+ * Llama a la IA de Gemini para mejorar el prompt del usuario de forma estricta.
  */
 export async function handleImprovePrompt() {
   const prompt = DOMElements.promptAudio.value.trim();
@@ -23,29 +23,26 @@ export async function handleImprovePrompt() {
 
   showLoadingOverlay("Mejorando prompt con IA...");
   try {
+    // ✅ Instrucciones más estrictas para la IA
+    const strictPrompt = `Reescribe y expande el siguiente prompt para una canción de IA para que sea detallado y evocador. El prompt resultante debe tener un mínimo de 100 caracteres. Devuelve ÚNICAMENTE el texto del prompt mejorado, sin saludos, explicaciones, comillas ni ningún otro texto introductorio. Prompt original: "${prompt}"`;
+
     const response = await fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [
-              {
-                text: `Reescribe y expande el siguiente prompt para una canción de IA, hazlo más detallado y evocador, manteniendo la idea central: "${prompt}"`,
-              },
-            ],
-          },
-        ],
+        contents: [{ role: "user", parts: [{ text: strictPrompt }] }],
       }),
     });
+
     if (!response.ok) {
       throw new Error("La IA no pudo mejorar el prompt en este momento.");
     }
+
     const result = await response.json();
     const newPrompt = result.candidates[0]?.content?.parts[0]?.text;
+
     if (newPrompt) {
-      DOMElements.promptAudio.value = newPrompt.replace(/["*]/g, "");
+      DOMElements.promptAudio.value = newPrompt.trim();
       showCustomMessage("¡Prompt mejorado!", "success");
     } else {
       throw new Error("Respuesta inesperada de la IA.");
@@ -61,12 +58,8 @@ export async function handleImprovePrompt() {
  * Maneja la lógica completa de generación de audio, incluyendo anuncios y barra de progreso.
  */
 export async function handleGenerateAudio() {
-  // 1. Comprueba si el usuario necesita ver un anuncio.
   const canGenerate = await checkAdRequirement();
-  if (!canGenerate) {
-    // Si no puede generar (ej. cerró el modal del anuncio), la función se detiene.
-    return;
-  }
+  if (!canGenerate) return;
 
   const {
     promptAudio,
@@ -88,7 +81,8 @@ export async function handleGenerateAudio() {
   }
 
   const finalPrompt = `${promptText}, ${genreSelect.value} style, ${moodSelect.value} mood`;
-  showLoadingOverlay("Iniciando generación...", false);
+  showLoadingOverlay("Iniciando generación...", true);
+  updateProgress(5);
 
   try {
     const initialResponse = await fetch("/api/music-generator", {
@@ -105,33 +99,32 @@ export async function handleGenerateAudio() {
       throw new Error(prediction.detail || "Error al iniciar la generación.");
     }
 
-    // 2. Muestra el overlay con la barra de progreso.
     showLoadingOverlay("La IA está componiendo...", true);
+    updateProgress(15);
 
+    let progress = 15;
     while (
       prediction.status !== "succeeded" &&
       prediction.status !== "failed"
     ) {
-      await sleep(2500);
+      await sleep(3000); // Espera 3 segundos entre cada verificación
       const statusResponse = await fetch(
         `/api/get-prediction?id=${prediction.id}`
       );
       prediction = await statusResponse.json();
 
-      // 3. Lógica para actualizar la barra de progreso
-      // Replicate a menudo muestra el progreso en sus logs
-      const log = prediction.logs || "";
-      const progressMatch = log.match(/(\d+)%/); // Busca un porcentaje en los logs
-      if (progressMatch) {
-        const progress = parseInt(progressMatch[1]);
-        updateProgress(progress);
-        DOMElements.loadingMessageTextModal.textContent = `Componiendo... ${progress}%`;
+      // ✅ Simulación de progreso para una mejor experiencia de usuario
+      if (progress < 95) {
+        progress += Math.random() * 5 + 2; // Aumenta el progreso de forma irregular
+        updateProgress(Math.min(95, progress)); // No pasar de 95% hasta que esté listo
       }
     }
 
     if (prediction.status === "failed") {
       throw new Error(`La generación de la música falló: ${prediction.error}`);
     }
+
+    updateProgress(100); // Generación completada
 
     const audioUrl = prediction.output;
     if (audioUrl) {
@@ -142,7 +135,6 @@ export async function handleGenerateAudio() {
       downloadAudioLink.classList.remove("hidden");
       showCustomMessage("¡Tu música está lista!", "success");
 
-      // 4. Usa un crédito de generación.
       useGenerationCredit();
     } else {
       throw new Error("La API no devolvió una URL de audio válida.");
@@ -151,6 +143,7 @@ export async function handleGenerateAudio() {
     console.error("Error en el proceso de generación de audio:", error);
     showCustomMessage(`Error: ${error.message}`, "error", 8000);
   } finally {
-    hideLoadingOverlay();
+    // Oculta el overlay después de un breve momento para que se vea el 100%
+    setTimeout(hideLoadingOverlay, 500);
   }
 }
