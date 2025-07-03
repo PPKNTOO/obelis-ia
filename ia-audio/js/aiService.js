@@ -33,13 +33,10 @@ export async function handleGenerateAudio() {
     return;
   }
 
-  // Combinamos todo en un prompt más detallado para el modelo
   const finalPrompt = `${promptText}, ${genre} style, ${mood} mood`;
-
-  showLoadingOverlay("Enviando petición a la IA... Por favor, espera.");
+  showLoadingOverlay("Enviando petición a la IA...");
 
   try {
-    // --- Inicia la generación de música ---
     const initialResponse = await fetch("/api/music-generator", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -51,20 +48,24 @@ export async function handleGenerateAudio() {
 
     let prediction = await initialResponse.json();
     if (initialResponse.status !== 202) {
-      throw new Error(`Error al iniciar la generación: ${prediction.detail}`);
+      throw new Error(prediction.detail || "Error al iniciar la generación.");
     }
 
-    // --- Espera a que la generación termine ---
     showLoadingOverlay(
-      "La IA está componiendo tu música... Esto puede tardar uno o dos minutos."
+      "La IA está componiendo... Esto puede tardar hasta 2 minutos."
     );
 
     while (
       prediction.status !== "succeeded" &&
       prediction.status !== "failed"
     ) {
-      await sleep(3000); // Espera 3 segundos entre cada verificación
-      const statusResponse = await fetch(`/api/predictions/${prediction.id}`);
+      await sleep(4000); // Aumentamos la espera a 4 segundos
+
+      // ✅ CORRECCIÓN CLAVE AQUÍ:
+      // Llamamos a la nueva ruta y pasamos el ID como un parámetro de búsqueda.
+      const statusResponse = await fetch(
+        `/api/get-prediction?id=${prediction.id}`
+      );
       prediction = await statusResponse.json();
     }
 
@@ -73,8 +74,6 @@ export async function handleGenerateAudio() {
     }
 
     const audioUrl = prediction.output;
-
-    // --- Muestra el resultado ---
     if (audioUrl) {
       audioPlayer.src = audioUrl;
       downloadAudioLink.href = audioUrl;
@@ -88,7 +87,7 @@ export async function handleGenerateAudio() {
     }
   } catch (error) {
     console.error("Error en el proceso de generación de audio:", error);
-    showCustomMessage(`Error: ${error.message}`, "error", 6000);
+    showCustomMessage(`Error: ${error.message}`, "error", 8000);
   } finally {
     hideLoadingOverlay();
   }
