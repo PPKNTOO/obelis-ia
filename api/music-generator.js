@@ -29,11 +29,11 @@ export default async function handler(req) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // ✅ VERSIÓN DEL MODELO ACTUALIZADA
         version:
           "7a76a8258b23fae65c5a22debb8841d1d7e816b75c2f24218cd2bd8573787906",
         input: {
-          model_version: "stereo-large",
+          // ✅ CAMBIO REALIZADO AQUÍ
+          model_version: "large", // Usamos 'large' en lugar de 'stereo-large'
           prompt: prompt,
           duration: duration_seconds,
         },
@@ -44,7 +44,7 @@ export default async function handler(req) {
       let error = await response.json();
       return new Response(
         JSON.stringify({
-          detail: error.detail || "Error desconocido al iniciar la predicción.",
+          detail: error.detail || "Error al iniciar la predicción.",
         }),
         { status: 500 }
       );
