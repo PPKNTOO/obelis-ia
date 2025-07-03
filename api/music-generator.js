@@ -29,9 +29,9 @@ export default async function handler(req) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // Este es el identificador del modelo MusicGen en Replicate
+        // ✅ VERSIÓN DEL MODELO ACTUALIZADA
         version:
-          "b05b1dff1d8c6ac63d424224af995aa363fe5352a73021361957f4da75b34a9d",
+          "7a76a8258b23fae65c5a22debb8841d1d7e816b75c2f24218cd2bd8573787906",
         input: {
           model_version: "stereo-large",
           prompt: prompt,
@@ -42,14 +42,15 @@ export default async function handler(req) {
 
     if (response.status !== 201) {
       let error = await response.json();
-      return new Response(JSON.stringify({ detail: error.detail }), {
-        status: 500,
-      });
+      return new Response(
+        JSON.stringify({
+          detail: error.detail || "Error desconocido al iniciar la predicción.",
+        }),
+        { status: 500 }
+      );
     }
 
     const prediction = await response.json();
-
-    // Devolvemos la URL para que el frontend pueda consultar el estado
     return new Response(JSON.stringify(prediction), { status: 202 });
   } catch (error) {
     return new Response(JSON.stringify({ detail: error.message }), {
