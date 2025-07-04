@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const response = await fetch("../../reporte_datos.json");
+    const response = await fetch("/reporte_datos.json");
     if (!response.ok) throw new Error("No se encontró el archivo de datos.");
     const data = await response.json();
 
