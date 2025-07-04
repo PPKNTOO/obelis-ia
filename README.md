@@ -2,12 +2,10 @@
 
 ```
 ObelisIA/
+├── .env
 ├── .gitignore
+├── README.md
 ├── ads.txt
-├── api
-│   ├── gemini.js
-│   ├── get-prediction.js
-│   └── music-generator.js
 ├── convert-img
 │   ├── css
 │   │   └── style.css
@@ -66,7 +64,6 @@ ObelisIA/
 │       ├── ui.js
 │       └── utils
 │           └── constants.js
-├── generate-readme.py
 ├── ia-audio
 │   ├── css
 │   │   └── style.css
@@ -133,5 +130,6 @@ ObelisIA/
 │   └── utils
 │       └── helpers.js
 ├── package-lock.json
-└── package.json
+├── package.json
+└── reporte_datos.json
 ```

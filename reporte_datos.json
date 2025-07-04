@@ -1,0 +1,740 @@
+{
+  "total_archivos_analizados": 88,
+  "archivos_mas_complejos": [
+    {
+      "ruta": "js/global.js",
+      "tamano_kb": 14.67,
+      "lineas": 411,
+      "complejidad": 93,
+      "dependencias": []
+    },
+    {
+      "ruta": "ia-img/js/galleryManager.js",
+      "tamano_kb": 11.57,
+      "lineas": 347,
+      "complejidad": 55,
+      "dependencias": [
+        "js/global.js",
+        "ia-img/js/config.js",
+        "ia-img/js/state.js",
+        "ia-img/js/editorManager.js"
+      ]
+    },
+    {
+      "ruta": "convert-img/js/uiUpdater.js",
+      "tamano_kb": 4.53,
+      "lineas": 118,
+      "complejidad": 55,
+      "dependencias": [
+        "js/global.js",
+        "convert-img/js/state.js",
+        "convert-img/js/config.js"
+      ]
+    },
+    {
+      "ruta": "ia-img/js/aiService.js",
+      "tamano_kb": 7.5,
+      "lineas": 251,
+      "complejidad": 44,
+      "dependencias": [
+        "js/global.js",
+        "ia-img/js/config.js",
+        "ia-img/js/state.js",
+        "ia-img/js/imageProcessor.js",
+        "ia-img/js/galleryManager.js",
+        "ia-img/js/uiUpdater.js"
+      ]
+    },
+    {
+      "ruta": "convert-img/js/imageProcessing.js",
+      "tamano_kb": 5.71,
+      "lineas": 173,
+      "complejidad": 44,
+      "dependencias": [
+        "js/global.js",
+        "convert-img/js/state.js",
+        "convert-img/js/storage.js",
+        "convert-img/js/uiUpdater.js",
+        "convert-img/js/limitManager.js"
+      ]
+    },
+    {
+      "ruta": "ia-text/js/textFormatter.js",
+      "tamano_kb": 2.26,
+      "lineas": 64,
+      "complejidad": 43,
+      "dependencias": []
+    },
+    {
+      "ruta": "ia-text/js/aiService.js",
+      "tamano_kb": 6.4,
+      "lineas": 186,
+      "complejidad": 36,
+      "dependencias": [
+        "ia-text/js/state.js",
+        "ia-text/js/config.js",
+        "js/global.js",
+        "ia-text/js/limitManager.js",
+        "ia-text/js/textFormatter.js",
+        "ia-text/js/audioPlayer.js",
+        "ia-text/js/historyManager.js",
+        "ia-text/js/storage.js"
+      ]
+    },
+    {
+      "ruta": "edit-img/js/tools/toolManager.js",
+      "tamano_kb": 3.88,
+      "lineas": 101,
+      "complejidad": 27,
+      "dependencias": [
+        "edit-img/js/ui.js",
+        "edit-img/js/tools/cropTool.js"
+      ]
+    },
+    {
+      "ruta": "ia-img/js/editorManager.js",
+      "tamano_kb": 6.38,
+      "lineas": 225,
+      "complejidad": 27,
+      "dependencias": [
+        "js/global.js",
+        "ia-img/js/state.js",
+        "ia-img/js/galleryManager.js"
+      ]
+    },
+    {
+      "ruta": "js/components/modals.js",
+      "tamano_kb": 4.35,
+      "lineas": 141,
+      "complejidad": 25,
+      "dependencias": []
+    }
+  ],
+  "archivos_mas_grandes": [
+    {
+      "ruta": "ia-img/index.html",
+      "tamano_kb": 37.25,
+      "lineas": 938,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "ia-text/index.html",
+      "tamano_kb": 34.9,
+      "lineas": 861,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "edit-img/index.html",
+      "tamano_kb": 25.56,
+      "lineas": 716,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "ia-img/css/style.css",
+      "tamano_kb": 17.35,
+      "lineas": 632,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "index.html",
+      "tamano_kb": 24.77,
+      "lineas": 626,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "convert-img/index.html",
+      "tamano_kb": 22.32,
+      "lineas": 580,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "js/global.js",
+      "tamano_kb": 14.67,
+      "lineas": 411,
+      "complejidad": 93,
+      "dependencias": []
+    },
+    {
+      "ruta": "css/style.css",
+      "tamano_kb": 9.8,
+      "lineas": 410,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "ia-audio/index.html",
+      "tamano_kb": 15.36,
+      "lineas": 407,
+      "complejidad": 0,
+      "dependencias": []
+    },
+    {
+      "ruta": "ia-img/js/galleryManager.js",
+      "tamano_kb": 11.57,
+      "lineas": 347,
+      "complejidad": 55,
+      "dependencias": [
+        "js/global.js",
+        "ia-img/js/config.js",
+        "ia-img/js/state.js",
+        "ia-img/js/editorManager.js"
+      ]
+    }
+  ],
+  "estructura_proyecto_json": {
+    "name": "ObelisIA",
+    "children": [
+      {
+        "name": ".env",
+        "children": []
+      },
+      {
+        "name": ".gitignore",
+        "children": []
+      },
+      {
+        "name": "README.md",
+        "children": []
+      },
+      {
+        "name": "ads.txt",
+        "children": []
+      },
+      {
+        "name": "convert-img",
+        "children": [
+          {
+            "name": "css",
+            "children": [
+              {
+                "name": "style.css",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "index.html",
+            "children": []
+          },
+          {
+            "name": "js",
+            "children": [
+              {
+                "name": "app.js",
+                "children": []
+              },
+              {
+                "name": "config.js",
+                "children": []
+              },
+              {
+                "name": "downloadManager.js",
+                "children": []
+              },
+              {
+                "name": "fileHandler.js",
+                "children": []
+              },
+              {
+                "name": "imageProcessing.js",
+                "children": []
+              },
+              {
+                "name": "limitManager.js",
+                "children": []
+              },
+              {
+                "name": "main.js",
+                "children": []
+              },
+              {
+                "name": "state.js",
+                "children": []
+              },
+              {
+                "name": "storage.js",
+                "children": []
+              },
+              {
+                "name": "uiUpdater.js",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "css",
+        "children": [
+          {
+            "name": "main.css",
+            "children": []
+          },
+          {
+            "name": "style.css",
+            "children": []
+          },
+          {
+            "name": "styles",
+            "children": [
+              {
+                "name": "_about-section.css",
+                "children": []
+              },
+              {
+                "name": "_base.css",
+                "children": []
+              },
+              {
+                "name": "_buttons.css",
+                "children": []
+              },
+              {
+                "name": "_editor.css",
+                "children": []
+              },
+              {
+                "name": "_faq-section.css",
+                "children": []
+              },
+              {
+                "name": "_forms.css",
+                "children": []
+              },
+              {
+                "name": "_global-ad-banner.css",
+                "children": []
+              },
+              {
+                "name": "_global-modals.css",
+                "children": []
+              },
+              {
+                "name": "_navbar.css",
+                "children": []
+              },
+              {
+                "name": "_responsive.css",
+                "children": []
+              },
+              {
+                "name": "_utilities.css",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "edit-img",
+        "children": [
+          {
+            "name": "css",
+            "children": [
+              {
+                "name": "style.css",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "index.html",
+            "children": []
+          },
+          {
+            "name": "js",
+            "children": [
+              {
+                "name": "adjustments",
+                "children": [
+                  {
+                    "name": "colorAdjustments.js",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "app.js",
+                "children": []
+              },
+              {
+                "name": "canvas.js",
+                "children": []
+              },
+              {
+                "name": "filters",
+                "children": [
+                  {
+                    "name": "blurFilter.js",
+                    "children": []
+                  },
+                  {
+                    "name": "filterManager.js",
+                    "children": []
+                  },
+                  {
+                    "name": "grayscaleFilter.js",
+                    "children": []
+                  },
+                  {
+                    "name": "invertFilter.js",
+                    "children": []
+                  },
+                  {
+                    "name": "sepiaFilter.js",
+                    "children": []
+                  },
+                  {
+                    "name": "sharpenFilter.js",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "history.js",
+                "children": []
+              },
+              {
+                "name": "main.js",
+                "children": []
+              },
+              {
+                "name": "tools",
+                "children": [
+                  {
+                    "name": "brushTool.js",
+                    "children": []
+                  },
+                  {
+                    "name": "cropTool.js",
+                    "children": []
+                  },
+                  {
+                    "name": "eraserTool.js",
+                    "children": []
+                  },
+                  {
+                    "name": "eyedropperTool.js",
+                    "children": []
+                  },
+                  {
+                    "name": "textTool.js",
+                    "children": []
+                  },
+                  {
+                    "name": "toolManager.js",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "ui.js",
+                "children": []
+              },
+              {
+                "name": "utils",
+                "children": [
+                  {
+                    "name": "constants.js",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ia-audio",
+        "children": [
+          {
+            "name": "css",
+            "children": [
+              {
+                "name": "style.css",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "index.html",
+            "children": []
+          },
+          {
+            "name": "js",
+            "children": [
+              {
+                "name": "aiService.js",
+                "children": []
+              },
+              {
+                "name": "app.js",
+                "children": []
+              },
+              {
+                "name": "config.js",
+                "children": []
+              },
+              {
+                "name": "limitManager.js",
+                "children": []
+              },
+              {
+                "name": "main.js",
+                "children": []
+              },
+              {
+                "name": "state.js",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ia-img",
+        "children": [
+          {
+            "name": "css",
+            "children": [
+              {
+                "name": "style.css",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "index.html",
+            "children": []
+          },
+          {
+            "name": "js",
+            "children": [
+              {
+                "name": "aiService.js",
+                "children": []
+              },
+              {
+                "name": "app.js",
+                "children": []
+              },
+              {
+                "name": "config.js",
+                "children": []
+              },
+              {
+                "name": "editorManager.js",
+                "children": []
+              },
+              {
+                "name": "galleryManager.js",
+                "children": []
+              },
+              {
+                "name": "imageProcessor.js",
+                "children": []
+              },
+              {
+                "name": "main.js",
+                "children": []
+              },
+              {
+                "name": "state.js",
+                "children": []
+              },
+              {
+                "name": "uiUpdater.js",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ia-text",
+        "children": [
+          {
+            "name": "css",
+            "children": [
+              {
+                "name": "style.css",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "index.html",
+            "children": []
+          },
+          {
+            "name": "js",
+            "children": [
+              {
+                "name": "aiService.js",
+                "children": []
+              },
+              {
+                "name": "app.js",
+                "children": []
+              },
+              {
+                "name": "audioPlayer.js",
+                "children": []
+              },
+              {
+                "name": "clipboardDownload.js",
+                "children": []
+              },
+              {
+                "name": "config.js",
+                "children": []
+              },
+              {
+                "name": "historyManager.js",
+                "children": []
+              },
+              {
+                "name": "limitManager.js",
+                "children": []
+              },
+              {
+                "name": "main.js",
+                "children": []
+              },
+              {
+                "name": "state.js",
+                "children": []
+              },
+              {
+                "name": "storage.js",
+                "children": []
+              },
+              {
+                "name": "textFormatter.js",
+                "children": []
+              },
+              {
+                "name": "voiceManager.js",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "img",
+        "children": [
+          {
+            "name": "El Limpiador y el Eco Silencioso.png",
+            "children": []
+          },
+          {
+            "name": "Pocoyo.gif",
+            "children": []
+          },
+          {
+            "name": "banner.webp",
+            "children": []
+          },
+          {
+            "name": "banner2.webp",
+            "children": []
+          },
+          {
+            "name": "favicon.ico",
+            "children": []
+          },
+          {
+            "name": "imagen-generada.png",
+            "children": []
+          },
+          {
+            "name": "logo-1280x720.jpg",
+            "children": []
+          },
+          {
+            "name": "logo.jpg",
+            "children": []
+          },
+          {
+            "name": "logo.webp",
+            "children": []
+          },
+          {
+            "name": "marca_de_agua.jpg",
+            "children": []
+          },
+          {
+            "name": "marca_de_agua.webp",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "index.html",
+        "children": []
+      },
+      {
+        "name": "js",
+        "children": [
+          {
+            "name": "components",
+            "children": [
+              {
+                "name": "carousel.js",
+                "children": []
+              },
+              {
+                "name": "faq.js",
+                "children": []
+              },
+              {
+                "name": "modals.js",
+                "children": []
+              },
+              {
+                "name": "navbar.js",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "global.js",
+            "children": []
+          },
+          {
+            "name": "home-app.js",
+            "children": []
+          },
+          {
+            "name": "utils",
+            "children": [
+              {
+                "name": "helpers.js",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "package-lock.json",
+        "children": []
+      },
+      {
+        "name": "package.json",
+        "children": []
+      },
+      {
+        "name": "reporte_datos.json",
+        "children": []
+      }
+    ]
+  }
+}
