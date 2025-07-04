@@ -1,0 +1,134 @@
+<!-- File: dashboard/index.html -->
+<!--
+Cada vez que reinicies tu PC y quieras empezar a trabajar,
+solo tendrás que abrir una terminal en la raíz del proyecto
+y ejecutar un único comando:
+
+```Bash
+./start_watcher.sh
+
+Esto activará el entorno virtual e iniciará el observador automáticamente.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard de Análisis de Código - ObelisIA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header>
+        <h1>Dashboard de Análisis del Proyecto</h1>
+      </header>
+
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <p class="title">
+            <i class="fas fa-file-alt"></i> Archivos Analizados
+          </p>
+          <p class="value" id="kpi-total-files">0</p>
+        </div>
+        <div class="kpi-card">
+          <p class="title">
+            <i class="fas fa-code"></i> Total de Líneas de Código
+          </p>
+          <p class="value" id="kpi-total-lines">0</p>
+        </div>
+        <div class="kpi-card">
+          <p class="title">
+            <i class="fas fa-exclamation-triangle"></i> Tareas Pendientes
+          </p>
+          <p class="value" id="kpi-todos">0</p>
+        </div>
+        <div class="kpi-card">
+          <p class="title">
+            <i class="fas fa-weight-hanging"></i> Activos Pesados
+          </p>
+          <p class="value" id="kpi-heavy-assets">0</p>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="card">
+          <h2><i class="fas fa-brain"></i> Archivos más Complejos</h2>
+          <canvas id="complexity-chart"></canvas>
+        </div>
+        <div class="card">
+          <h2>
+            <i class="fas fa-ruler-vertical"></i> Archivos más Grandes (Líneas)
+          </h2>
+          <canvas id="size-chart"></canvas>
+        </div>
+
+        <div class="card full-width">
+          <h2>
+            <i class="fas fa-tachometer-alt"></i> Informe de Rendimiento
+            (Archivos Pesados)
+          </h2>
+          <div class="table-container">
+            <h3>Imágenes (>150KB)</h3>
+            <table id="large-images-table">
+              <thead>
+                <tr>
+                  <th>Archivo</th>
+                  <th>Tamaño (KB)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="table-container">
+            <h3>JavaScript (>50KB)</h3>
+            <table id="large-js-table">
+              <thead>
+                <tr>
+                  <th>Archivo</th>
+                  <th>Tamaño (KB)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card full-width">
+          <h2>
+            <i class="fas fa-tasks"></i> Tareas Pendientes (TODOs y FIXMEs)
+          </h2>
+          <div class="table-container">
+            <table id="todos-table">
+              <thead>
+                <tr>
+                  <th>Archivo</th>
+                  <th>Línea</th>
+                  <th>Tarea</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card full-width">
+          <h2>
+            <i class="fas fa-project-diagram"></i> Estructura Interactiva del
+            Proyecto
+          </h2>
+          <div id="tree-container">
+            <svg id="project-tree-svg"></svg>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

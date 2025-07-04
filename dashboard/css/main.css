@@ -1,0 +1,129 @@
+:root {
+  --color-bg: #111827;
+  --color-card-bg: #1f2937;
+  --color-border: #374151;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #9ca3af;
+  --color-accent: #0891b2;
+  --color-accent-light: #06b6d4;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 1.5rem;
+}
+
+.dashboard-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background-color: var(--color-card-bg);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.kpi-card .title {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin: 0 0 0.5rem 0;
+}
+
+.kpi-card .value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.card.full-width {
+  grid-column: 1 / -1;
+}
+
+.card h2 {
+  font-size: 1.25rem;
+  margin-top: 0;
+  color: var(--color-accent-light);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* ✅ NUEVOS ESTILOS PARA EL GRÁFICO DEL PROYECTO */
+
+#tree-container {
+  width: 100%;
+  height: 600px; /* Altura fija para el contenedor del gráfico */
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #111827; /* Fondo ligeramente más oscuro */
+  border: 1px solid var(--color-border);
+}
+
+#project-tree-svg {
+  width: 100%;
+  height: 100%;
+  cursor: move; /* Indica que el gráfico se puede arrastrar */
+}
+
+/* Estilo para las líneas que conectan los nodos */
+.link {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 1.5px;
+}
+
+/* Estilo para los nodos (cajas) */
+.node rect {
+  fill: var(--color-card-bg);
+  stroke: var(--color-accent);
+  stroke-width: 2px;
+  rx: 5px; /* Bordes redondeados */
+}
+
+/* Estilo para el texto dentro de los nodos */
+.node text {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 12px;
+  fill: var(--color-text-primary);
+  paint-order: stroke;
+  stroke: var(
+    --color-bg
+  ); /* Añade un pequeño borde al texto para legibilidad */
+  stroke-width: 2px;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}

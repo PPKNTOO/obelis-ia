@@ -59,9 +59,8 @@
         <a
           href="../index.html"
           class="text-2xl font-bold hover:text-cyan-500 transition-colors duration-200"
+          >Obelis <span style="color: #0891b2">IA</span></a
         >
-          Obelis <span style="color: #0891b2">IA</span>
-        </a>
         <button id="menuToggle" class="md:hidden">
           <i class="fas fa-bars"></i>
         </button>
@@ -69,6 +68,7 @@
           <a href="../index.html" class="nav-item">
             <i class="fas fa-home nav-icon"></i> Inicio
           </a>
+
           <div class="nav-item group">
             <span class="cursor-pointer">
               <i class="fas fa-robot nav-icon"></i> Herramientas IA
@@ -81,14 +81,20 @@
               <a href="../ia-text/index.html" class="submenu-item"
                 >Generador de Texto IA</a
               >
-              <a href="index.html" class="submenu-item"
-                >Generador de Música IA</a
+              <a href="../ia-video/index.html" class="submenu-item"
+                >Generador de Videos IA</a
+              >
+              <a
+                href="index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador de Música/Audio IA (Próximamente)</a
               >
             </div>
           </div>
+
           <div class="nav-item group">
             <span class="cursor-pointer">
-              <i class="fas fa-paint-brush nav-icon"></i> Edición
+              <i class="fas fa-paint-brush nav-icon"></i> Edición de Imagen
               <i class="fas fa-chevron-right arrow-icon"></i>
             </span>
             <div class="submenu">
@@ -97,6 +103,41 @@
               >
               <a href="../convert-img/index.html" class="submenu-item"
                 >Convertir Imágenes</a
+              >
+              <a
+                href="../ia-upscale/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Mejorador de Imágenes IA (Próximamente)</a
+              >
+              <a
+                href="../ia-bgremove/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Removedor de Fondo IA (Próximamente)</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-item group">
+            <span class="cursor-pointer">
+              <i class="fas fa-tools nav-icon"></i> Utilidades Digitales
+              <i class="fas fa-chevron-right arrow-icon"></i>
+            </span>
+            <div class="submenu">
+              <a
+                href="../image-compressor/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Compresor de Imágenes (Próximamente)</a
+              >
+              <a
+                href="../color-palette/index.html"
+                class="submenu-item opacity-50 cursor-not-allowed"
+                >Generador/Extractor de Paletas de Colores (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta X (Próximamente)</a
+              >
+              <a href="#" class="submenu-item opacity-50 cursor-not-allowed"
+                >Herramienta Y (Próximamente)</a
               >
             </div>
           </div>
@@ -152,7 +193,10 @@
         </div>
       </section>
 
-      <section id="iaGeneratorSection" class="w-full max-w-5xl px-4 py-16">
+      <section
+        id="iaGeneratorSection"
+        class="w-full max-w-5xl px-4 py-16 paralaje-svg"
+      >
         <div
           class="ia-generator-layout-container"
           style="
@@ -174,12 +218,15 @@
                 id="genre-select"
                 class="w-full p-2 mb-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-cyan-500 focus:border-cyan-500 text-sm"
               >
-                <option value="lo-fi">Lo-fi</option>
-                <option value="cinematic">Cinemático</option>
-                <option value="ambient">Ambiental</option>
-                <option value="electronic">Electrónico</option>
                 <option value="acoustic">Acústico</option>
+                <option value="ambient">Ambiental</option>
+                <option value="cinematic">Cinemático</option>
+                <option value="electronic">Electrónico</option>
+                <option value="lo-fi">Lo-fi</option>
                 <option value="rock">Rock</option>
+                <option value="rap">HipHop</option>
+                <option value="reggae">Reggae</option>
+                <option value="urban">Reggaeton</option>
               </select>
             </div>
             <div class="options-group">
@@ -203,16 +250,20 @@
               <label
                 for="duration-slider"
                 class="block text-lg font-semibold text-gray-300 mb-2"
-                >Duración: <span id="duration-value">10s</span></label
+                >Duración: <span id="duration-value">20s</span></label
               >
               <input
                 type="range"
                 id="duration-slider"
                 min="10"
                 max="30"
-                value="10"
-                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                value="20"
+                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer dynamic-slider"
               />
+              <div class="flex justify-between text-sm text-gray-400 mt-1">
+                <span>10s</span>
+                <span>30s</span>
+              </div>
             </div>
           </aside>
 
@@ -228,9 +279,19 @@
                 placeholder="Ej: Guitarra acústica suave con un ritmo de batería ligero, estilo folk, para un video de viaje."
               ></textarea>
             </div>
-            <button id="generate-audio-btn" class="btn-primary">
-              Generar Música
-            </button>
+            <div class="flex items-center gap-4">
+              <button id="generate-audio-btn" class="btn-primary">
+                <li class="fas fa-music"></li>
+                Generar Música
+              </button>
+              <button
+                id="improve-prompt-btn"
+                class="btn-secondary"
+                title="Mejorar descripción con IA"
+              >
+                <i class="fas fa-magic"></i> Mejorar Prompt
+              </button>
+            </div>
 
             <div id="audio-player-container" class="mt-8 w-full hidden">
               <h3 class="text-xl font-bold text-white mb-4">Tu Creación:</h3>
@@ -287,17 +348,60 @@
         <div id="messageModalIcon"></div>
       </div>
     </div>
+
     <div id="loadingOverlayModal" class="modal-overlay loading-overlay-modal">
-      <div class="modal-content"><p id="loadingMessageTextModal"></p></div>
+      <div class="modal-content text-center">
+        <img
+          src="../img/Pocoyo.gif"
+          alt="Cargando..."
+          id="pocoyo-gif"
+          class="mx-auto mb-4 hidden"
+          width="120"
+        />
+        <p id="loadingMessageTextModal" class="text-lg font-semibold"></p>
+        <div
+          class="w-full bg-gray-700 rounded-full h-2.5 mt-4 hidden"
+          id="progress-bar-container"
+        >
+          <div
+            class="bg-cyan-500 h-2.5 rounded-full"
+            id="progress-bar"
+            style="width: 0%"
+          ></div>
+        </div>
+      </div>
     </div>
 
-    <footer class="w-full text-gray-400 text-center py-6 paralaje">
-      <p class="text-sm">
-        © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
-        derechos reservados.
-      </p>
-    </footer>
+    <div id="ad-modal" class="modal-overlay">
+      <div class="modal-content text-center" style="max-width: 600px">
+        <h3 class="text-xl font-bold mb-4">Anuncio Requerido</h3>
+        <p class="mb-4">
+          Para continuar generando, por favor visualiza el siguiente anuncio.
+        </p>
+        <p class="mb-4">
+          Esto hace que
+          <a href="../index.html" class="font-bold"
+            >Obelis<span class="text-cyan-500">IA</span></a
+          >
+          siga siendo gratuito y sostenible.
+        </p>
+        <div
+          id="ad-iframe-container"
+          class="w-full h-72 bg-black flex items-center justify-center"
+        >
+          <p class="text-gray-400">Cargando anuncio...</p>
+        </div>
+        <p id="ad-timer" class="mt-4 font-mono text-lg"></p>
+      </div>
+    </div>
 
     <script type="module" src="js/app.js" defer></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
   </body>
+  <footer class="w-full text-gray-400 text-center py-6 paralaje">
+    <p class="text-sm">
+      © 2025 <span class="text-cyan-500 font-bold">ObelisIA</span>. Todos los
+      derechos reservados.
+    </p>
+  </footer>
 </html>

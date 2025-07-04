@@ -118,6 +118,16 @@ function initializeCarousel() {
     ".carousel-indicator"
   );
 
+  // Función para ir a un slide específico
+  // Esta función se encarga de cambiar el slide actual y actualizar los indicadores.
+  // Recibe un índice y ajusta el índice actual para que esté dentro del rango de
+  // los slides disponibles. Luego, actualiza la transformación del contenedor de slides
+  // y activa el indicador correspondiente.
+  // Si el índice es negativo o mayor que el número total de slides, lo ajusta
+  // para que se mantenga dentro del rango válido.
+  // Por ejemplo, si el índice es -1, lo ajusta a totalSlides - 1, y si es igual a totalSlides, lo ajusta a 0.
+  // // Esto permite que el carrusel sea cíclico, es decir, al llegar al final vuelve
+  // al principio y viceversa.
   const goToSlide = (index) => {
     currentIndex = (index + totalSlides) % totalSlides;
     slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -126,6 +136,7 @@ function initializeCarousel() {
     );
   };
 
+  // Iniciar el carrusel automáticamente
   const startCarousel = () => {
     clearInterval(slideInterval);
     slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
@@ -150,6 +161,7 @@ function initializeCarousel() {
   startCarousel();
 }
 
+// Esta función inicializa los modales y sus eventos.
 function initializeModals() {
   const {
     acceptCookiesButton,
@@ -207,6 +219,21 @@ function initializeModals() {
 }
 
 // 4. Funciones de utilidad que serán exportadas para que otros módulos las usen.
+
+// Esta función muestra un mensaje personalizado en un modal.
+// Puedes especificar el tipo de mensaje (info, success, error) y la duración en milisegundos.
+// El mensaje se mostrará con un icono correspondiente y se ocultará automáticamente
+// después de la duración especificada.
+// Si no se especifica duración, se ocultará después de 3 segundos.
+// Si no se especifica tipo, se mostrará como un mensaje informativo.
+// El modal debe tener los siguientes elementos:
+// - messageModal: el modal que contiene el mensaje.
+// - messageModalText: el elemento donde se muestra el texto del mensaje.
+// - messageModalIcon: el elemento donde se muestra el icono del mensaje.
+// - messageModalCloseButton: el botón para cerrar el modal.
+// Ejemplo de uso:
+// showCustomMessage("¡Operación exitosa!", "success", 5000);
+// Si el modal no existe, la función no hará nada.
 export function showCustomMessage(message, type = "info", duration = 3000) {
   const { messageModal, messageModalText, messageModalIcon } = DOMElements;
   if (!messageModal) return;
@@ -227,23 +254,62 @@ export function showCustomMessage(message, type = "info", duration = 3000) {
   setTimeout(hideCustomMessage, duration);
 }
 
+// Esta función oculta el mensaje personalizado mostrado por showCustomMessage.
 export function hideCustomMessage() {
   if (DOMElements.messageModal)
     DOMElements.messageModal.classList.remove("show");
 }
 
-export function showLoadingOverlay(message = "Cargando...") {
-  const { loadingOverlayModal, loadingMessageTextModal } = DOMElements;
-  if (!loadingOverlayModal) return;
-  loadingMessageTextModal.textContent = message;
-  loadingOverlayModal.classList.add("show");
+// Esta función muestra un overlay de carga con un mensaje y una barra de progreso opcional.
+// Puedes especificar el mensaje que se mostrará y si quieres mostrar una barra de progreso.
+// Si no se especifica mensaje, se mostrará "Cargando...".
+// Si no se especifica si se quiere mostrar la barra de progreso, se mostrará sin ella.
+// El overlay debe tener los siguientes elementos:
+// - loadingOverlayModal: el modal que contiene el overlay de carga.
+// - loadingMessageTextModal: el elemento donde se muestra el texto del mensaje de carga.
+// - loadingModalCloseButton: el botón para cerrar el modal de carga.
+// - pocoyoGif: un GIF opcional que se muestra durante la carga.
+// - progressBarContainer: el contenedor de la barra de progreso (opcional).
+// - progressBar: la barra de progreso (opcional).
+// Ejemplo de uso:
+// showLoadingOverlay("Cargando datos...", true);
+// Si el modal de carga no existe, la función no hará nada.
+export function showLoadingOverlay(
+  message = "Cargando...",
+  withProgress = false
+) {
+  if (!DOMElements.loadingOverlayModal) return;
+
+  if (DOMElements.loadingMessageTextModal) {
+    DOMElements.loadingMessageTextModal.textContent = message;
+  }
+
+  if (DOMElements.progressBarContainer) {
+    DOMElements.progressBarContainer.classList.toggle("hidden", !withProgress);
+  }
+  if (DOMElements.pocoyoGif) {
+    DOMElements.pocoyoGif.classList.toggle("hidden", !withProgress);
+  }
+
+  if (withProgress && DOMElements.progressBar) {
+    DOMElements.progressBar.style.width = "0%"; // Resetea al mostrar
+  }
+
+  DOMElements.loadingOverlayModal.classList.add("show");
 }
 
+// Esta función oculta el overlay de carga.
 export function hideLoadingOverlay() {
-  if (DOMElements.loadingOverlayModal)
-    DOMElements.loadingOverlayModal.classList.remove("show");
+  if (!DOMElements.loadingOverlayModal) return;
+  DOMElements.loadingOverlayModal.classList.remove("show");
+
+  // Resetea la barra de progreso al ocultar el overlay
+  if (DOMElements.progressBar) {
+    DOMElements.progressBar.style.width = "0%";
+  }
 }
 
+// Esta función descarga una imagen desde una URL y la guarda con un nombre específico.
 export async function downloadImage(imageUrl, filename = "imagen.png") {
   try {
     const response = await fetch(
@@ -266,6 +332,7 @@ export async function downloadImage(imageUrl, filename = "imagen.png") {
   }
 }
 
+// Esta función actualiza el uso de localStorage en la interfaz.
 export function updateLocalStorageUsage() {
   if (!DOMElements.localStorageUsage) return;
   let totalBytes = 0;
@@ -279,7 +346,19 @@ export function updateLocalStorageUsage() {
   ).toFixed(2)} KB`;
 }
 
+// Esta función actualiza la barra de progreso en la interfaz.
+export function updateProgress(percentage) {
+  if (!DOMElements.progressBar) return;
+  const validPercentage = Math.max(0, Math.min(100, percentage));
+  DOMElements.progressBar.style.width = `${validPercentage}%`;
+}
+
 // 5. La función de inicialización global que será llamada por app.js.
+
+// Esta función inicializa todos los elementos globales y componentes de la aplicación.
+// Debe ser llamada una vez que el DOM esté completamente cargado.
+// Se encarga de poblar el objeto DOMElements con los elementos comunes y luego
+// inicializa los componentes que dependen de esos elementos.
 export function initGlobalApp() {
   // Primero, poblamos DOMElements con todos los elementos comunes que puedan existir.
   Object.assign(DOMElements, {
@@ -300,6 +379,9 @@ export function initGlobalApp() {
     navLinksContainer: getElement(".navbar-inner-content .flex-wrap"),
     navbarInnerContent: getElement(".navbar-inner-content"),
     localStorageUsage: getElement("#localStorageUsage"), // Es usado en ia-img, pero lo podemos buscar globalmente.
+    pocoyoGif: getElement("#pocoyo-gif"),
+    progressBarContainer: getElement("#progress-bar-container"),
+    progressBar: getElement("#progress-bar"),
   });
 
   // Luego, inicializamos los componentes que usan estos elementos.
@@ -307,4 +389,23 @@ export function initGlobalApp() {
   initializeFAQ();
   initializeCarousel();
   initializeModals();
+
+  // ✅ AÑADE ESTO AL FINAL DE LA FUNCIÓN
+  const dynamicSliders = document.querySelectorAll(".dynamic-slider");
+  dynamicSliders.forEach((slider) => {
+    const updateFill = () => {
+      const percentage =
+        ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+      slider.style.background = `linear-gradient(to right, #0891b2 ${percentage}%, #374151 ${percentage}%)`;
+    };
+    slider.addEventListener("input", updateFill);
+    updateFill(); // Llama una vez para el estado inicial
+  });
 }
+
+// 6. Inicializa el objeto si no existe y define la función siq para seguimiento de eventos.
+window.si =
+  window.si ||
+  function () {
+    (window.siq = window.siq || []).push(arguments);
+  };
