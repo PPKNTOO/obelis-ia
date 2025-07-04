@@ -1,33 +1,23 @@
-<!-- File: dashboard/index.html -->
-<!--
-Cada vez que reinicies tu PC y quieras empezar a trabajar,
-solo tendrás que abrir una terminal en la raíz del proyecto
-y ejecutar un único comando:
-
-```Bash
-./start_watcher.sh
-
-Esto activará el entorno virtual e iniciará el observador automáticamente.
--->
-
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard de Análisis de Código - ObelisIA</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="css/main.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
     <div class="dashboard-container">
-      <header>
+      <header class="header-container">
         <h1>Dashboard de Análisis del Proyecto</h1>
+        <button id="scan-button" class="scan-button">
+          <i class="fas fa-sync-alt"></i>
+          <span>Escanear Proyecto</span>
+        </button>
       </header>
 
       <section class="kpi-grid">
@@ -129,6 +119,12 @@ Esto activará el entorno virtual e iniciará el observador automáticamente.
       </section>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script type="module" src="js/app.js"></script>
+    <!--     
+    <script type="module" src="js/tree.js"></script>
+    <script type="module" src="js/charts.js"></script>
+    <script type="module" src="js/tables.js"></script> -->
   </body>
 </html>

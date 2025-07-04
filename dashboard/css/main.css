@@ -127,3 +127,129 @@ header h1 {
   stroke-linecap: butt;
   stroke-linejoin: miter;
 }
+
+/* Estilos para el nuevo botón de escaneo */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.scan-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-accent);
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.scan-button:hover {
+  background-color: var(--color-accent-light);
+}
+
+.scan-button:active {
+  transform: scale(0.98);
+}
+
+/* Estilo para la animación del icono al escanear */
+.scan-button.scanning .fa-sync-alt {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- MEDIA QUERIES PARA RESPONSIVIDAD --- */
+
+/* Para Tablets y pantallas medianas (hasta 1200px) */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    /* Cambia a una sola columna para que los gráficos no se aplasten */
+    grid-template-columns: 1fr;
+  }
+
+  #tree-container {
+    height: 500px; /* Reduce un poco la altura del gráfico del proyecto */
+  }
+}
+
+/* Para Tablets en modo vertical y móviles grandes (hasta 768px) */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem; /* Menos espacio en los bordes */
+  }
+
+  header h1 {
+    font-size: 1.75rem; /* Título principal más pequeño */
+  }
+
+  .kpi-grid {
+    /* Asegura que las tarjetas tengan un tamaño mínimo legible */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .kpi-card .value {
+    font-size: 2rem; /* Números de KPI más pequeños */
+  }
+
+  .card h2 {
+    font-size: 1.1rem; /* Títulos de las tarjetas más pequeños */
+  }
+
+  /* Ajusta el texto del gráfico D3 para que sea legible en pantallas más pequeñas */
+  .node text {
+    font-size: 11px;
+    stroke-width: 2.5px; /* Borde de texto ligeramente más grueso para legibilidad */
+  }
+}
+
+/* Para Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .kpi-grid {
+    /* Fuerza a que las tarjetas KPI se apilen en dos columnas para aprovechar mejor el espacio */
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .kpi-card {
+    padding: 1rem;
+  }
+
+  .kpi-card .title {
+    font-size: 0.8rem;
+  }
+
+  .kpi-card .value {
+    font-size: 1.5rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  /* El texto de los nodos D3 se hace aún más pequeño */
+  .node text {
+    font-size: 9px;
+  }
+}

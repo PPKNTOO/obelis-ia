@@ -35,8 +35,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error al cargar el dashboard:", error);
     document.body.innerHTML = `<h1>Error al Cargar</h1><p>No se pudo encontrar o leer el archivo <code>reporte_datos.json</code>. Asegúrate de haber ejecutado <code>analizar_proyecto.py</code> primero y de acceder a esta página a través de un servidor local.</p>`;
   }
+  const scanButton = document.getElementById("scan-button");
+  if (scanButton) {
+    scanButton.addEventListener("click", handleScanButtonClick);
+  }
 });
 
+// ✅ NUEVA FUNCIÓN para manejar el botón de escaneo
+async function handleScanButtonClick() {
+  const scanButton = document.getElementById("scan-button");
+  const icon = scanButton.querySelector("i");
+  const text = scanButton.querySelector("span");
+
+  // Poner el botón en estado de "cargando"
+  scanButton.disabled = true;
+  icon.classList.add("scanning");
+  text.textContent = "Escaneando...";
+
+  try {
+    const response = await fetch("/api/run-analysis", { method: "POST" });
+    if (!response.ok) {
+      throw new Error("La respuesta del servidor no fue OK");
+    }
+    const result = await response.json();
+    console.log(result.message);
+
+    // Mostrar un mensaje de éxito y recargar la página para ver los nuevos datos
+    alert("Análisis completado. El dashboard se actualizará.");
+    location.reload();
+  } catch (error) {
+    console.error("Error al escanear el proyecto:", error);
+    alert(
+      "Ocurrió un error al escanear el proyecto. Revisa la consola para más detalles."
+    );
+  } finally {
+    // Restaurar el botón (aunque la página se recargará)
+    scanButton.disabled = false;
+    icon.classList.remove("scanning");
+    text.textContent = "Escanear Proyecto";
+  }
+}
+
+// ✅ NUEVA FUNCIÓN para poblar los KPIs
 function populateKPIs(data) {
   document.getElementById("kpi-total-files").textContent =
     data.total_archivos_analizados || 0;
