@@ -1,113 +1,65 @@
 {
-  "total_archivos_analizados": 88,
+  "total_archivos_analizados": 87,
   "archivos_mas_complejos": [
     {
       "ruta": "js/global.js",
       "tamano_kb": 14.67,
       "lineas": 411,
-      "complejidad": 93,
-      "dependencias": []
+      "complejidad": 93
     },
     {
       "ruta": "ia-img/js/galleryManager.js",
       "tamano_kb": 11.57,
       "lineas": 347,
-      "complejidad": 55,
-      "dependencias": [
-        "js/global.js",
-        "ia-img/js/config.js",
-        "ia-img/js/state.js",
-        "ia-img/js/editorManager.js"
-      ]
+      "complejidad": 55
     },
     {
       "ruta": "convert-img/js/uiUpdater.js",
       "tamano_kb": 4.53,
       "lineas": 118,
-      "complejidad": 55,
-      "dependencias": [
-        "js/global.js",
-        "convert-img/js/state.js",
-        "convert-img/js/config.js"
-      ]
+      "complejidad": 55
     },
     {
       "ruta": "ia-img/js/aiService.js",
       "tamano_kb": 7.5,
       "lineas": 251,
-      "complejidad": 44,
-      "dependencias": [
-        "js/global.js",
-        "ia-img/js/config.js",
-        "ia-img/js/state.js",
-        "ia-img/js/imageProcessor.js",
-        "ia-img/js/galleryManager.js",
-        "ia-img/js/uiUpdater.js"
-      ]
+      "complejidad": 44
     },
     {
       "ruta": "convert-img/js/imageProcessing.js",
       "tamano_kb": 5.71,
       "lineas": 173,
-      "complejidad": 44,
-      "dependencias": [
-        "js/global.js",
-        "convert-img/js/state.js",
-        "convert-img/js/storage.js",
-        "convert-img/js/uiUpdater.js",
-        "convert-img/js/limitManager.js"
-      ]
+      "complejidad": 44
     },
     {
       "ruta": "ia-text/js/textFormatter.js",
       "tamano_kb": 2.26,
       "lineas": 64,
-      "complejidad": 43,
-      "dependencias": []
+      "complejidad": 43
     },
     {
       "ruta": "ia-text/js/aiService.js",
       "tamano_kb": 6.4,
       "lineas": 186,
-      "complejidad": 36,
-      "dependencias": [
-        "ia-text/js/state.js",
-        "ia-text/js/config.js",
-        "js/global.js",
-        "ia-text/js/limitManager.js",
-        "ia-text/js/textFormatter.js",
-        "ia-text/js/audioPlayer.js",
-        "ia-text/js/historyManager.js",
-        "ia-text/js/storage.js"
-      ]
+      "complejidad": 36
     },
     {
       "ruta": "edit-img/js/tools/toolManager.js",
       "tamano_kb": 3.88,
       "lineas": 101,
-      "complejidad": 27,
-      "dependencias": [
-        "edit-img/js/ui.js",
-        "edit-img/js/tools/cropTool.js"
-      ]
+      "complejidad": 27
     },
     {
       "ruta": "ia-img/js/editorManager.js",
       "tamano_kb": 6.38,
       "lineas": 225,
-      "complejidad": 27,
-      "dependencias": [
-        "js/global.js",
-        "ia-img/js/state.js",
-        "ia-img/js/galleryManager.js"
-      ]
+      "complejidad": 27
     },
     {
       "ruta": "js/components/modals.js",
       "tamano_kb": 4.35,
       "lineas": 141,
-      "complejidad": 25,
-      "dependencias": []
+      "complejidad": 25
     }
   ],
   "archivos_mas_grandes": [
@@ -115,76 +67,61 @@
       "ruta": "ia-img/index.html",
       "tamano_kb": 37.25,
       "lineas": 938,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "ia-text/index.html",
       "tamano_kb": 34.9,
       "lineas": 861,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "edit-img/index.html",
       "tamano_kb": 25.56,
       "lineas": 716,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "ia-img/css/style.css",
       "tamano_kb": 17.35,
       "lineas": 632,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "index.html",
       "tamano_kb": 24.77,
       "lineas": 626,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "convert-img/index.html",
       "tamano_kb": 22.32,
       "lineas": 580,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "js/global.js",
       "tamano_kb": 14.67,
       "lineas": 411,
-      "complejidad": 93,
-      "dependencias": []
+      "complejidad": 93
     },
     {
       "ruta": "css/style.css",
       "tamano_kb": 9.8,
       "lineas": 410,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "ia-audio/index.html",
       "tamano_kb": 15.36,
       "lineas": 407,
-      "complejidad": 0,
-      "dependencias": []
+      "complejidad": 0
     },
     {
       "ruta": "ia-img/js/galleryManager.js",
       "tamano_kb": 11.57,
       "lineas": 347,
-      "complejidad": 55,
-      "dependencias": [
-        "js/global.js",
-        "ia-img/js/config.js",
-        "ia-img/js/state.js",
-        "ia-img/js/editorManager.js"
-      ]
+      "complejidad": 55
     }
   ],
   "estructura_proyecto_json": {
@@ -736,5 +673,19 @@
         "children": []
       }
     ]
+  },
+  "tareas_pendientes": [],
+  "informe_rendimiento": {
+    "imagenes": [
+      {
+        "ruta": "img/Pocoyo.gif",
+        "tamano_kb": 2623.43
+      },
+      {
+        "ruta": "img/imagen-generada.png",
+        "tamano_kb": 157.19
+      }
+    ],
+    "javascript": []
   }
 }
