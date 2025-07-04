@@ -1,5 +1,5 @@
 {
-  "total_archivos_analizados": 87,
+  "total_archivos_analizados": 89,
   "archivos_mas_complejos": [
     {
       "ruta": "js/global.js",
@@ -18,6 +18,12 @@
       "tamano_kb": 4.53,
       "lineas": 118,
       "complejidad": 55
+    },
+    {
+      "ruta": "venv/lib/python3.11/site-packages/werkzeug/debug/shared/debugger.js",
+      "tamano_kb": 9.83,
+      "lineas": 344,
+      "complejidad": 54
     },
     {
       "ruta": "ia-img/js/aiService.js",
@@ -54,12 +60,6 @@
       "tamano_kb": 6.38,
       "lineas": 225,
       "complejidad": 27
-    },
-    {
-      "ruta": "js/components/modals.js",
-      "tamano_kb": 4.35,
-      "lineas": 141,
-      "complejidad": 25
     }
   ],
   "archivos_mas_grandes": [

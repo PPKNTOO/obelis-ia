@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/run-analysis.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["README.md"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/run-analysis",
+      "dest": "api/run-analysis.py"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "dashboard/index.html"
+    },
+    {
+      "src": "/dashboard/(.*)",
+      "dest": "dashboard/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "home/$1"
+    }
+  ]
+}
