@@ -173,6 +173,86 @@ header h1 {
   }
 }
 
+/* --- ESTILOS PARA EL FOOTER --- */
+.footer-container {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: saturate(180%) blur(10px);
+  /* Efecto de desenfoque para el fondo */
+  border-top: 1px solid var(--color-border);
+  padding: 1.5rem;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+.footer-container p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+.footer-container p span {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+/* Footer con enlaces */
+.footer-container a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.footer-container a:hover {
+  text-decoration: underline;
+}
+.footer-container a:visited {
+  color: var(--color-accent-light);
+}
+.footer-container a:active {
+  color: var(--color-accent);
+}
+.footer-container a:focus {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+.footer-container a:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+.footer-container a:focus:not(:focus-visible) {
+  outline: none; /* Elimina el outline si no es visible */
+}
+.footer-container a:focus-visible:not(:focus) {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+.footer-container a:focus:not(:focus-visible) {
+  outline: none; /* Elimina el outline si no es visible */
+}
+
+.btn-settings,
+.btn-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-accent);
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.scan-button:hover,
+.btn-settings:hover,
+.btn-help:hover {
+  background-color: var(--color-accent-light);
+}
+.btn-settings:active,
+.btn-help:active {
+  transform: scale(0.98);
+}
+
 /* --- MEDIA QUERIES PARA RESPONSIVIDAD --- */
 
 /* Para Tablets y pantallas medianas (hasta 1200px) */

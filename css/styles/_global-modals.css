@@ -1,4 +1,5 @@
 /* --- Global Modals Styles (Subscription, Cookie Consent, Generic Message, Lightbox, Editor Image, Loading Overlay) --- */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -22,22 +23,21 @@
 }
 .modal-content {
   position: relative;
-  background-color: #1e293b;
+  background-color: rgb(255 255 255 / 0%);
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6),
+  border-radius: 0rem 10rem 0rem 10rem;
+  box-shadow: 0px 1px 70px 1px rgba(255, 255, 255, 0.6),
     0 10px 15px -3px rgba(0, 0, 0, 0.4);
   text-align: center;
   color: white;
   max-width: 90%;
-  max-height: 90vh; /* Limita la altura del contenido del modal */
+  max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   transform: translateY(-20px);
   transition: transform 0.4s ease;
-  border: 1px solid #2d3748; /* Borde gris original */
 }
 .modal-overlay.show .modal-content {
   transform: translateY(0);
@@ -94,12 +94,17 @@
 }
 
 /* Cookie Consent Specifics */
+
+.modal-overlay.cookie-consent {
+  z-index: 1005; /* Entre el contenido y el modal de suscripción */
+}
 .cookie-consent {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(26, 32, 44, 0.95);
+  background-color: rgba(0, 0, 0, 0.8); /* Gris oscuro con opacidad */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
   color: white;
   padding: 1.25rem 2rem;
   display: flex;

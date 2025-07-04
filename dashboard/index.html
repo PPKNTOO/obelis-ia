@@ -13,10 +13,17 @@
   <body>
     <div class="dashboard-container">
       <header class="header-container">
-        <h1>Dashboard de Análisis del Proyecto</h1>
+        <h1>
+          <i class="fas fa-code"></i> Dashboard de Análisis de Código - ObelisIA
+        </h1>
         <button id="scan-button" class="scan-button">
-          <i class="fas fa-sync-alt"></i>
-          <span>Escanear Proyecto</span>
+          <i class="fas fa-play"></i> <span>Ejecutar Análisis</span>
+        </button>
+        <button id="settings-btn" class="btn-settings">
+          <i class="fas fa-cog"></i> Configuración
+        </button>
+        <button id="help-btn" class="btn-help">
+          <i class="fas fa-question-circle"></i> Ayuda
         </button>
       </header>
 
@@ -119,9 +126,20 @@
       </section>
     </div>
 
+    <footer class="footer-container">
+      <p>
+        Dashboard de Análisis de Código - ObelisIA
+        <span class="version">v1.0.0</span>
+      </p>
+      <p>Hecho con <i class="fas fa-heart"></i> por el equipo de ObelisIA</p>
+      <p>
+        <a href="https://obelis-ia.vercel.app">Visita nuestro sitio web</a>
+      </p>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/app.js" defer></script>
     <!--     
     <script type="module" src="js/tree.js"></script>
     <script type="module" src="js/charts.js"></script>

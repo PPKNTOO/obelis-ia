@@ -1,82 +1,107 @@
 // dashboard/js/app.js
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Intenta cargar los datos existentes al iniciar
   try {
     const response = await fetch("/reporte_datos.json");
-    if (!response.ok) throw new Error("No se encontró el archivo de datos.");
-    const data = await response.json();
-
-    // Llama a todas las funciones de renderizado con los datos
-    populateKPIs(data);
-    renderPerformanceReport(data.informe_rendimiento);
-    renderTodosReport(data.tareas_pendientes);
-
-    if (data.estructura_proyecto_json) {
-      renderD3Tree(data.estructura_proyecto_json);
+    if (!response.ok) {
+      throw new Error(
+        "No se pudo cargar el reporte. Ejecuta un análisis para generarlo."
+      );
     }
-
-    renderBarChart(
-      "complexity-chart",
-      "Complejidad",
-      data.archivos_mas_complejos,
-      "ruta",
-      "complejidad",
-      "#eab308"
-    );
-    renderBarChart(
-      "size-chart",
-      "Líneas",
-      data.archivos_mas_grandes,
-      "ruta",
-      "lineas",
-      "#38bdf8"
-    );
+    const data = await response.json();
+    updateDashboard(data);
   } catch (error) {
-    console.error("Error al cargar el dashboard:", error);
-    document.body.innerHTML = `<h1>Error al Cargar</h1><p>No se pudo encontrar o leer el archivo <code>reporte_datos.json</code>. Asegúrate de haber ejecutado <code>analizar_proyecto.py</code> primero y de acceder a esta página a través de un servidor local.</p>`;
+    console.warn("Advertencia al cargar datos iniciales:", error);
+    // No es un error crítico si el archivo no existe al principio
+    // Se puede mostrar un estado inicial o un mensaje para que el usuario escanee.
   }
+
+  // Asigna el evento al botón de escaneo
   const scanButton = document.getElementById("scan-button");
   if (scanButton) {
     scanButton.addEventListener("click", handleScanButtonClick);
   }
 });
 
-// ✅ NUEVA FUNCIÓN para manejar el botón de escaneo
+/**
+ * Rellena todas las secciones del dashboard con los datos del análisis.
+ * @param {object} data - El objeto JSON con los datos del reporte.
+ */
+function updateDashboard(data) {
+  populateKPIs(data);
+  renderPerformanceReport(data.informe_rendimiento);
+  renderTodosReport(data.tareas_pendientes);
+
+  if (data.estructura_proyecto_json) {
+    // Limpia el SVG anterior antes de dibujar uno nuevo para evitar duplicados
+    d3.select("#project-tree-svg").selectAll("*").remove();
+    renderD3Tree(data.estructura_proyecto_json);
+  }
+
+  renderBarChart(
+    "complexity-chart",
+    "Complejidad",
+    data.archivos_mas_complejos,
+    "ruta",
+    "complejidad",
+    "#eab308"
+  );
+  renderBarChart(
+    "size-chart",
+    "Líneas",
+    data.archivos_mas_grandes,
+    "ruta",
+    "lineas",
+    "#38bdf8"
+  );
+}
+
+/**
+ * Maneja el clic en el botón "Escanear Proyecto".
+ * Llama a la API para ejecutar el script de análisis y recarga la página.
+ */
 async function handleScanButtonClick() {
   const scanButton = document.getElementById("scan-button");
   const icon = scanButton.querySelector("i");
   const text = scanButton.querySelector("span");
 
-  // Poner el botón en estado de "cargando"
+  // Pone el botón en estado de "cargando"
   scanButton.disabled = true;
-  icon.classList.add("scanning");
-  text.textContent = "Escaneando...";
+  icon.className = "fas fa-sync-alt fa-spin"; // Ícono de carga con animación
+  text.textContent = "Analizando...";
 
   try {
+    // Llama a la API que ejecuta el script de Python
     const response = await fetch("/api/run-analysis", { method: "POST" });
-    if (!response.ok) {
-      throw new Error("La respuesta del servidor no fue OK");
-    }
-    const result = await response.json();
-    console.log(result.message);
 
-    // Mostrar un mensaje de éxito y recargar la página para ver los nuevos datos
+    if (!response.ok) {
+      const errorResult = await response.json();
+      throw new Error(
+        errorResult.error || "La respuesta del servidor no fue OK"
+      );
+    }
+
+    const result = await response.json();
+    console.log("Respuesta del servidor:", result.message);
+
+    // Muestra un mensaje de éxito y recarga la página para ver los nuevos datos
     alert("Análisis completado. El dashboard se actualizará.");
-    location.reload();
+    location.reload(); // Recarga la página para obtener el nuevo JSON
   } catch (error) {
     console.error("Error al escanear el proyecto:", error);
     alert(
-      "Ocurrió un error al escanear el proyecto. Revisa la consola para más detalles."
+      `Ocurrió un error al ejecutar el análisis:\n\n${error.message}\n\nRevisa la consola del navegador y del servidor para más detalles.`
     );
-  } finally {
-    // Restaurar el botón (aunque la página se recargará)
+    // Restaura el botón al estado original en caso de error
     scanButton.disabled = false;
-    icon.classList.remove("scanning");
-    text.textContent = "Escanear Proyecto";
+    icon.className = "fas fa-play";
+    text.textContent = "Ejecutar Análisis";
   }
 }
 
-// ✅ NUEVA FUNCIÓN para poblar los KPIs
+// --- FUNCIONES DE RENDERIZADO (sin cambios) ---
+
 function populateKPIs(data) {
   document.getElementById("kpi-total-files").textContent =
     data.total_archivos_analizados || 0;
@@ -95,14 +120,13 @@ function populateKPIs(data) {
   document.getElementById("kpi-heavy-assets").textContent = heavyAssets;
 }
 
-// ✅ NUEVA FUNCIÓN para renderizar la tabla de rendimiento
 function renderPerformanceReport(performanceData) {
   const imagesTbody = document.querySelector("#large-images-table tbody");
   const jsTbody = document.querySelector("#large-js-table tbody");
-
   if (!performanceData || !imagesTbody || !jsTbody) return;
+  imagesTbody.innerHTML = ""; // Limpiar contenido previo
+  jsTbody.innerHTML = ""; // Limpiar contenido previo
 
-  // Rellenar tabla de imágenes pesadas
   if (performanceData.imagenes.length > 0) {
     performanceData.imagenes.forEach((file) => {
       imagesTbody.innerHTML += `<tr><td><span class="file-path">${file.ruta}</span></td><td>${file.tamano_kb} KB</td></tr>`;
@@ -112,7 +136,6 @@ function renderPerformanceReport(performanceData) {
       '<tr><td colspan="2">No se encontraron imágenes pesadas. ¡Buen trabajo!</td></tr>';
   }
 
-  // Rellenar tabla de JS pesados
   if (performanceData.javascript.length > 0) {
     performanceData.javascript.forEach((file) => {
       jsTbody.innerHTML += `<tr><td><span class="file-path">${file.ruta}</span></td><td>${file.tamano_kb} KB</td></tr>`;
@@ -123,10 +146,10 @@ function renderPerformanceReport(performanceData) {
   }
 }
 
-// ✅ NUEVA FUNCIÓN para renderizar la tabla de tareas pendientes
 function renderTodosReport(todosData) {
   const todosTbody = document.querySelector("#todos-table tbody");
   if (!todosData || !todosTbody) return;
+  todosTbody.innerHTML = ""; // Limpiar contenido previo
 
   if (todosData.length > 0) {
     todosData.forEach((task) => {
@@ -137,19 +160,15 @@ function renderTodosReport(todosData) {
       '<tr><td colspan="3">¡Felicidades! No hay tareas pendientes.</td></tr>';
   }
 }
-/**
- * Dibuja el árbol del proyecto con D3.js de forma interactiva
- */
+
 function renderD3Tree(treeData) {
   const container = document.getElementById("tree-container");
   if (!container) return;
 
   const svgElement = d3.select("#project-tree-svg");
-
   const width = container.clientWidth;
   const height = container.clientHeight;
 
-  // Configura el SVG y el grupo principal para el zoom
   const svg = svgElement.attr("viewBox", [
     -width / 2,
     -height / 4,
@@ -158,12 +177,10 @@ function renderD3Tree(treeData) {
   ]);
   const g = svg.append("g");
 
-  // Crea la jerarquía de datos y el layout del árbol
   const root = d3.hierarchy(treeData);
   const treeLayout = d3.tree().nodeSize([150, 120]);
   treeLayout(root);
 
-  // Dibuja las líneas/enlaces entre nodos
   g.append("g")
     .attr("fill", "none")
     .attr("stroke", "#374151")
@@ -179,7 +196,6 @@ function renderD3Tree(treeData) {
         .y((d) => d.y)
     );
 
-  // Dibuja los nodos (caja + texto)
   const node = g
     .append("g")
     .selectAll("g")
@@ -210,7 +226,6 @@ function renderD3Tree(treeData) {
     .style("stroke-width", "3px")
     .style("stroke-linecap", "butt");
 
-  // Configura el comportamiento de zoom y arrastre (pan)
   const zoom = d3.zoom().on("zoom", (event) => {
     g.attr("transform", event.transform);
   });
@@ -218,12 +233,14 @@ function renderD3Tree(treeData) {
   svg.call(zoom);
 }
 
-/**
- * Dibuja un gráfico de barras horizontal con Chart.js
- */
 function renderBarChart(canvasId, label, data, labelKey, dataKey, color) {
   const ctx = document.getElementById(canvasId);
-  if (!ctx || !data || data.length === 0) return;
+  if (!ctx || !data) return;
+
+  // Si ya existe un gráfico en este canvas, lo destruimos primero
+  if (Chart.getChart(ctx)) {
+    Chart.getChart(ctx).destroy();
+  }
 
   const labels = data.map((item) => item[labelKey]);
   const values = data.map((item) => item[dataKey]);
@@ -236,7 +253,7 @@ function renderBarChart(canvasId, label, data, labelKey, dataKey, color) {
         {
           label: label,
           data: values,
-          backgroundColor: color + "4D", // Color con ~30% de opacidad
+          backgroundColor: color + "4D",
           borderColor: color,
           borderWidth: 1.5,
           borderRadius: 4,
@@ -244,7 +261,7 @@ function renderBarChart(canvasId, label, data, labelKey, dataKey, color) {
       ],
     },
     options: {
-      indexAxis: "y", // Hace el gráfico horizontal
+      indexAxis: "y",
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
@@ -259,26 +276,4 @@ function renderBarChart(canvasId, label, data, labelKey, dataKey, color) {
       },
     },
   });
-}
-/**
- * Muestra un mensaje de error si no se encuentra el archivo JSON
- */
-function showError(message) {
-  const container = document.getElementById("error-container");
-  if (container) {
-    container.innerHTML = `<h1>Error</h1><p>${message}</p>`;
-  } else {
-    document.body.innerHTML = `<h1>Error</h1><p>${message}</p>`;
-  }
-}
-/**
- * Muestra un mensaje de carga mientras se obtienen los datos
- */
-function showLoading() {
-  const container = document.getElementById("loading-container");
-  if (container) {
-    container.innerHTML = `<h1>Cargando...</h1><p>Por favor, espera mientras se obtienen los datos del proyecto.</p>`;
-  } else {
-    document.body.innerHTML = `<h1>Cargando...</h1><p>Por favor, espera mientras se obtienen los datos del proyecto.</p>`;
-  }
 }
